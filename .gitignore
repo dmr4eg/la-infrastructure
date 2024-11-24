@@ -33,3 +33,29 @@ replay_pid*
 *.idea
 *vscode
 .vscode
+
+# Maven
+target/
+
+# Eclipse
+.classpath
+
+# NetBeans
+
+# Gradle
+.gradle/
+build/
+
+# Mac
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+
+
+# IntelliJ
+*.iml
+*.ipr
+*.iws
+.idea/
