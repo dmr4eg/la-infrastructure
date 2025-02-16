@@ -1,0 +1,46 @@
+---
+- name: Add ingress-nginx Helm repository
+  kubernetes.core.helm_repository:
+    name: ingress-nginx
+    repo_url: https://kubernetes.github.io/ingress-nginx
+    state: present
+
+- name: Install/Upgrade ingress-nginx using Helm
+  kubernetes.core.helm:
+    name: "{{ ingress_nginx_release }}"
+    chart_ref: "{{ ingress_nginx_chart }}"
+    chart_version: "{{ ingress_nginx_chart_version }}"
+    release_namespace: "{{ ingress_nginx_namespace }}"
+    create_namespace: true
+    values_files: 
+      -  "{{ role_path }}/templates/nginx-ingress-values.yml" 
+    state: present
+
+- name: Wait for ingress-nginx controller to be ready
+  kubernetes.core.k8s_info:
+    kind: Pod
+    namespace: "{{ ingress_nginx_namespace }}"
+  register: ingress_pods
+  until: ingress_pods.resources | selectattr('status.phase', 'eq', 'Running') | list | length > 0
+  retries: 10
+  delay: 15
+
+- name: Retrieve Ingress Controller Service NodePort
+  kubernetes.core.k8s_info:
+    kind: Service
+    namespace: "{{ ingress_nginx_namespace }}"
+    name: "{{ ingress_nginx_release }}-controller"
+  register: ingress_service
+
+# - name: Set Ingress Controller IP
+#   set_fact:
+#     ingress_ip: "127.0.0.1"
+
+# - name: Update /etc/hosts for Ingress
+#   become: true  
+#   lineinfile:
+#     path: /etc/hosts
+#     line: "{{ ingress_ip }} *.local "
+#     state: present
+#     create: true
+  
