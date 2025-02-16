@@ -1,0 +1,38 @@
+global:
+  domain: "argocd.localhost"
+  
+certificate:
+  enabled: false
+
+crds:
+  install: true
+
+configs:
+  repositories:
+    private-gitlab-repo:
+      url: {{ repo_url }}
+      name: dnai-assessment-repo
+      type: git
+      username: git
+      password: {{ azure_token }}
+  params:
+    server.insecure: true
+  cm:
+    admin.enabled: true
+  secret:
+    ## htpasswd -nbBC 10 "" "password" | tr -d ':\n' | sed 's/$2y/$2a/'
+    argocdServerAdminPassword: "$2a$10$gKQEW.1kDyZUpFyRIXhEJ.RymGuHTDGwDGFf/.CXf/X2.lZ5r1ae2"
+
+server:
+  ingress:
+    enabled: true
+    ingressClassName: "nginx"
+    hostname: "argocd.localhost"
+    tls: "false"
+    extraTls: []
+    annotations:
+      nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+      nginx.ingress.kubernetes.io/ssl-passthrough: "false"
+  service:
+    type: ClusterIP

@@ -1,0 +1,37 @@
+---
+######## Repository Configuration ########
+repo_url: "https://dnai-ai@dev.azure.com/dnai-ai/DevOps%20-%20Playground/_git/damir-kabi-onboarding"
+
+######## K8s Cluster Configuration ########
+cluster_name: kind
+control_nodes: 1
+worker_nodes: 2
+
+######## Ingress Configuration ########
+ingress_nginx_namespace: "ingress-nginx"
+ingress_nginx_release: "ingress-nginx"
+ingress_nginx_chart: "ingress-nginx/ingress-nginx"
+ingress_nginx_chart_version: "4.11.2"
+
+######## ArgoCD Configuration ########
+argocd_namespace: argocd
+argocd_server: argocd-server
+argocd_server_port: 80
+
+######## Environment Configuration ########
+environments:
+  - name: dev
+    path: "helm/envs/dev"
+    url: "dev.k8s.local"
+  - name: test
+    path: "helm/envs/test"
+    url: "test.k8s.local"
+  - name: prod
+    path: "helm/envs/prod"
+    url: "prod.k8s.local"
+
+######## Helm Chart Configuration ########
+own_chart_name: my-own-chart
+own_chart_path: "helm/modules/my-own-chart"
+own_chart_chart_version: "0.1.0"
+own_chart_app_version: "1.16.0"

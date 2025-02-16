@@ -1,0 +1,16 @@
+---
+- name: Render and apply Wordpress ApplicationSet
+  k8s:
+    state: present
+    definition: "{{ lookup('template', 'argocd-application-set.yml.j2') }}"
+    namespace: "{{ argocd_namespace }}"
+  tags:
+    - configure-argocd-application-set
+
+- name: Render and apply Own Chart Application
+  k8s:
+    state: present
+    definition: "{{ lookup('template', 'argocd-my-own-chart.yml.j2') }}"
+    namespace: "{{ argocd_namespace }}"
+  tags:
+    - configure-argocd-application
