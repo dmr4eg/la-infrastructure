@@ -9,13 +9,12 @@ source .venv/bin/activate
 pip3 install ansible kubernetes pyyaml
 ansible-galaxy collection install kubernetes.core
 
-# Run playbook
-#ansible-playbook main.yaml \
-#  -e @group_vars/vault_github_token.yml \
-#  --ask-vault-pass --ask-become-pass
-
 ansible-playbook main.yaml \
   -e @group_vars/vault_github_token.yml \
-  --ask-vault-pass --ask-become-pass \
-  --skip-tags "kind-cluster-creation"
+  --ask-vault-pass --ask-become-pass
+
+#ansible-playbook main.yaml \
+#  -e @group_vars/vault_github_token.yml \
+#  --ask-vault-pass --ask-become-pass \
+#  --skip-tags "kind-cluster-creation"
 

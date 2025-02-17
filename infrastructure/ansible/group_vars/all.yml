@@ -1,9 +1,9 @@
 ---
 ######## Repository Configuration ########
-repo_url: "https://github.com/dmr4eg/littlepm-helm.git"
+repo_url: "https://github.com/dmr4eg/littlepm.git"
 
 ######## K8s Cluster Configuration ########
-cluster_name: kind
+cluster_name: littlepm-kind
 control_nodes: 1
 worker_nodes: 2
 
@@ -21,20 +21,15 @@ argocd_server_port: 80
 ######## Environment Configuration ########
 charts:
   - name: finances-service
-    path: "charts/finances-service"
-    url: "dev.k8s.local"
+    path: "infrastructure/helm/charts/finances-service"
   - name: project-conf-service
-    path: "charts/project-conf-service"
-    url: "test.k8s.local"
+    path: "infrastructure/helm/charts/project-conf-service"
   - name: report-service
-    path: "charts/report-service"
-    url: "prod.k8s.local"
+    path: "infrastructure/helm/charts/report-service"
   - name: task-service
-    path: "charts/task-service"
-    url: "prod.k8s.local"
+    path: "infrastructure/helm/charts/task-service"
   - name: user-service
-    path: "charts/user-service"
-    url: "prod.k8s.local"
+    path: "infrastructure/helm/charts/user-service"
 
 ######### Helm Chart Configuration ########
 #own_chart_name: my-own-chart
