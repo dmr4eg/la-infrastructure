@@ -11,10 +11,10 @@ configs:
   repositories:
     private-gitlab-repo:
       url: {{ repo_url }}
-      name: dnai-assessment-repo
+      name: littlepm-helm-charts
       type: git
       username: git
-      password: {{ azure_token }}
+      password: {{ github_token }}
   params:
     server.insecure: true
   cm:

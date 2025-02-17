@@ -9,16 +9,16 @@ spec:
   generators:
     - list:
         elements:
-{% for env in environments %}
-          - cluster: {{ env.name }}
-            namespace: {{ env.name }}
-            environment: {{ env.name }}
-            chart_version: "24.0.9"
-            release_name: "wordpress-{{ env.name }}"
-            path: {{ env.path }}
+{% for chart in charts %}
+          - cluster: {{ chart.name }}
+            namespace: {{ chart.name }}
+            environment: {{ chart.name }}
+            chart_version: "latest"
+            release_name: "{{ chart.name }}"
+            path: {{ chart.path }}
             repo: {{ repo_url }}
             revision: main
-            values_file: "{{ env.path }}/wordpress-values.yml"
+            values_file: "values.yaml"
 {% endfor %}
   template:
 {% raw %}
@@ -34,15 +34,15 @@ spec:
       sources:
         - repoURL: "{{ .repo }}"
           targetRevision: "{{ .revision }}"
-          ref: gitlab_repo
+          ref: "{{ .revision }}"
 
-        - repoURL: registry-1.docker.io/bitnamicharts
-          chart: "wordpress"
-          targetRevision: "{{ .chart_version }}"
+        - repoURL: "{{ .repo }}"
+          targetRevision: "{{ .revision }}"
+          path: "{{ .path }}"
           helm:
             releaseName: "{{ .release_name }}"
             valueFiles:
-              - "$gitlab_repo/{{ .values_file }}"
+              - "{{ .values_file }}"
 
       syncPolicy:
         syncOptions:

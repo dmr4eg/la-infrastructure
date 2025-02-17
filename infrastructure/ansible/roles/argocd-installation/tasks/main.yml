@@ -8,6 +8,7 @@
     - add-argocd-helm-repo
 
 - name: Render ArgoCD values file from template
+  become: true
   template:
     src: "templates/argocd-values.yml.j2"
     dest: "/tmp/argocd-values.yml"

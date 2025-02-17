@@ -10,15 +10,12 @@ pip3 install ansible kubernetes pyyaml
 ansible-galaxy collection install kubernetes.core
 
 # Run playbook
-ansible-playbook main.yml \
-  -e @group_vars/vault_azure_token.yml \
-  -e @group_vars/vault_grafana_admin_password.yml \
-  --ask-vault-pass --ask-become-pass
+#ansible-playbook main.yaml \
+#  -e @group_vars/vault_github_token.yml \
+#  --ask-vault-pass --ask-become-pass
 
-# Run playbook with tags
-#ansible-playbook ansible/main.yml \
-#  -e @ansible/group_vars/vault_azure_token.yml \
-#  -e @ansible/group_vars/vault_grafana_admin_password.yml \
-#  --ask-vault-pass --ask-become-pass \
-#  --skip-tags "kind-cluster-creation,argocd-installation,monitoring"
-#
+ansible-playbook main.yaml \
+  -e @group_vars/vault_github_token.yml \
+  --ask-vault-pass --ask-become-pass \
+  --skip-tags "kind-cluster-creation"
+

@@ -1,6 +1,6 @@
 ---
 ######## Repository Configuration ########
-repo_url: "https://dnai-ai@dev.azure.com/dnai-ai/DevOps%20-%20Playground/_git/damir-kabi-onboarding"
+repo_url: "https://github.com/dmr4eg/littlepm-helm.git"
 
 ######## K8s Cluster Configuration ########
 cluster_name: kind
@@ -19,19 +19,25 @@ argocd_server: argocd-server
 argocd_server_port: 80
 
 ######## Environment Configuration ########
-environments:
-  - name: dev
-    path: "helm/envs/dev"
+charts:
+  - name: finances-service
+    path: "charts/finances-service"
     url: "dev.k8s.local"
-  - name: test
-    path: "helm/envs/test"
+  - name: project-conf-service
+    path: "charts/project-conf-service"
     url: "test.k8s.local"
-  - name: prod
-    path: "helm/envs/prod"
+  - name: report-service
+    path: "charts/report-service"
+    url: "prod.k8s.local"
+  - name: task-service
+    path: "charts/task-service"
+    url: "prod.k8s.local"
+  - name: user-service
+    path: "charts/user-service"
     url: "prod.k8s.local"
 
-######## Helm Chart Configuration ########
-own_chart_name: my-own-chart
-own_chart_path: "helm/modules/my-own-chart"
-own_chart_chart_version: "0.1.0"
-own_chart_app_version: "1.16.0"
+######### Helm Chart Configuration ########
+#own_chart_name: my-own-chart
+#own_chart_path: "helm/modules/my-own-chart"
+#own_chart_chart_version: "0.1.0"
+#own_chart_app_version: "1.16.0"
