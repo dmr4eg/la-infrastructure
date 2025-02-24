@@ -31,8 +31,9 @@ charts:
   - name: user-service
     path: "infrastructure/helm/charts/user-service"
 
-######### Helm Chart Configuration ########
-#own_chart_name: my-own-chart
-#own_chart_path: "helm/modules/my-own-chart"
-#own_chart_chart_version: "0.1.0"
-#own_chart_app_version: "1.16.0"
+######### Postgres Chart Configuration ########
+pg_chart_name: "bitnami/postgresql"
+pg_chart_version: "16.4.14"
+pg_release_name: "postgres-db"
+pg_values_file: "postgres-values.yaml"
+pg_chart_path: "infrastructure/helm/values"

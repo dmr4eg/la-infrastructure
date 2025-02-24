@@ -6,3 +6,11 @@
     namespace: "{{ argocd_namespace }}"
   tags:
     - configure-argocd-application-set
+
+- name: Render and apply Postgres Application
+  k8s:
+    state: present
+    definition: "{{ lookup('template', 'argocd-postgres-app.yml.j2') }}"
+    namespace: "{{ argocd_namespace }}"
+  tags:
+    - configure-argocd-postgres-app`

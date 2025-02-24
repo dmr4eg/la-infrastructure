@@ -40,6 +40,17 @@ spec:
             - name: http
               containerPort: {{ .Values.service.port }}
               protocol: TCP
+          env:
+            - name: DB_HOST
+              value: "{{ .Values.db.host | default "localhost" }}"
+            - name: DB_PORT
+              value: "{{ .Values.db.port | default "5432" }}"
+            - name: DB_NAME
+              value: "{{ .Values.db.name | default "project-conf-db" }}"
+            - name: DB_USER
+              value: "{{ .Values.db.user | default "user" }}"
+            - name: DB_PASSWOR
+              value: "{{ .Values.db.password | default "password" }}"
           livenessProbe:
             {{- toYaml .Values.livenessProbe | nindent 12 }}
           readinessProbe:

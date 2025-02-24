@@ -125,3 +125,11 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+db:
+  host: "my-postgres-postgresql.default.svc.cluster.local"
+  port: "5431"
+  name: "finances-db"
+  user: "user"
+  password: "password"
+

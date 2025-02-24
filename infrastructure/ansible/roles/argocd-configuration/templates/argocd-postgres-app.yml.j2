@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: "{{ pg_chart_name }}"
+  namespace: {{ pg_release_name }}
+spec:
+  project: default
+  destination:
+    namespace: "{{ pg_release_name }}"
+    server: "https://kubernetes.default.svc"
+
+  sources:
+    - repoURL: "{{ repo_url }}"
+      targetRevision: main
+      path: "{{ pg_chart_path }}"
+      helm:
+        releaseName: "{{ pg_chart_name }}"
+        valueFiles:
+          - "postgres-values.yaml"
+
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+    automated:
+      selfHeal: true
+      prune: true

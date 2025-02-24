@@ -125,3 +125,10 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+db:
+  host: "my-postgres-postgresql.default.svc.cluster.local"
+  port: "5434"
+  name: "task-db"
+  user: "user"
+  password: "password"
