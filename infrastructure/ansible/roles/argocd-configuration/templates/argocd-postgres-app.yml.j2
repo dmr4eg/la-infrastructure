@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   destination:
-    namespace: "{{ pg_release_name }}"
+    namespace: "{{ pg_chart_name }}"
     server: "https://kubernetes.default.svc"
 
   sources:
@@ -14,7 +14,7 @@ spec:
       targetRevision: main
       path: "{{ pg_chart_path }}"
       helm:
-        releaseName: "{{ pg_chart_name }}"
+        releaseName: "{{ pg_release_name }}"
         valueFiles:
           - "postgres-values.yaml"
 
