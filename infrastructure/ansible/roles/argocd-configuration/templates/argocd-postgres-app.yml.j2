@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: "{{ pg_chart_name }}"
-  namespace: {{ pg_release_name }}
+  namespace: {{ argocd_namespace }}
 spec:
   project: default
   destination:
