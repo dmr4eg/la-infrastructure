@@ -10,6 +10,11 @@ spec:
     server: "https://kubernetes.default.svc"
 
   sources:
+    - repoURL: "https://charts.bitnami.com/bitnami"
+      chart: "bitnami"
+      targetRevision: "{{ pg_chart_version }}"
+      ref: "postgresChart"
+
     - repoURL: "{{ repo_url }}"
       targetRevision: main
       path: "{{ pg_chart_path }}"
@@ -17,6 +22,7 @@ spec:
         releaseName: "{{ pg_release_name }}"
         valueFiles:
           - "postgres-values.yaml"
+
 
   syncPolicy:
     syncOptions:
