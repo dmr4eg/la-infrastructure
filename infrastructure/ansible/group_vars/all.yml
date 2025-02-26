@@ -35,5 +35,5 @@ charts:
 pg_chart_name: "postgres-db"
 pg_chart_version: "16.4.14"
 pg_release_name: "bitnami/postgresql"
-pg_values_file: "postgres-values.yaml"
+pg_values_file: "infrastructure/helm/values/postgres-values.yaml"
 pg_chart_path: "infrastructure/helm/values"
