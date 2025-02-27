@@ -17,6 +17,6 @@ nodes:
         hostPort: 443
         protocol: TCP
 {% endfor %}
-{% for n in range(worker_nodes|int) %}
-  - role: worker
-{% endfor %}
+{#{% for n in range(worker_nodes|int) %}#}
+{#  - role: worker#}
+{#{% endfor %}#}

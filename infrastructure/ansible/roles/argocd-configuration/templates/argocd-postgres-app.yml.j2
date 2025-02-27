@@ -21,7 +21,6 @@ spec:
         releaseName: "{{ pg_release_name }}"
         valueFiles:
           - "$gitlab_repo/{{ pg_values_file }}"
-
   syncPolicy:
     syncOptions:
       - CreateNamespace=true

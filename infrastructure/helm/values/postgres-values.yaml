@@ -1,20 +1,17 @@
 auth:
-  username: myuser
-  password: mypassword
+  username: user
+  password: password
   database: mydb
 
 primary:
   service:
     type: ClusterIP
-  persistence:
-    enabled: true
-    size: 2Gi
 
-# This is optional, but you can override resources or any other chart config
-resources:
-  requests:
-    memory: 256Mi
-    cpu: 250m
-  limits:
-    memory: 512Mi
-    cpu: 500m
+ingress:
+  enabled: true
+  className: "nginx"
+  annotations: {
+                 'nginx.ingress.kubernetes.io/backend-protocol: "HTTP"',
+                 'nginx.ingress.kubernetes.io/force-ssl-redirect: "true"',
+                 'nginx.ingress.kubernetes.io/ssl-passthrough: "false"'
+  }
