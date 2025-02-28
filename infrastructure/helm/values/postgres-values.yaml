@@ -2,10 +2,6 @@ auth:
   enablePostgresUser: true
   postgresPassword: "superpassword"
 
-  username: admin_user
-  password: admin_password
-  database: main_db
-
 initdbScripts:
   01-create-finances.sql: |
     CREATE DATABASE finances_db;
