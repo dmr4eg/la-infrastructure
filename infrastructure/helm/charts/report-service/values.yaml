@@ -126,7 +126,7 @@ tolerations: []
 affinity: {}
 
 db:
-  host: "my-postgres-postgresql.default.svc.cluster.local"
+  host: "postgresql-postgresql.postgresql.svc.cluster.local"
   port: "5433"
   name: "report-db"
   user: "user"
