@@ -1,4 +1,7 @@
 auth:
+  enablePostgresUser: true
+  postgresPassword: "superpassword"
+
   username: admin_user
   password: admin_password
   database: main_db
