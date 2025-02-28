@@ -1,7 +1,34 @@
 auth:
-  username: user
-  password: password
-  database: mydb
+  username: admin_user
+  password: admin_password
+  database: main_db
+
+initdbScripts:
+  01-create-finances.sql: |
+    CREATE DATABASE finances_db;
+    CREATE USER testuser WITH ENCRYPTED PASSWORD 'testpassword';
+    GRANT ALL PRIVILEGES ON DATABASE finances_db TO testuser;
+
+  02-create-project-conf.sql: |
+    CREATE DATABASE project_conf_db;
+    CREATE USER testuser WITH ENCRYPTED PASSWORD 'testpassword';
+    GRANT ALL PRIVILEGES ON DATABASE project_conf_db TO testuser;
+
+  03-create-report.sql: |
+    CREATE DATABASE report_db;
+    CREATE USER testuser WITH ENCRYPTED PASSWORD 'testpassword';
+    GRANT ALL PRIVILEGES ON DATABASE report-db TO testuser;
+
+  04-create-task.sql: |
+    CREATE DATABASE task_db;
+    CREATE USER testuser WITH ENCRYPTED PASSWORD 'testpassword';
+    GRANT ALL PRIVILEGES ON DATABASE task-db TO testuser;
+
+  05-create-user.sql: |
+    CREATE DATABASE user_db;
+    CREATE USER testuser WITH ENCRYPTED PASSWORD 'testpassword';
+    GRANT ALL PRIVILEGES ON DATABASE user-db TO testuser;
+
 
 primary:
   service:

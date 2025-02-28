@@ -128,8 +128,8 @@ affinity: {}
 
 db:
   host: "postgresql.postgresql.svc.cluster.local"
-  port: "5431"
-  name: "finances-db"
-  user: "user"
-  password: "password"
+  port: "5432"
+  name: "finances_db"
+  user: "testuser"
+  password: "testpassword"
 

@@ -127,8 +127,8 @@ tolerations: []
 affinity: {}
 
 db:
-  host: "postgresql-postgresql.postgresql.svc.cluster.local"
-  port: "5434"
-  name: "task-db"
-  user: "user"
-  password: "password"
+  host: "postgresql.postgresql.svc.cluster.local"
+  port: "5432"
+  name: "task_db"
+  user: "testuser"
+  password: "testpassword"

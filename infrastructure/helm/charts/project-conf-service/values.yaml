@@ -129,6 +129,6 @@ affinity: {}
 db:
   host: "postgresql.postgresql.svc.cluster.local"
   port: "5432"
-  name: "project-conf-db"
-  user: "user"
-  password: "password"
+  name: "project_conf_db"
+  user: "testuser"
+  password: "testpassword"

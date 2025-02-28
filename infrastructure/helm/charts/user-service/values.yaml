@@ -126,8 +126,8 @@ tolerations: []
 affinity: {}
 
 db:
-  host: "postgresql-postgresql.postgresql.svc.cluster.local"
-  port: "5435"
-  name: "user-db"
-  user: "user"
-  password: "password"
+  host: "postgresql.postgresql.svc.cluster.local"
+  port: "5432"
+  name: "user_db"
+  user: "testuser"
+  password: "testpassword"
