@@ -1,0 +1,8 @@
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: task-service
+  namespace: task-service
+spec:
+  interval: 5m
+  url: ghcr.io/dmr4eg/littlepm-task-service

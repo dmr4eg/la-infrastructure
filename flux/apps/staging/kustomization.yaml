@@ -1,0 +1,13 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../base/finances-service
+  - ../base/postgresql
+  - ../base/project-conf-service
+  - ../base/report-service
+  - ../base/task-service
+  - ../base/user-service
+patches:
+  - path: staging-values.yaml
+    target:
+      kind: HelmRelease

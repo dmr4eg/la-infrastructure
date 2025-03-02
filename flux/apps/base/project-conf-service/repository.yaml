@@ -1,0 +1,8 @@
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: project-conf-service
+  namespace: project-conf-service
+spec:
+  interval: 5m
+  url: ghcr.io/dmr4eg/littlepm-project-conf-service

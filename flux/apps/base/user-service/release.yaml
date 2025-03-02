@@ -1,0 +1,21 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: user-service
+  namespace: user-service
+spec:
+  releaseName: user-service
+  chart:
+    spec:
+      chart: user-service
+      sourceRef:
+        kind: HelmRepository
+        name: user-service
+  interval: 50m
+  install:
+    remediation:
+      retries: 3
+  values:
+    ingress:
+      enabled: true
+      className: nginx
