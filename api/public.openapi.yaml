@@ -1,0 +1,811 @@
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# # # # # # # # # #    OPEN API SPEC    # # # # # # # # # # #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+openapi: 3.0.3
+info:
+  title: Little PM API
+  version: 1.0.0
+  description: >
+    An example OpenAPI specification for the Little PM application,
+    referencing path parameters from components.
+
+servers:
+  - url: https://app.little.pm
+    description: Production server
+
+tags:
+  - name: User Service
+  - name: Project Configuration Service
+  - name: Tasks/Blueprint Service
+  - name: Finances Service
+  - name: Report Service
+  - name: Video Glossary
+
+paths:
+  # ========================== User Service ==========================
+  /auth:
+    post:
+      tags:
+        - User Service
+      summary: User authentication
+      description: Authenticate a user and return a token or session details.
+      operationId: authenticateUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegistration'
+      responses:
+        '200':
+          $ref: '#/components/responses/AuthorizationSuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorizedLoginError'
+    parameters:
+      - $ref: "#/components/parameters/userUUID"
+
+    put:
+      tags:
+        - User Service
+      summary: Update user consent
+      description: Update a user’s parental consent details.
+      operationId: updateUserConsent
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ParentalConsent'
+      responses:
+        '200':
+          description: Consent updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  # ==================== Project Configuration Service ====================
+  /projects/{userUUID}:
+    parameters:
+      - $ref: "#/components/parameters/userUUID"
+
+    get:
+      tags:
+        - Project Configuration Service
+      summary: Get projects for user
+      description: List all projects belonging to a specific user.
+      operationId: getUserProjects
+      responses:
+        '200':
+          description: A list of projects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProjectIdea'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    post:
+      tags:
+        - Project Configuration Service
+      summary: Create new project for user
+      description: Create a new project idea or configuration for a specific user.
+      operationId: createUserProject
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectIdea'
+      responses:
+        '201':
+          description: Project created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectIdea'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /projects/{userUUID}/{projectUUID}:
+    parameters:
+      - $ref: "#/components/parameters/userUUID"
+      - $ref: "#/components/parameters/projectUUID"
+
+    get:
+      tags:
+        - Project Configuration Service
+      summary: Get project by UUID
+      description: Retrieve details of a specific project for a user.
+      operationId: getProject
+      responses:
+        '200':
+          description: Project found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectIdea'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          description: Project or user not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    put:
+      tags:
+        - Project Configuration Service
+      summary: Update an existing project
+      description: Update the details of an existing project for a user.
+      operationId: updateProject
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectIdea'
+      responses:
+        '200':
+          description: Project updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectIdea'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          description: Project or user not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  # ======================= Tasks/Blueprint Service ========================
+  /tasks/{projectUUID}:
+    parameters:
+      - $ref: "#/components/parameters/projectUUID"
+
+    get:
+      tags:
+        - Tasks/Blueprint Service
+      summary: Get tasks for a project
+      description: Retrieve all tasks for the specified project.
+      operationId: getProjectTasks
+      responses:
+        '200':
+          description: A list of tasks
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Task'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          description: Project not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    post:
+      tags:
+        - Tasks/Blueprint Service
+      summary: Create a new task
+      description: Create a new task for the specified project.
+      operationId: createTask
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Task'
+      responses:
+        '201':
+          description: Task created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          description: Project not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /tasks/{projectUUID}/{taskUUID}:
+    parameters:
+      - $ref: "#/components/parameters/projectUUID"
+      - $ref: "#/components/parameters/taskUUID"
+
+    get:
+      tags:
+        - Tasks/Blueprint Service
+      summary: Get a task by UUID
+      description: Retrieve a specific task by UUID within a project.
+      operationId: getTask
+      responses:
+        '200':
+          description: Task found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          description: Task or project not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    put:
+      tags:
+        - Tasks/Blueprint Service
+      summary: Update a task (e.g., completion)
+      description: Partially update a task’s status, completion date, etc.
+      operationId: updateTask
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/Task'
+                - $ref: '#/components/schemas/TaskCompletion'
+      responses:
+        '200':
+          description: Task updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          description: Task or project not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  # ========================= Finances Service =========================
+  /finances/{projectUUID}:
+    parameters:
+      - $ref: "#/components/parameters/projectUUID"
+
+    get:
+      tags:
+        - Finances Service
+      summary: Get finance details
+      description: Retrieve budget or finance info for a specific project.
+      operationId: getFinances
+      responses:
+        '200':
+          description: Financial details found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Budget'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          description: Project not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    post:
+      tags:
+        - Finances Service
+      summary: Update or create finance details
+      description: Update or create financial info (e.g., budget) for a project.
+      operationId: updateFinances
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BudgetUpdate'
+      responses:
+        '200':
+          description: Finance details updated/created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Budget'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          description: Project not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /finances/calculate:
+    post:
+      tags:
+        - Finances Service
+      summary: Calculate ROI or financial projections
+      description: Given investment data, compute ROI or related metrics.
+      operationId: calculateFinances
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InvestmentData'
+      responses:
+        '200':
+          description: Calculation result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ROIResult'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  # ========================== Report Service ==========================
+  /reports/{userUUID}:
+    parameters:
+      - $ref: "#/components/parameters/userUUID"
+
+    post:
+      tags:
+        - Report Service
+      summary: Generate a new report
+      description: Create a new report (e.g., pitch deck, marketing, financial).
+      operationId: createReport
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReportRequest'
+      responses:
+        '201':
+          description: Report generated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Report'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    get:
+      tags:
+        - Report Service
+      summary: List all reports for a user
+      description: Retrieve a list of generated reports for the specified user.
+      operationId: getReports
+      responses:
+        '200':
+          description: Reports found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Report'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /reports/{userUUID}/{reportUUID}:
+    parameters:
+      - $ref: "#/components/parameters/userUUID"
+      - name: reportUUID
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          example: 665c599d-5c8d-4d20-aaab-7ffaba150606
+
+    get:
+      tags:
+        - Report Service
+      summary: Get a specific report
+      description: Retrieve a specific report by UUID for a user.
+      operationId: getReport
+      responses:
+        '200':
+          description: Report found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Report'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          description: Report or user not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  # ========================== Video Glossary ==========================
+  /videos:
+    get:
+      tags:
+        - Video Glossary
+      summary: List all videos
+      description: Retrieve a list of available videos in the glossary.
+      operationId: getAllVideos
+      responses:
+        '200':
+          description: A list of videos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    videoUUID:
+                      $ref: '#/components/schemas/videoUUID'
+                    title:
+                      type: string
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /videos/{videoUUID}:
+    parameters:
+      - $ref: "#/components/parameters/videoUUID"
+
+    get:
+      tags:
+        - Video Glossary
+      summary: Get a specific video
+      description: Retrieve details of a specific video by UUID.
+      operationId: getVideo
+      responses:
+        '200':
+          description: Video found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  videoUUID:
+                    $ref: '#/components/schemas/videoUUID'
+                  title:
+                    type: string
+                  description:
+                    type: string
+                  url:
+                    type: string
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          description: Video not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      description: JWT token
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  parameters:
+    userUUID:
+      name: userUUID
+      in: path
+      required: true
+      description: ID of the user
+      schema:
+        $ref: '#/components/schemas/userUUID'
+
+    projectUUID:
+      name: projectUUID
+      in: path
+      required: true
+      description: ID of the project
+      schema:
+        $ref: '#/components/schemas/projectUUID'
+
+    taskUUID:
+      name: taskUUID
+      in: path
+      required: true
+      description: ID of the task
+      schema:
+        $ref: '#/components/schemas/taskUUID'
+
+    videoUUID:
+      name: videoUUID
+      in: path
+      required: true
+      description: ID of the video
+      schema:
+        $ref: '#/components/schemas/videoUUID'
+
+  schemas:
+    userUUID:
+      description: ID of the user
+      type: string
+      format: uuid
+      example: 665c599d-5c8d-4d20-aaab-7ffaba150606
+
+    projectUUID:
+      description: ID of the project
+      type: string
+      format: uuid
+      example: 665c599d-5c8d-4d20-aaab-7ffaba150606
+
+    taskUUID:
+      description: ID of the task
+      type: string
+      format: uuid
+      example: 665c599d-5c8d-4d20-aaab-7ffaba150606
+
+    ideaUUID:
+      description: ID of the project idea
+      type: string
+      format: uuid
+      example: 665c599d-5c8d-4d20-aaab-7ffaba150606
+
+    reportUUID:
+      description: ID of the report
+      type: string
+      format: uuid
+      example: 665c599d-5c8d-4d20-aaab-7ffaba150606
+
+    videoUUID:
+      description: ID of the video
+      type: string
+      format: uuid
+      example: 665c599d-5c8d-4d20-aaab-7ffaba150606
+
+    Error:
+      type: object
+      description: Error object
+      example: { "message": "Error message" }
+      properties:
+        message:
+          description: Error message
+          example: "Error message"
+          type: string
+
+    User:
+      type: object
+      properties:
+        userUUID:
+          $ref: "#/components/schemas/userUUID"
+        name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+
+    ParentalConsent:
+      type: object
+      properties:
+        isSigned:
+          type: boolean
+        signedDate:
+          type: string
+          format: date-time
+
+    Budget:
+      type: object
+      properties:
+        totalFunds:
+          type: number
+          format: float
+        allocated:
+          type: number
+          format: float
+
+    BudgetUpdate:
+      type: object
+      properties:
+        totalFunds:
+          type: number
+        allocated:
+          type: number
+
+    InvestmentData:
+      type: object
+      properties:
+        initialInvestment:
+          type: number
+        expenses:
+          type: number
+
+    ROIResult:
+      type: object
+      properties:
+        roiPercentage:
+          type: number
+        profit:
+          type: number
+
+    ProjectIdea:
+      type: object
+      properties:
+        ideaUUID:
+          $ref: "#/components/schemas/ideaUUID"
+        ideaName:
+          type: string
+        requiredInvestment:
+          type: number
+        productType:
+          type: string
+        teamSize:
+          type: integer
+
+    Task:
+      type: object
+      properties:
+        taskUUID:
+          $ref: "#/components/schemas/taskUUID"
+        name:
+          type: string
+        day:
+          type: integer
+        status:
+          type: string
+          enum:
+            - pending
+            - completed
+
+    TaskCompletion:
+      type: object
+      properties:
+        taskUUID:
+          $ref: "#/components/schemas/taskUUID"
+        completedDate:
+          type: string
+          format: date-time
+
+    ReportRequest:
+      type: object
+      properties:
+        reportType:
+          type: string
+          enum:
+            - pitchDeck
+            - marketing
+            - financial
+        inputs:
+          type: object
+          description: Key-value inputs for the template
+
+    Report:
+      type: object
+      properties:
+        reportUUID:
+          $ref: "#/components/schemas/reportUUID"
+        reportType:
+          type: string
+        url:
+          type: string
+          description: URL to download the generated file
+
+  headers:
+    Set-JWT:
+      schema:
+        type: string
+        description: JWT token
+        example: "jwt=tokenValue; Path=/; HttpOnly; Secure"
+    Clear-JWT:
+      schema:
+        type: string
+        description: JWT token clear
+        example: "jwt=; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Path=/;"
+    HomeRedirect:
+      schema:
+        type: string
+        description: Home redirect
+        example: /
+    LoginRedirect:
+      schema:
+        type: string
+        description: Login redirect
+        example: /auth/login
+
+  responses:
+    UnauthorizedLoginError:
+      description: Unauthorized login
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    UnauthorizedError:
+      description: Unauthorized access
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    AuthorizationSuccess:
+      description: OK
+      headers:
+        Set-Cookie:
+          $ref: "#/components/headers/Set-JWT"
+        Location:
+          $ref: "#/components/headers/HomeRedirect"
+    UnauthorizationSuccess:
+      description: OK
+      headers:
+        Set-Cookie:
+          $ref: "#/components/headers/Clear-JWT"
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    NotAcceptable:
+      description: Not Acceptable
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
