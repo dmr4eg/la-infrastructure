@@ -9,7 +9,7 @@ spec:
   targetNamespace: keycloak
   chart:
     spec:
-      chart: keycloak
+      chart: keycloak/keycloak
       interval: 10s
       version: "26.1.3" # Specify the desired version
       sourceRef:
@@ -17,7 +17,10 @@ spec:
         name: bitnami
         namespace: flux-system
   install:
+    crds: CreateReplace
     createNamespace: true
+  update:
+    crds: CreateReplace
   values:
     replicaCount: 1
     ingress:
