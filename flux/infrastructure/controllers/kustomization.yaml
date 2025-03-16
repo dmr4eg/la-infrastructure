@@ -3,5 +3,5 @@ kind: Kustomization
 resources:
   - nginx-ingress.yaml
   - cert-manager.yaml
-  # - keycloak.yaml
+  - keycloak.yaml
   # - kube-dashboard.yaml

@@ -26,5 +26,5 @@ spec:
       hostname: auth.app.little.pm
       tls: true
       annotations:
-        cert-manager.io/cluster-issuer: "letsencrypt-prod" # Example for cert-manager
+        cert-manager.io/cluster-issuer: "letsencrypt-staging" # Example for cert-manager
 
