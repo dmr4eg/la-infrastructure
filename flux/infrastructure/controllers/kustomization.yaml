@@ -3,7 +3,5 @@ kind: Kustomization
 resources:
   - nginx-ingress.yaml
   - cert-manager.yaml
-  # - kube-dashboard.yaml
   # - keycloak.yaml
-  # - argocd.yaml
-  # - prometheus-grafana.yaml
+  # - kube-dashboard.yaml

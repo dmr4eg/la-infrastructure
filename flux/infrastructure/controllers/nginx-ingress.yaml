@@ -10,10 +10,11 @@ spec:
     spec:
       chart: ingress-nginx
       version: "*"
+      namespace: ingress-nginx
       sourceRef:
         kind: HelmRepository
         name: ingress-nginx
-        namespace: ingress-nginx
+        namespace: flux-system
       interval: 1m
   install:
     createNamespace: true
