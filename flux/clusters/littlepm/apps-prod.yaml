@@ -11,7 +11,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./flux/apps/prod
+  path: flux/apps/overlays/prod
   prune: true
   wait: true
   timeout: 5m0s
