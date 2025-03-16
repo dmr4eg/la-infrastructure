@@ -13,8 +13,8 @@ spec:
       interval: 10s
       version: "26.1.3" # Specify the desired version
       sourceRef:
-        kind: HelmRepository
-        name: bitnami
+        kind: OCIRepository
+        name: bitnami-keycloak
         namespace: flux-system
   install:
     crds: CreateReplace
