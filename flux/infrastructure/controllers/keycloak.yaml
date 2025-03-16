@@ -19,8 +19,6 @@ spec:
   install:
     crds: CreateReplace
     createNamespace: true
-  update:
-    crds: CreateReplace
   values:
     replicaCount: 1
     ingress:
