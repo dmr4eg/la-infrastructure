@@ -10,9 +10,9 @@ spec:
   releaseName: keycloak
   chart:
     spec:
-      chart: keycloak/keycloak
+      chart: keycloak
       interval: 10s
-      version: "24.4.13"
+      version: "*"
       sourceRef:
         kind: HelmRepository
         name: bitnami
