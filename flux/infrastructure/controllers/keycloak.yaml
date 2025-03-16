@@ -1,0 +1,79 @@
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: keycloak
+spec:
+  interval: 5m
+  url: registry-1.docker.io/bitnamicharts
+
+
+
+
+
+
+  namespace: flux-system
+spec:
+  url: https://charts.bitnami.com/bitnami
+
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: keycloak
+spec:
+  releaseName: keycloak
+  chart:
+    spec:
+      chart: keycloak
+      sourceRef:
+        kind: HelmRepository
+        name: keycloak
+        namespace: flux-system
+  interval: 50m
+  install:
+    remediation:
+      retries: 3
+  values:
+    auth:
+      enablePostgresUser: true
+      postgresPassword: "superpassword"
+
+    initdbScripts:
+      01-create-finances.sql: |
+        CREATE DATABASE finances_db;
+        CREATE USER testuser WITH PASSWORD 'testpassword';
+        GRANT ALL PRIVILEGES ON DATABASE finances_db TO testuser;
+
+      02-create-project-conf.sql: |
+        CREATE DATABASE project_conf_db;
+        CREATE USER testuser WITH PASSWORD 'testpassword';
+        GRANT ALL PRIVILEGES ON DATABASE project_conf_db TO testuser;
+
+      03-create-report.sql: |
+        CREATE DATABASE report_db;
+        CREATE USER testuser WITH PASSWORD 'testpassword';
+        GRANT ALL PRIVILEGES ON DATABASE report_db TO testuser;
+
+      04-create-task.sql: |
+        CREATE DATABASE task_db;
+        CREATE USER testuser WITH PASSWORD 'testpassword';
+        GRANT ALL PRIVILEGES ON DATABASE task_db TO testuser;
+
+      05-create-user.sql: |
+        CREATE DATABASE user_db;
+        CREATE USER testuser WITH PASSWORD 'testpassword';
+        GRANT ALL PRIVILEGES ON DATABASE user_db TO testuser;
+
+    primary:
+      service:
+        type: ClusterIP
+
+    ingress:
+      enabled: true
+      className: "nginx"
+      annotations:
+        {
+          'nginx.ingress.kubernetes.io/backend-protocol: "HTTP"',
+          'nginx.ingress.kubernetes.io/force-ssl-redirect: "true"',
+          'nginx.ingress.kubernetes.io/ssl-passthrough: "false"',
+        }

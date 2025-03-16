@@ -1,0 +1,30 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: apigw
+  labels:
+    name: apigw
+spec:
+  rules:
+    - host: app.little.pm
+      tls:
+        - hosts:
+            - app.little.pm
+          secretName: app.little.pm
+      http:
+        paths:
+          - pathType: Prefix
+            path: "/api/orders/$2"
+            backend:
+              service:
+                name: <Service>
+                port:
+                  number: <Port>
+
+          - pathType: Prefix
+            path: "/api/taks"
+            backend:
+              service:
+                name: <Service>
+                port:
+                  number: <Port>

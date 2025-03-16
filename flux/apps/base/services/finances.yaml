@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: finances
+spec:
+  selector:
+    app: finances
+  ports:
+    - port: 80
+      name: http
+      targetPort: http
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: finances
+spec:
+  selector:
+    matchLabels:
+      app: finances
+  template:
+    metadata:
+      labels:
+        app: finances
+    spec:
+      containers:
+        - name: finances
+          image: ghcr.io/dmr4eg/littlepm-finances-service:latest
+          env:
+            - name: SOME_ENV_VAR
+              value: some-value
+          envFrom:
+            - configMapRef:
+                name: common-config
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          ports:
+            - containerPort: 80
+              name: http

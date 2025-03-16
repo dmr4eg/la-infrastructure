@@ -1,0 +1,266 @@
+apiVersion: v1
+data:
+  key1: value1
+  key2: value2
+kind: ConfigMap
+metadata:
+  labels:
+    app: myapp
+  name: common-map-ch29b7t2m8
+  namespace: prod
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: myapp
+  name: finances-service
+  namespace: prod
+spec:
+  ports:
+  - name: http
+    port: 80
+    targetPort: http
+  selector:
+    app: finances
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: myapp
+  name: project-conf-service
+  namespace: prod
+spec:
+  ports:
+  - name: http
+    port: 80
+    targetPort: http
+  selector:
+    app: project-conf
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: myapp
+  name: report-service
+  namespace: prod
+spec:
+  ports:
+  - name: http
+    port: 80
+    targetPort: http
+  selector:
+    app: report
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: myapp
+  name: task-service
+  namespace: prod
+spec:
+  ports:
+  - name: http
+    port: 80
+    targetPort: http
+  selector:
+    app: task
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: myapp
+  name: finances-service
+  namespace: prod
+spec:
+  selector:
+    matchLabels:
+      app: finances
+  template:
+    metadata:
+      labels:
+        app: finances
+    spec:
+      containers:
+      - image: docker.io/nginx:latest
+        name: finances
+        ports:
+        - containerPort: 80
+          name: http
+        resources:
+          limits:
+            cpu: 500m
+            memory: 128Mi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: myapp
+  name: project-conf-service
+  namespace: prod
+spec:
+  selector:
+    matchLabels:
+      app: project-conf
+  template:
+    metadata:
+      labels:
+        app: project-conf
+    spec:
+      containers:
+      - image: docker.io/nginx:latest
+        name: project-conf
+        ports:
+        - containerPort: 80
+          name: http
+        resources:
+          limits:
+            cpu: 500m
+            memory: 128Mi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: myapp
+  name: report-service
+  namespace: prod
+spec:
+  selector:
+    matchLabels:
+      app: report
+  template:
+    metadata:
+      labels:
+        app: report
+    spec:
+      containers:
+      - image: docker.io/nginx:latest
+        name: report
+        ports:
+        - containerPort: 80
+          name: http
+        resources:
+          limits:
+            cpu: 500m
+            memory: 128Mi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: myapp
+  name: task-service
+  namespace: prod
+spec:
+  selector:
+    matchLabels:
+      app: task
+  template:
+    metadata:
+      labels:
+        app: task
+    spec:
+      containers:
+      - image: docker.io/nginx:latest
+        name: task
+        ports:
+        - containerPort: 80
+          name: http
+        resources:
+          limits:
+            cpu: 500m
+            memory: 128Mi
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  labels:
+    app: myapp
+  name: postgresql
+  namespace: prod
+spec:
+  chart:
+    spec:
+      chart: postgresql
+      sourceRef:
+        kind: HelmRepository
+        name: postgresql
+        namespace: flux-system
+  install:
+    remediation:
+      retries: 3
+  interval: 50m
+  releaseName: postgresql
+  values:
+    auth:
+      enablePostgresUser: true
+      postgresPassword: superpassword
+    ingress:
+      annotations:
+        'nginx.ingress.kubernetes.io/backend-protocol: "HTTP"': ""
+        'nginx.ingress.kubernetes.io/force-ssl-redirect: "true"': ""
+        'nginx.ingress.kubernetes.io/ssl-passthrough: "false"': ""
+      className: nginx
+      enabled: true
+    initdbScripts:
+      01-create-finances.sql: |
+        CREATE DATABASE finances_db;
+        CREATE USER testuser WITH PASSWORD 'testpassword';
+        GRANT ALL PRIVILEGES ON DATABASE finances_db TO testuser;
+      02-create-project-conf.sql: |
+        CREATE DATABASE project_conf_db;
+        CREATE USER testuser WITH PASSWORD 'testpassword';
+        GRANT ALL PRIVILEGES ON DATABASE project_conf_db TO testuser;
+      03-create-report.sql: |
+        CREATE DATABASE report_db;
+        CREATE USER testuser WITH PASSWORD 'testpassword';
+        GRANT ALL PRIVILEGES ON DATABASE report_db TO testuser;
+      04-create-task.sql: |
+        CREATE DATABASE task_db;
+        CREATE USER testuser WITH PASSWORD 'testpassword';
+        GRANT ALL PRIVILEGES ON DATABASE task_db TO testuser;
+      05-create-user.sql: |
+        CREATE DATABASE user_db;
+        CREATE USER testuser WITH PASSWORD 'testpassword';
+        GRANT ALL PRIVILEGES ON DATABASE user_db TO testuser;
+    primary:
+      service:
+        type: ClusterIP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  labels:
+    app: myapp
+    name: apigw
+  name: apigw
+  namespace: prod
+spec:
+  rules:
+  - host: app.little.pm
+    http:
+      paths:
+      - backend:
+          service:
+            name: <Service>
+            port:
+              number: <Port>
+        path: /api/orders/$2
+        pathType: Prefix
+      - backend:
+          service:
+            name: <Service>
+            port:
+              number: <Port>
+        path: /api/taks
+        pathType: Prefix
+    tls:
+    - hosts:
+      - app.little.pm
+      secretName: app.little.pm

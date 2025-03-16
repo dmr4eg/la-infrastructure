@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: project-conf
+spec:
+  selector:
+    app: project-conf
+  ports:
+    - port: 80
+      name: http
+      targetPort: http
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: project-conf
+spec:
+  selector:
+    matchLabels:
+      app: project-conf
+  template:
+    metadata:
+      labels:
+        app: project-conf
+    spec:
+      containers:
+        - name: project-conf
+          image: ghcr.io/dmr4eg/littlepm-project-conf-service:latest
+          env:
+            - name: SOME_ENV_VAR
+              value: some-value
+          envFrom:
+            - configMapRef:
+                name: common-config
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          ports:
+            - containerPort: 80
+              name: http
