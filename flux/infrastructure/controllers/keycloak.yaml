@@ -6,11 +6,11 @@ metadata:
   namespace: flux-system
 spec:
   interval: 10m
+  targetNamespace: keycloak
   chart:
     spec:
       chart: keycloak
       version: "26.1.3" # Specify the desired version
-      namespace: keycloak
       sourceRef:
         kind: HelmRepository
         name: bitnami

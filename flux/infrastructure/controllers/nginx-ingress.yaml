@@ -6,11 +6,11 @@ metadata:
   namespace: flux-system
 spec:
   interval: 1m
+  targetNamespace: ingress-nginx
   chart:
     spec:
       chart: ingress-nginx
       version: "*"
-      namespace: ingress-nginx
       sourceRef:
         kind: HelmRepository
         name: ingress-nginx

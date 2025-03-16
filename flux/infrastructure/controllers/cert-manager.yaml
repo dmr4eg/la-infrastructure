@@ -6,11 +6,11 @@ metadata:
   namespace: flux-system
 spec:
   interval: 5m
+  targetNamespace: cert-manager
   chart:
     spec:
       chart: cert-manager
       version: "1.15.1"
-      namespace: cert-manager
       sourceRef:
         kind: HelmRepository
         name: jetstack
