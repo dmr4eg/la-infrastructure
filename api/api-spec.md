@@ -1,259 +1,91 @@
 openapi: 3.0.3
 info:
-  title: Little PM – RBAC, Projects, Tasks, Reports, Video
+  title: Little PM API
   version: 1.0.0
-  description: >
-    OpenAPI specification detailing the RBAC, Projects, Tasks, Reports,
-    and Video endpoints for the Little PM application.
+  description: |
+    Comprehensive project management API with task tracking, reporting,
+    and video resources. Provides secure access control and project organization.
+  termsOfService: https://app.little.pm/terms
+  contact:
+    name: API Support
+    url: https://support.little.pm/api
+    email: support@little.pm
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
 
 servers:
-  - url: https://app.little.pm
-    description: Production Server
+  - url: https://app.little.pm/api/v1
+    description: Production API
+  - url: https://sandbox.little.pm/api/v1
+    description: Sandbox Environment (Testing)
 
 tags:
-  - name: Project RBAC
-  - name: Project Management
+  - name: Projects
+    description: Project lifecycle management
   - name: Tasks
+    description: Task management within projects
+  - name: Project Finances
+    description: Project budget management and financial tracking
   - name: Reports
-  - name: Video
+    description: Project reporting and analytics
+  - name: Media
+    description: Video resources and metadata
 
 paths:
-
-  #####################################################
-  #               PROJECT RBAC API                    #
-  #####################################################
-  /rbac/{projectUUID}:
-    parameters:
-      - $ref: "#/components/parameters/projectUUID"
-      - name: limit
-        in: query
-        description: Pagination limit
-        required: false
-        schema:
-          type: integer
-      - name: offset
-        in: query
-        description: Pagination offset
-        required: false
-        schema:
-          type: integer
-      - name: role
-        in: query
-        description: Filter by user role within this project (owner or member)
-        required: false
-        schema:
-          type: string
-          enum: [owner, member]
-
-    get:
-      tags:
-        - Project RBAC
-      summary: List project users
-      description: Retrieve a list of users (and roles) within the specified project.
-      operationId: getProjectRbacList
-      security:
-        - bearerAuth: []
-      responses:
-        '200':
-          description: A list of RBAC records
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/RBAC'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
-        '404':
-          description: Project not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-
-    post:
-      tags:
-        - Project RBAC
-      summary: Create RBAC record
-      description: Only the project owner can create a new RBAC record for this project.
-      operationId: createProjectRbac
-      security:
-        - bearerAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/RBAC'
-      responses:
-        '200':
-          description: Successfully created an RBAC record
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RBAC'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
-        '403':
-          description: Only owner can create RBAC record
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '404':
-          description: Project not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-
-    delete:
-      tags:
-        - Project RBAC
-      summary: Remove RBAC record
-      description: Only the project owner can remove an RBAC record from this project.
-      operationId: deleteProjectRbac
-      security:
-        - bearerAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/RBAC'
-      responses:
-        '200':
-          description: RBAC record removed
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
-        '403':
-          description: Only owner can delete RBAC record
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '404':
-          description: Project or record not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-
-
-  #####################################################
-  #              PROJECT REST API                     #
-  #####################################################
   /projects:
     get:
-      tags:
-        - Project Management
-      summary: List all project DTOs
-      description: |
-        List all projects (DTO) to which the current user has read-access via RBAC.
-        Supports optional pagination.
+      tags: [Projects]
+      summary: List accessible projects
+      description: Retrieve paginated list of projects with user access
       operationId: listProjects
       security:
         - bearerAuth: []
       parameters:
-        - name: limit
-          in: query
-          description: Pagination limit
-          required: false
-          schema:
-            type: integer
-        - name: offset
-          in: query
-          description: Pagination offset
-          required: false
-          schema:
-            type: integer
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/offset"
       responses:
         '200':
-          description: An array of project DTO
+          description: Successful project list retrieval
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/ProjectDTO'
+                  $ref: '#/components/schemas/Project'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
-        '404':
-          description: No projects found or invalid access
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-
-    post:
-      tags:
-        - Project Management
-      summary: Create a new project
-      description: |
-        Create a new project. The backend automatically generates a UUID and grants the
-        creating user "owner" RBAC on success.
-      operationId: createProject
-      security:
-        - bearerAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ProjectDTO'
-      responses:
-        '200':
-          description: Project created
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/ProjectDTO'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
 
   /projects/{projectUUID}:
     parameters:
       - $ref: "#/components/parameters/projectUUID"
-
     get:
-      tags:
-        - Project Management
-      summary: Retrieve a single project
-      description: Retrieve a single project DTO by UUID, requires valid RBAC.
+      tags: [Projects]
+      summary: Get project details
+      description: Retrieve detailed information about a specific project
       operationId: getProject
       security:
         - bearerAuth: []
       responses:
         '200':
-          description: A project DTO
+          description: Project details retrieved
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ProjectDTO'
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
+                $ref: '#/components/schemas/Project'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
         '404':
-          description: Project not found or user lacks RBAC
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
 
     put:
-      tags:
-        - Project Management
-      summary: Update a project
-      description: Update an existing project’s DTO, requires valid RBAC.
+      tags: [Projects]
+      summary: Update project
+      description: Update project metadata and details
       operationId: updateProject
       security:
         - bearerAuth: []
@@ -262,96 +94,52 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ProjectDTO'
+              $ref: '#/components/schemas/ProjectUpdate'
       responses:
         '200':
-          description: Updated project DTO
+          description: Project updated successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ProjectDTO'
+                $ref: '#/components/schemas/Project'
         '400':
           $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
         '404':
-          description: Project not found or user lacks RBAC
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-
-    delete:
-      tags:
-        - Project Management
-      summary: Delete a project
-      description: Delete a project (and its associated RBAC), requires valid RBAC.
-      operationId: deleteProject
-      security:
-        - bearerAuth: []
-      responses:
-        '200':
-          description: Project deleted
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
-        '404':
-          description: Project not found or user lacks RBAC
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-
-
-  #####################################################
-  #                TASKS REST API                     #
-  #####################################################
-  /tasks:
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  
+  /budgets/{projectUUID}:
+    parameters:
+      - $ref: "#/components/parameters/projectUUID"
     get:
-      tags:
-        - Tasks
-      summary: List tasks accessible to the current user
-      description: Retrieve a list of all tasks for which the user has valid RBAC. Supports pagination.
-      operationId: listTasks
+      tags: [Project Finances]
+      summary: Get project budget
+      description: Retrieve financial budget details for a specific project
+      operationId: getProjectBudget
       security:
         - bearerAuth: []
-      parameters:
-        - name: limit
-          in: query
-          description: Pagination limit
-          required: false
-          schema:
-            type: integer
-        - name: offset
-          in: query
-          description: Pagination offset
-          required: false
-          schema:
-            type: integer
-        - name: projectUUID
-          in: query
-          description: If provided, filters tasks by the specified project UUID
-          required: false
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
-          description: A list of tasks
+          description: Budget details retrieved
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Task'
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
+                $ref: '#/components/schemas/Budget'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
 
     post:
-      tags:
-        - Tasks
-      summary: Create a new task
-      description: Create a new task. The user must have valid RBAC on the project in question.
-      operationId: createTask
+      tags: [Project Finances]
+      summary: Update project budget (Partial)
+      description: Update partial budget information for a project
+      operationId: partialUpdateProjectBudget
       security:
         - bearerAuth: []
       requestBody:
@@ -359,57 +147,110 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Task'
+              $ref: '#/components/schemas/BudgetUpdate'
       responses:
         '200':
-          description: Task created
+          description: Budget updated successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Task'
+                $ref: '#/components/schemas/Budget'
         '400':
           $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
         '404':
-          description: Project not found or invalid RBAC
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    put:
+      tags: [Project Finances]
+      summary: Update project budget (Full)
+      description: Replace entire budget information for a project
+      operationId: updateProjectBudget
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Budget'
+      responses:
+        '200':
+          description: Budget replaced successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/Budget'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /projects/{projectUUID}/tasks:
+    parameters:
+      - $ref: "#/components/parameters/projectUUID"
+    get:
+      tags: [Tasks]
+      summary: List project tasks
+      description: Retrieve all tasks associated with a project
+      operationId: listProjectTasks
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/offset"
+        - $ref: "#/components/parameters/statusFilter"
+      responses:
+        '200':
+          description: Successful task list retrieval
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Task'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
 
   /tasks/{taskUUID}:
     parameters:
       - $ref: "#/components/parameters/taskUUID"
     get:
-      tags:
-        - Tasks
-      summary: Retrieve a single task
-      description: Retrieve a task by its UUID, requires valid RBAC.
+      tags: [Tasks]
+      summary: Get task details
+      description: Retrieve detailed information about a specific task
       operationId: getTask
       security:
         - bearerAuth: []
       responses:
         '200':
-          description: Task retrieved
+          description: Task details retrieved
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Task'
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
         '404':
-          description: Task not found or invalid RBAC
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
 
     put:
-      tags:
-        - Tasks
-      summary: Edit a task
-      description: Edit a task, requires valid RBAC.
+      tags: [Tasks]
+      summary: Update task
+      description: Modify existing task details
       operationId: updateTask
       security:
         - bearerAuth: []
@@ -418,303 +259,447 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Task'
+              $ref: '#/components/schemas/TaskUpdate'
       responses:
         '200':
-          description: Updated task
+          description: Task updated successfully
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Task'
         '400':
           $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
         '404':
-          description: Task not found or invalid RBAC
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
 
     delete:
-      tags:
-        - Tasks
-      summary: Delete a task
-      description: Delete a task, requires valid RBAC.
+      tags: [Tasks]
+      summary: Delete task
+      description: Permanently remove a task
       operationId: deleteTask
       security:
         - bearerAuth: []
       responses:
-        '200':
-          description: Task deleted
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Task'
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
+        '204':
+          description: Task deleted successfully
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
         '404':
-          description: Task not found or invalid RBAC
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
 
-
-  #####################################################
-  #               REPORTS REST API                    #
-  #####################################################
-  /reports:
-    get:
-      tags:
-        - Reports
-      summary: List all reports accessible to the current user
-      description: Retrieve a list of all reports for projects where the user has valid RBAC.
-      operationId: listReports
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: limit
-          in: query
-          description: Pagination limit
-          required: false
-          schema:
-            type: integer
-        - name: offset
-          in: query
-          description: Pagination offset
-          required: false
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: A list of reports
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Report'
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
-
-  /reports/{projectUUID}:
+  /projects/{projectUUID}/reports:
     parameters:
       - $ref: "#/components/parameters/projectUUID"
     post:
-      tags:
-        - Reports
-      summary: Generate a new report
-      description: Generate a new report for the given project. Requires valid RBAC.
-      operationId: createReport
+      tags: [Reports]
+      summary: Generate project report
+      description: Initiate report generation for a project
+      operationId: generateReport
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReportRequest'
+      responses:
+        '202':
+          description: Report generation accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportStatus'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /reports/{reportUUID}:
+    parameters:
+      - $ref: "#/components/parameters/reportUUID"
+    get:
+      tags: [Reports]
+      summary: Get report status
+      description: Retrieve current status of a report generation
+      operationId: getReportStatus
       security:
         - bearerAuth: []
       responses:
         '200':
-          description: Report generated
+          description: Report status retrieved
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Report'
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
+                $ref: '#/components/schemas/ReportStatus'
         '404':
-          description: Project not found or user lacks RBAC
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
 
-
-  #####################################################
-  #                VIDEO REST API                     #
-  #####################################################
-  /video/{videoUUID}:
+  /media/videos/{videoUUID}:
     parameters:
-      - name: videoUUID
-        in: path
-        required: true
-        description: ID of the video
-        schema:
-          type: string
-          format: uuid
-          example: 665c599d-5c8d-4d20-aaab-7ffaba150606
+      - $ref: "#/components/parameters/videoUUID"
     get:
-      tags:
-        - Video
-      summary: Retrieve video object
-      description: Public endpoint to retrieve a specific video object by UUID.
-      operationId: getVideo
+      tags: [Media]
+      summary: Get video metadata
+      description: Retrieve metadata about a video resource
+      operationId: getVideoMetadata
       responses:
         '200':
-          description: Video found
+          description: Video metadata retrieved
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Video'
         '404':
-          description: Video not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
 
 components:
   securitySchemes:
     bearerAuth:
-      description: JWT token
       type: http
       scheme: bearer
       bearerFormat: JWT
+      description: Valid JWT token required for authenticated endpoints
 
   parameters:
+    limit:
+      name: limit
+      in: query
+      description: Maximum number of items to return
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 20
+    offset:
+      name: offset
+      in: query
+      description: Pagination offset
+      required: false
+      schema:
+        type: integer
+        minimum: 0
+        default: 0
     projectUUID:
       name: projectUUID
       in: path
       required: true
-      description: Project UUID
       schema:
-        type: string
-        format: uuid
-        example: 665c599d-5c8d-4d20-aaab-7ffaba150606
-
+        $ref: '#/components/schemas/uuid'
+      description: Unique project identifier
     taskUUID:
       name: taskUUID
       in: path
       required: true
-      description: Task UUID
+      schema:
+        $ref: '#/components/schemas/uuid'
+      description: Unique task identifier
+    reportUUID:
+      name: reportUUID
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/uuid'
+      description: Unique report identifier
+    videoUUID:
+      name: videoUUID
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/uuid'
+      description: Unique video identifier
+    roleFilter:
+      name: role
+      in: query
+      description: Filter by user role
       schema:
         type: string
-        format: uuid
-        example: 665c599d-5c8d-4d20-aaab-7ffaba150606
+        enum: [owner, member]
+    statusFilter:
+      name: status
+      in: query
+      description: Filter tasks by status
+      schema:
+        type: string
+        enum: [pending, in_progress, completed]
 
   schemas:
-    # --------------------- Error Object ---------------------
+    uuid:
+      type: string
+      format: uuid
+      example: "550e8400-e29b-41d4-a716-446655440000"
+
     Error:
       type: object
       properties:
+        code:
+          type: integer
+          format: int32
+          example: 404
         message:
           type: string
-          example: "An error occurred"
+          example: "Resource not found"
+        details:
+          type: array
+          items:
+            type: string
+          example: ["Invalid UUID format", "Missing required field"]
 
-    # --------------------- RBAC ---------------------
-    RBAC:
-      type: object
-      description: A record defining a user's role on a project
-      properties:
-        projectUUID:
-          type: string
-          format: uuid
-          description: The project for which RBAC is assigned
-        userUUID:
-          type: string
-          format: uuid
-          description: The user to which RBAC is assigned
-        role_enum:
-          type: string
-          enum: [owner, member]
-          description: The role of this user on the project
-
-    # --------------------- Projects ---------------------
-    ProjectDTO:
-      type: object
-      description: Project DTO for retrieval and creation
-      properties:
-        projectUUID:
-          type: string
-          format: uuid
-          description: Unique ID of the project
-        userUUID:
-          type: string
-          format: uuid
-          description: Owner/creator's user UUID
-        description:
-          type: string
-          description: Short description of the project
-
-    # Potentially a more detailed Project object including progress
     Project:
       type: object
-      description: Full project object
+      required: [projectUUID, name, ownerUUID]
       properties:
         projectUUID:
-          type: string
-          format: uuid
-        userUUID:
-          type: string
-          format: uuid
-        description:
-          type: string
-        progress:
-          type: integer
-          description: Percentage of project completion
-
-    # --------------------- Tasks ---------------------
-    Task:
-      type: object
-      description: Represents a Task
-      properties:
-        taskUUID:
-          type: string
-          format: uuid
-        projectUUID:
-          type: string
-          format: uuid
+          $ref: '#/components/schemas/uuid'
         name:
           type: string
+          example: "Q4 Marketing Campaign"
+        description:
+          type: string
+          example: "Year-end marketing push"
+        ownerUUID:
+          $ref: '#/components/schemas/uuid'
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    ProjectCreate:
+      type: object
+      required: [name]
+      properties:
+        name:
+          type: string
+          example: "New Product Launch"
+        description:
+          type: string
+          example: "2025 Product roadmap implementation"
+
+    ProjectUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Updated Project Name"
+        description:
+          type: string
+          example: "Revised project scope"
+
+    Task:
+      type: object
+      required: [taskUUID, projectUUID, title, status]
+      properties:
+        taskUUID:
+          $ref: '#/components/schemas/uuid'
+        projectUUID:
+          $ref: '#/components/schemas/uuid'
+        title:
+          type: string
+          example: "Competitor Analysis"
+        description:
+          type: string
+          example: "Research main competitors' features"
         status:
           type: string
-          enum: [pending, completed]
-        # add any other optional fields (e.g., day, notes) as needed
+          enum: [pending, in_progress, completed]
+        dueDate:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
 
-    # --------------------- Reports ---------------------
-    Report:
+    TaskCreate:
       type: object
-      description: A report object
+      required: [title]
       properties:
-        reportUUID:
+        title:
           type: string
-          format: uuid
-        userUUID:
+          example: "New Task"
+        description:
           type: string
-          format: uuid
-        projectUUID:
+        dueDate:
           type: string
-          format: uuid
-        report_enum:
-          type: string
-          enum: [pitchDeck, marketing, financial]
-        url:
-          type: string
-          description: URL where the generated report can be accessed
+          format: date-time
 
-    # --------------------- Video ---------------------
-    Video:
+    TaskUpdate:
       type: object
-      description: A video resource
       properties:
-        videoUUID:
-          type: string
-          format: uuid
         title:
           type: string
         description:
           type: string
-        url:
+        status:
           type: string
+          enum: [pending, in_progress, completed]
+        dueDate:
+          type: string
+          format: date-time
+    
+    Budget:
+      type: object
+      required: [projectUUID, totalFunds, allocated]
+      properties:
+        projectUUID:
+          $ref: '#/components/schemas/uuid'
+        totalFunds:
+          type: number
+          format: float
+          minimum: 0
+          description: Total available funds for the project
+          example: 50000.00
+        allocated:
+          type: number
+          format: float
+          minimum: 0
+          description: Currently allocated funds
+          example: 12500.50
+        currency:
+          type: string
+          default: "USD"
+          example: "EUR"
+        lastUpdated:
+          type: string
+          format: date-time
+          description: Timestamp of last modification
+
+    BudgetUpdate:
+      type: object
+      properties:
+        totalFunds:
+          type: number
+          format: float
+          minimum: 0
+        allocated:
+          type: number
+          format: float
+          minimum: 0
+        currency:
+          type: string
+      example:
+        totalFunds: 75000.00
+        allocated: 25000.00
+
+    ReportRequest:
+      type: object
+      required: [reportType]
+      properties:
+        reportType:
+          type: string
+          enum: [summary, detailed, financial]
+        format:
+          type: string
+          enum: [pdf, csv, json]
+          default: "pdf"
+
+    ReportStatus:
+      type: object
+      properties:
+        reportUUID:
+          $ref: '#/components/schemas/uuid'
+        status:
+          type: string
+          enum: [queued, processing, completed, failed]
+        downloadUrl:
+          type: string
+          format: uri
+        requestedAt:
+          type: string
+          format: date-time
+        completedAt:
+          type: string
+          format: date-time
+
+    Video:
+      type: object
+      properties:
+        videoUUID:
+          $ref: '#/components/schemas/uuid'
+        title:
+          type: string
+          example: "Product Demo"
+        description:
+          type: string
+          example: "Q3 feature showcase"
+        duration:
+          type: number
+          format: float
+          example: 123.45
+        resolution:
+          type: string
+          example: "1920x1080"
+        createdAt:
+          type: string
+          format: date-time
 
   responses:
     BadRequest:
-      description: Bad Request
+      description: Invalid request parameters
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 400
+            message: "Validation error"
+            details: ["Invalid date format", "Missing required field: title"]
 
     UnauthorizedError:
-      description: Unauthorized
+      description: Missing or invalid authentication
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: "Authentication required"
+
+    ForbiddenError:
+      description: Insufficient permissions
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 403
+            message: "Insufficient permissions"
+
+    NotFoundError:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 404
+            message: "Project not found"
+
+    InternalServerError:
+      description: Server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 500
+            message: "Internal server error"
