@@ -25,7 +25,7 @@ spec:
     spec:
       containers:
         - name: report
-          image: docker.io/nginx:latest
+          image: docker.io/nginx:stable
           #image: ghcr.io/dmr4eg/littlepm-report-service:latest
           env:
             - name: SOME_ENV_VAR

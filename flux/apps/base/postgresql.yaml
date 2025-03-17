@@ -9,7 +9,7 @@ spec:
       chart: postgresql
       sourceRef:
         kind: HelmRepository
-        name: postgresql
+        name: bitnami
         namespace: flux-system
   interval: 50m
   install:
