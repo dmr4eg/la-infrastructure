@@ -5,6 +5,9 @@ resources:
   - ../../base
 
 namespace: staging
+
+patchesStrategicMerge:
+  - apigw-staging.yaml
 # patches:
 #   - path: staging-values.yaml
 #     target:
