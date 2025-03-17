@@ -25,7 +25,8 @@ spec:
     spec:
       containers:
         - name: project-conf
-          image: ghcr.io/dmr4eg/littlepm-project-conf-service:latest
+          image: docker.io/nginx:latest
+          #image: ghcr.io/dmr4eg/littlepm-project-conf-service:latest
           env:
             - name: SOME_ENV_VAR
               value: some-value

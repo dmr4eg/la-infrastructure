@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: report
+  name: finances
 spec:
   selector:
-    app: report
+    app: finances
   ports:
     - port: 80
       name: http
@@ -13,20 +13,20 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: report
+  name: finances
 spec:
   selector:
     matchLabels:
-      app: report
+      app: finances
   template:
     metadata:
       labels:
-        app: report
+        app: finances
     spec:
       containers:
-        - name: report
+        - name: finances
           image: docker.io/nginx:latest
-          #image: ghcr.io/dmr4eg/littlepm-report-service:latest
+          #image: ghcr.io/dmr4eg/littlepm-finances-service:latest
           env:
             - name: SOME_ENV_VAR
               value: some-value

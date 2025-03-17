@@ -25,7 +25,8 @@ spec:
     spec:
       containers:
         - name: task
-          image: ghcr.io/dmr4eg/littlepm-task-service:latest
+          image: docker.io/nginx:latest
+          # image: ghcr.io/dmr4eg/littlepm-task-service:latest
           env:
             - name: SOME_ENV_VAR
               value: some-value

@@ -4,7 +4,17 @@ metadata:
   name: apigw
   labels:
     name: apigw
+  annotations:
+    kubernetes.io/ingress.class: "nginx-external"
+    cert-manager.io/cluster-issuer: "lets-encrypt-prod"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
 spec:
+  tls:
+    - secretName: app-little-tls
+      hosts:
+        - app.little.pm
+
   rules:
     - host: app.little.pm
       tls:
@@ -13,18 +23,42 @@ spec:
           secretName: app.little.pm
       http:
         paths:
-          - pathType: Prefix
-            path: "/api/orders/$2"
+          - path: /
+            pathType: Prefix
             backend:
               service:
-                name: <Service>
+                name: frontend-service
                 port:
-                  number: <Port>
+                  name: http
 
-          - pathType: Prefix
-            path: "/api/taks"
+          - path: /api/project(/|$)(.*)
+            pathType: Prefix
             backend:
               service:
-                name: <Service>
+                name: project-conf-service
                 port:
-                  number: <Port>
+                  name: http
+
+          - path: /api/finance(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: finance-service
+                port:
+                  name: http
+
+          - path: /api/report(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: report-service
+                port:
+                  name: http
+
+          - path: /api/task(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: task-service
+                port:
+                  name: http
