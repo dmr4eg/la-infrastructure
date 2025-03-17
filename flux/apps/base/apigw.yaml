@@ -20,7 +20,7 @@ spec:
       tls:
         - hosts:
             - app.little.pm
-          secretName: app.little.pm
+          secretName: letsencrypt-staging
       http:
         paths:
           - path: /
@@ -32,7 +32,7 @@ spec:
                   name: http
 
           - path: /api/project(/|$)(.*)
-            pathType: Prefix
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: project-conf-service
@@ -40,7 +40,7 @@ spec:
                   name: http
 
           - path: /api/finance(/|$)(.*)
-            pathType: Prefix
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: finance-service
@@ -48,7 +48,7 @@ spec:
                   name: http
 
           - path: /api/report(/|$)(.*)
-            pathType: Prefix
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: report-service
@@ -56,7 +56,7 @@ spec:
                   name: http
 
           - path: /api/task(/|$)(.*)
-            pathType: Prefix
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: task-service
