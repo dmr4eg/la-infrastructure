@@ -1,837 +1,1483 @@
 openapi: 3.0.3
 info:
-  title: Little PM API
+  title: Project & Day API
   version: 1.0.0
-  description: |
-    Comprehensive project management API with task tracking, reporting,
-    and video resources. Provides secure access control and project organization.
-  license:
-    name: Apache 2.0
-    url: https://www.apache.org/licenses/LICENSE-2.0.html
-
+  description: An OpenAPI specification for project management, day templates, tasks, forms, media, and related user progress tracking.
 servers:
-  - url: https://app.little.pm
-    description: Production API
+  - url: https://api.example.com
 
-tags:
-  - name: Course Service
-    description: Project lifecycle management
-  - name: Content Service
-    description: Task management within projects
-  - name: Finances Service
-    description: Project budget management and financial tracking
+########################################################
+# SECURITY SCHEMES
+########################################################
+components:
+  securitySchemes:
+    admin_jwt:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    user_jwt:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  ######################################################
+  # SCHEMAS
+  ######################################################
+  schemas:
+
+    ######################################################
+    # PROJECT
+    ######################################################
+    ProjectBlueprint:
+      type: object
+      properties:
+        project_blueprint_uuid:
+          type: string
+          format: uuid
+        poster_url:
+          type: string
+          description: URL for the project poster image
+        welcome_video_url:
+          type: string
+          description: URL for the project introduction video
+        title:
+          type: string
+        description:
+          type: string
+        difficulty:
+          type: string
+          enum: [easy, medium, hard]
+        style:
+          type: string
+          enum: [dyi, ready_made]
+
+    ProjectDaysMapper:
+      type: object
+      properties:
+        project_blueprint:
+          type: string
+          format: uuid
+          description: UUID referencing a ProjectBlueprint
+        day:
+          type: string
+          format: uuid
+          description: UUID referencing a DayBlueprint
+        order:
+          type: integer
+          description: The order of the day in the project
+
+    ProjectInstance:
+      type: object
+      properties:
+        project_blueprint_uuid:
+          type: string
+          format: uuid
+        user_uuid:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum: [in_progress, completed]
+        start_date:
+          type: string
+          format: date-time
+        end_date:
+          type: string
+          format: date-time
+        feedback:
+          type: string
+        what_went_well:
+          type: string
+
+    ProjectFinance:
+      type: object
+      properties:
+        project_blueprint_uuid:
+          type: string
+          format: uuid
+        user_uuid:
+          type: string
+          format: uuid
+        investor_gave:
+          type: number
+          format: float
+        investor_return:
+          type: number
+          format: float
+        spent_budget:
+          type: number
+          format: float
+        toys_planned:
+          type: number
+          format: float
+        toys_sold:
+          type: number
+          format: float
+        toys_left:
+          type: number
+          format: float
+        members_budged:
+          type: number
+          format: float
+        profit:
+          type: number
+          format: float
+        expense_amount:
+          type: number
+          format: float
+        calculated_budget:
+          type: number
+          format: float
+        items_cost:
+          type: number
+          format: float
+        recommended_price:
+          type: number
+          format: float
+        price_per_item:
+          type: number
+          format: float
+        sold_price:
+          type: number
+          format: float
+
+    ProjectMembers:
+      type: object
+      properties:
+        project_blueprint_uuid:
+          type: string
+          format: uuid
+        user_uuid:
+          type: string
+          format: uuid
+        member_name:
+          type: string
+
+    ProjectDTO:
+      type: object
+      properties:
+        blueprint:
+          $ref: '#/components/schemas/ProjectBlueprint'
+        instance:
+          $ref: '#/components/schemas/ProjectInstance'
+
+    ######################################################
+    # DAY
+    ######################################################
+    DayBlueprint:
+      type: object
+      properties:
+        day_blueprint_uuid:
+          type: string
+          format: uuid
+        title:
+          type: string
+        description:
+          type: string
+        text:
+          type: string
+
+    DayComponentsMapper:
+      type: object
+      properties:
+        day_blueprint_uuid:
+          type: string
+          format: uuid
+        day_component_uuid:
+          type: string
+          format: uuid
+        type:
+          type: string
+          enum: [task_blueprint, form_blueprint, media]
+
+    DayInstance:
+      type: object
+      properties:
+        day_blueprint_uuid:
+          type: string
+          format: uuid
+        user_uuid:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum: [in_progress, completed, not_started]
+
+    DayDTO:
+      type: object
+      properties:
+        blueprint:
+          $ref: '#/components/schemas/DayBlueprint'
+        instance:
+          $ref: '#/components/schemas/DayInstance'
+
+    ######################################################
+    # TASK
+    ######################################################
+    TaskBlueprint:
+      type: object
+      properties:
+        task_blueprint_uuid:
+          type: string
+          format: uuid
+        title:
+          type: string
+        description:
+          type: string
+
+    TaskInstance:
+      type: object
+      properties:
+        task_blueprint_uuid:
+          type: string
+          format: uuid
+        user_uuid:
+          type: string
+          format: uuid
+        status:
+          type: boolean
+          description: True if completed, false otherwise
+
+    TaskDTO:
+      type: object
+      properties:
+        blueprint:
+          $ref: '#/components/schemas/TaskBlueprint'
+        progress:
+          $ref: '#/components/schemas/TaskInstance'
+
+    ######################################################
+    # FORM
+    ######################################################
+    FormBlueprint:
+      type: object
+      properties:
+        form_blueprint_uuid:
+          type: string
+          format: uuid
+        title:
+          type: string
+        description:
+          type: string
+        callback_url:
+          type: string
+
+    FormField:
+      type: object
+      properties:
+        form_field_uuid:
+          type: string
+          format: uuid
+        input_type:
+          type: string
+          enum: [text, number, file]
+        required:
+          type: boolean
+        title:
+          type: string
+        description:
+          type: string
+
+    FormFieldMapper:
+      type: object
+      properties:
+        form_blueprint_uuid:
+          type: string
+          format: uuid
+        form_field:
+          type: string
+          format: uuid
+        order:
+          type: integer
+
+    FormInstance:
+      type: object
+      properties:
+        form_blueprint_uuid:
+          type: string
+          format: uuid
+        user_uuid:
+          type: string
+          format: uuid
+        status:
+          type: boolean
+          description: True if form is completed, false otherwise
+
+    FormDTO:
+      type: object
+      properties:
+        blueprint:
+          $ref: '#/components/schemas/FormBlueprint'
+        instance:
+          $ref: '#/components/schemas/FormInstance'
+
+    ######################################################
+    # MEDIA
+    ######################################################
+    Media:
+      type: object
+      properties:
+        mediaUUID:
+          type: string
+          format: uuid
+        type:
+          type: string
+          enum: [video, image]
+        title:
+          type: string
+        description:
+          type: string
 
 paths:
-  /project:
-    post:
-      tags: [Course Service]
-      summary: Create project from blueprint
-      description: Create project from blueprint
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                blueprintUUID:
-                  $ref: '#/components/schemas/uuid'
-                name:
-                  type: string
-      parameters:
-        - $ref: "#/components/parameters/limit"
-        - $ref: "#/components/parameters/offset"
-        - $ref: "#/components/parameters/blueprintType"
 
-      responses:
-        '202':
-          description: Project was created from a blueprint
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Project'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '403':
-          $ref: '#/components/responses/ForbiddenError'
-        '404':
-          $ref: '#/components/responses/NotFoundError'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-
+  ######################################################
+  # PROJECT ENDPOINTS
+  ######################################################
+  /projects:
     get:
-      tags: [Course Service]
-      summary: List accessible projects
-      description: Retrieve paginated list of projects with user access
-      operationId: listProjects
-      security:
-        - bearerAuth: []
+      summary: List project blueprints
+      description: List project blueprints (paginated)
       parameters:
-        - $ref: "#/components/parameters/limit"
-        - $ref: "#/components/parameters/offset"
-        - $ref: "#/components/parameters/projectStatusFilter"
+        - name: limit
+          in: query
+          schema:
+            type: integer
+        - name: offset
+          in: query
+          schema:
+            type: integer
       responses:
         '200':
-          description: Successful project list retrieval
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Project'
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-
-  /project/blueprints:
-    get:
-      tags: [Course Service]
-      summary: List available blueprints
-      description: Retrieve paginated list of blueprints for projects with user access
-      operationId: listBlueprintsProject
-      security:
-        - bearerAuth: []
-      parameters:
-        - $ref: "#/components/parameters/limit"
-        - $ref: "#/components/parameters/offset"
-      responses:
-        '200':
-          description: Successful project list retrieval
+          description: A list of project blueprints
           content:
             application/json:
               schema:
                 type: array
                 items:
                   $ref: '#/components/schemas/ProjectBlueprint'
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-
-  /project/{projectUUID}:
-    parameters:
-      - $ref: "#/components/parameters/projectUUID"
-    get:
-      tags: [Course Service]
-      summary: Get project details
-      description: Retrieve detailed information about a specific project
-      operationId: getProject
-      security:
-        - bearerAuth: []
-      responses:
-        '200':
-          description: Project details retrieved
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Project'
-        '403':
-          $ref: '#/components/responses/ForbiddenError'
-        '404':
-          $ref: '#/components/responses/NotFoundError'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-
-    put:
-      tags: [Course Service]
-      summary: Update project
-      description: Update project metadata and details
-      operationId: updateProject
-      security:
-        - bearerAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ProjectUpdate'
-      responses:
-        '200':
-          description: Project updated successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Project'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '403':
-          $ref: '#/components/responses/ForbiddenError'
-        '404':
-          $ref: '#/components/responses/NotFoundError'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-
-  /finances/{projectUUID}:
-    parameters:
-      - $ref: "#/components/parameters/projectUUID"
-    get:
-      tags: [Finances Service]
-      summary: Get project budget
-      description: Retrieve financial budget details for a specific project
-      operationId: getProjectBudget
-      security:
-        - bearerAuth: []
-      responses:
-        '200':
-          description: Budget details retrieved
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Budget'
-        '403':
-          $ref: '#/components/responses/ForbiddenError'
-        '404':
-          $ref: '#/components/responses/NotFoundError'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-
     post:
-      tags: [Finances Service]
-      summary: Update project budget (Partial)
-      description: Update partial budget information for a project
-      operationId: partialUpdateProjectBudget
+      summary: Create new project blueprint
+      description: Create new project blueprint (admin only)
       security:
-        - bearerAuth: []
+        - admin_jwt: []
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/BudgetUpdate'
+              $ref: '#/components/schemas/ProjectBlueprint'
       responses:
         '200':
-          description: Budget updated successfully
+          description: The created project blueprint
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Budget'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '403':
-          $ref: '#/components/responses/ForbiddenError'
-        '404':
-          $ref: '#/components/responses/NotFoundError'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
+                $ref: '#/components/schemas/ProjectBlueprint'
 
-    put:
-      tags: [Finances Service]
-      summary: Update project budget (Full)
-      description: Replace entire budget information for a project
-      operationId: updateProjectBudget
-      security:
-        - bearerAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Budget'
-      responses:
-        '200':
-          description: Budget replaced successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Budget'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '403':
-          $ref: '#/components/responses/ForbiddenError'
-        '404':
-          $ref: '#/components/responses/NotFoundError'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-
-  /project/{projectUUID}/unit:
+  /projects/{project_uuid}:
     parameters:
-      - $ref: "#/components/parameters/projectUUID"
+      - name: project_uuid
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
     get:
-      tags: [Content Service]
-      summary: List project tasks
-      description: Retrieve all tasks associated with a project
-      operationId: listProjectTasks
-      security:
-        - bearerAuth: []
-      parameters:
-        - $ref: "#/components/parameters/limit"
-        - $ref: "#/components/parameters/offset"
-        - $ref: "#/components/parameters/taskStatusFilter"
+      summary: Get project blueprint details
+      description: Returns a specific project blueprint
       responses:
         '200':
-          description: Successful task list retrieval
+          description: Project blueprint
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectBlueprint'
+    put:
+      summary: Update an existing project blueprint
+      description: Update project blueprint (admin only)
+      security:
+        - admin_jwt: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectBlueprint'
+      responses:
+        '200':
+          description: Updated project blueprint
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectBlueprint'
+    delete:
+      summary: Delete a project blueprint
+      description: Delete project blueprint (admin only)
+      security:
+        - admin_jwt: []
+      responses:
+        '204':
+          description: No Content
+
+  ######################################################
+  # PROJECT DAYS MAPPING
+  ######################################################
+  /projects/{project_uuid}/days:
+    parameters:
+      - name: project_uuid
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      summary: Get days linked to a project blueprint
+      description: Get linked days (paginated)
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+        - name: offset
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A list of ProjectDaysMapper
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Task'
-        '403':
-          $ref: '#/components/responses/ForbiddenError'
-        '404':
-          $ref: '#/components/responses/NotFoundError'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-
-  /task/{taskUUID}:
-    parameters:
-      - $ref: "#/components/parameters/taskUUID"
-    get:
-      tags: [Content Service]
-      summary: Get task details
-      description: Retrieve detailed information about a specific task
-      operationId: getTask
+                  $ref: '#/components/schemas/ProjectDaysMapper'
+    post:
+      summary: Link a day to a project blueprint
+      description: Link day to project (admin only)
       security:
-        - bearerAuth: []
+        - admin_jwt: []
+      parameters:
+        - name: day_blueprint_uuid
+          in: query
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: order
+          in: query
+          required: true
+          schema:
+            type: integer
       responses:
         '200':
-          description: Task details retrieved
+          description: Linked day
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Task'
-        '403':
-          $ref: '#/components/responses/ForbiddenError'
-        '404':
-          $ref: '#/components/responses/NotFoundError'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-
-    put:
-      tags: [Content Service]
-      summary: Update task
-      description: Modify existing task details
-      operationId: updateTask
+                $ref: '#/components/schemas/ProjectDaysMapper'
+    delete:
+      summary: Unlink a day from a project blueprint
+      description: Unlink day from project (admin only)
       security:
-        - bearerAuth: []
+        - admin_jwt: []
+      parameters:
+        - name: day_blueprint_uuid
+          in: query
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: No Content
+
+  ######################################################
+  # DAY BLUEPRINT ENDPOINTS
+  ######################################################
+  /days:
+    get:
+      summary: List day templates
+      description: List day templates (paginated)
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+        - name: offset
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A list of day blueprints
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DayBlueprint'
+    post:
+      summary: Create day template
+      description: Create day template (admin only)
+      security:
+        - admin_jwt: []
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TaskUpdate'
+              $ref: '#/components/schemas/DayBlueprint'
       responses:
         '200':
-          description: Task updated successfully
+          description: Created day blueprint
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Task'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '403':
-          $ref: '#/components/responses/ForbiddenError'
-        '404':
-          $ref: '#/components/responses/NotFoundError'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
+                $ref: '#/components/schemas/DayBlueprint'
 
-  /media/videos/{videoUUID}:
+  /days/{day_uuid}:
     parameters:
-      - $ref: "#/components/parameters/videoUUID"
+      - name: day_uuid
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
     get:
-      tags: [Content Service]
-      summary: Get video metadata
-      description: Retrieve metadata about a video resource
-      operationId: getVideoMetadata
+      summary: Get day template details
       responses:
         '200':
-          description: Video metadata retrieved
+          description: Day blueprint
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Video'
-        '404':
-          $ref: '#/components/responses/NotFoundError'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
+                $ref: '#/components/schemas/DayBlueprint'
+    put:
+      summary: Update day template
+      security:
+        - admin_jwt: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DayBlueprint'
+      responses:
+        '200':
+          description: Updated day blueprint
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DayBlueprint'
+    delete:
+      summary: Delete day template
+      security:
+        - admin_jwt: []
+      responses:
+        '204':
+          description: No Content
 
-components:
-  securitySchemes:
-    bearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
-      description: Valid JWT token required for authenticated endpoints
-
-  parameters:
-    limit:
-      name: limit
-      in: query
-      description: Maximum number of items to return
-      required: false
-      schema:
-        type: integer
-        minimum: 1
-        maximum: 100
-        default: 20
-    offset:
-      name: offset
-      in: query
-      description: Pagination offset
-      required: false
-      schema:
-        type: integer
-        minimum: 0
-        default: 0
-    projectUUID:
-      name: projectUUID
-      in: path
-      required: true
-      schema:
-        $ref: '#/components/schemas/uuid'
-      description: Unique project identifier
-    taskUUID:
-      name: taskUUID
-      in: path
-      required: true
-      schema:
-        $ref: '#/components/schemas/uuid'
-      description: Unique task identifier
-    blueprintUUID:
-      name: blueprintUUID
-      in: path
-      required: true
-      schema:
-        $ref: '#/components/schemas/uuid'
-      description: Unique task identifier
-    reportUUID:
-      name: reportUUID
-      in: path
-      required: true
-      schema:
-        $ref: '#/components/schemas/uuid'
-      description: Unique report identifier
-    videoUUID:
-      name: videoUUID
-      in: path
-      required: true
-      schema:
-        $ref: '#/components/schemas/uuid'
-      description: Unique video identifier
-    roleFilter:
-      name: role
-      in: query
-      description: Filter by user role
-      schema:
-        type: string
-        enum: [owner, member]
-    taskStatusFilter:
-      name: status
-      in: query
-      description: Filter tasks by status
-      schema:
-        type: string
-        enum: [pending, in_progress, completed]
-    blueprintType:
-      name: status
-      in: query
-      description: Blueprints by its type
-      schema:
-        type: string
-        enum: [toy]
-    projectStatusFilter:
-      name: status
-      in: query
-      description: Filter tasks by status
-      schema:
-        type: string
-        enum: [in_progress, completed]
-
-
-  schemas:
-    uuid:
-      type: string
-      format: uuid
-      example: "550e8400-e29b-41d4-a716-446655440000"
-
-    Error:
-      type: object
-      properties:
-        code:
-          type: integer
-          format: int32
-          example: 404
-        message:
+  ######################################################
+  # DAY COMPONENTS MAPPING
+  ######################################################
+  /days/{day_uuid}/components:
+    parameters:
+      - name: day_uuid
+        in: path
+        required: true
+        schema:
           type: string
-          example: "Resource not found"
-        details:
-          type: array
-          items:
+          format: uuid
+    get:
+      summary: List day components
+      description: List day components (paginated)
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+        - name: offset
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A list of DayComponentsMapper
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DayComponentsMapper'
+    post:
+      summary: Add component to day
+      description: Add a component (task_blueprint, form_blueprint, or media) to a day (admin only)
+      security:
+        - admin_jwt: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                component_uuid:
+                  type: string
+                  format: uuid
+                type:
+                  type: string
+                  enum: [task_blueprint, form_blueprint, media]
+      responses:
+        '200':
+          description: Added component
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DayComponentsMapper'
+    delete:
+      summary: Remove component from day
+      description: Remove a component from day (admin only)
+      security:
+        - admin_jwt: []
+      parameters:
+        - name: component_uuid
+          in: query
+          required: true
+          schema:
             type: string
-          example: ["Invalid UUID format", "Missing required field"]
+            format: uuid
+      responses:
+        '204':
+          description: No Content
 
-    Project:
-      type: object
-      required: [projectUUID, name, ownerUUID]
-      properties:
-        projectUUID:
-          $ref: '#/components/schemas/uuid'
-        name:
-          type: string
-          example: "Q4 Marketing Campaign"
-        description:
-          type: string
-          example: "Year-end marketing push"
-        ownerUUID:
-          $ref: '#/components/schemas/uuid'
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
+  ######################################################
+  # MEDIA
+  ######################################################
+  /media:
+    post:
+      summary: Upload new media
+      security:
+        - admin_jwt: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Media'
+      responses:
+        '200':
+          description: The uploaded media metadata
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Media'
 
-    ProjectBlueprint:
-      type: object
-      required: [blueprintUUID, projectUUID, title]
-      properties:
-        blueprintUUID:
-          $ref: '#/components/schemas/uuid'
-        title:
+  /media/{media_uuid}:
+    parameters:
+      - name: media_uuid
+        in: path
+        required: true
+        schema:
           type: string
-          example: "Marketing Blueprint"
-        description:
-          type: string
-          example: "Q4 marketing strategy"
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
+          format: uuid
+    get:
+      summary: Get media metadata
+      responses:
+        '200':
+          description: Media metadata
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Media'
+    put:
+      summary: Update media metadata
+      security:
+        - admin_jwt: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Media'
+      responses:
+        '200':
+          description: Updated media metadata
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Media'
+    delete:
+      summary: Delete media
+      security:
+        - admin_jwt: []
+      responses:
+        '204':
+          description: No Content
 
-    ProjectUpdate:
-      type: object
-      properties:
-        name:
-          type: string
-          example: "Updated Project Name"
-        description:
-          type: string
-          example: "Revised project scope"
-
-    Task:
-      type: object
-      required: [taskUUID, projectUUID, title, status, blueprintUUID]
-      properties:
-        taskUUID:
-          $ref: '#/components/schemas/uuid'
-        projectUUID:
-          $ref: '#/components/schemas/uuid'
-        title:
-          type: string
-          example: "Competitor Analysis"
-        blueprintUUID:
-          $ref: '#/components/schemas/uuid'
-        description:
-          type: string
-          example: "Research main competitors' features"
-        day:
-          type: string
-          enum: [ MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY ]
-        status:
-          type: string
-          enum: [pending, in_progress, completed]
-        dueDate:
-          type: string
-          format: date-time
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
-
-    TaskUpdate:
-      type: object
-      properties:
-        title:
-          type: string
-        description:
-          type: string
-        status:
-          type: string
-          enum: [pending, in_progress, completed]
-        dueDate:
-          type: string
-          format: date-time
-
-    Budget:
-      type: object
-      required: [projectUUID, totalFunds, allocated]
-      properties:
-        projectUUID:
-          $ref: '#/components/schemas/uuid'
-        totalFunds:
-          type: number
-          format: float
-          minimum: 0
-          description: Total available funds for the project
-          example: 50000.00
-        allocated:
-          type: number
-          format: float
-          minimum: 0
-          description: Currently allocated funds
-          example: 12500.50
-        currency:
-          type: string
-          default: "USD"
-          example: "EUR"
-        lastUpdated:
-          type: string
-          format: date-time
-          description: Timestamp of last modification
-
-    BudgetUpdate:
-      type: object
-      properties:
-        totalFunds:
-          type: number
-          format: float
-          minimum: 0
-        allocated:
-          type: number
-          format: float
-          minimum: 0
-        currency:
-          type: string
-      example:
-        totalFunds: 75000.00
-        allocated: 25000.00
-
-    ReportStatus:
-      type: object
-      properties:
-        reportUUID:
-          $ref: '#/components/schemas/uuid'
-        status:
-          type: string
-          enum: [queued, processing, completed, failed]
-        downloadUrl:
-          type: string
-          format: uri
-        requestedAt:
-          type: string
-          format: date-time
-        completedAt:
-          type: string
-          format: date-time
-
-    Video:
-      type: object
-      properties:
-        videoUUID:
-          $ref: '#/components/schemas/uuid'
-        title:
-          type: string
-          example: "Product Demo"
-        description:
-          type: string
-          example: "Q3 feature showcase"
-        duration:
-          type: number
-          format: float
-          example: 123.45
-        resolution:
-          type: string
-          example: "1920x1080"
-        createdAt:
-          type: string
-          format: date-time
-
-    PitchDeck:
-      type: object
-      description: Unified schema for business pitch deck
-      required:
-        - plannedToys
-        - expenseAmount
-        - calculatedAmount
-        - returnPercentage
-        - founderName
-        - founderDate
-      properties:
-        plannedToysAmount:
-          type: integer
-          minimum: 0
-          example: 0
-          description: Number of planned toys to sell (explicitly set to 0 for this pitch)
-        expenseAmount:
-          type: number
-          format: float
-          example: 5000.00
-          description: Base expense amount for operations
-        calculatedAmount:
-          type: number
-          format: float
-          example: 1200.50
-          description: Additional calculated expenses
-        returnPercentage:
-          type: number
-          format: float
-          minimum: 0
-          maximum: 100
-          example: 15.5
-          description: Percentage return promised to investor
-        returnAmount:
-          type: number
-          format: float
-          example: 7750.00
-          description: Total monetary value to return to investor
-        founderName:
-          type: string
-          example: "John Doe"
-          description: Full name of the business founder
-        founderDate:
-          type: string
-          format: date
-          example: "2023-09-20"
-          description: Date of pitch submission/signature
-
-    ToyAdvertisement:
-      type: object
-      description: Unified schema for sales advertisement
-      required:
-        - productName
-        - price
-        - eventLocation
-        - eventDate
-        - contactNumber
-      properties:
-        productName:
-          type: string
-          example: "Cat Toy"
-          description: Name of the advertised product
-        price:
-          type: string
-          example: "10 CZK"
-          description: Price with currency symbol
-          pattern: "^[0-9]+\\s[A-Z]{3}$"
-        eventLocation:
-          type: string
-          example: "Tabletop market, Prague"
-          description: Physical location for purchase
-        eventDate:
-          type: string
-          format: date
-          example: "2025-02-21"
-          description:
-            "Event date in ISO 8601 format (original: 21/02/2025)"
-        contactNumber:
-          type: string
-          example: "+1234567890"
-          description: International phone number
-          pattern: "^\\+[0-9]{6,15}$"
-
-    SalesReportPL:
-      type: object
-      description: Profit & Loss statement for sales operations
-      required:
-        - amountGivenByInvestor
-        - amountToReturnToInvestor
-        - totalSpent
-        - toysPrepared
-        - toysSold
-        - toysLeft
-        - amountForHelpers
-        - totalRevenue
-      properties:
-        amountGivenByInvestor:
-          type: number
-          format: float
-          example: 50000.00
-          description: Initial investment amount (CZK, prefilled from DB)
-          readOnly: true
-        amountToReturnToInvestor:
-          type: number
-          format: float
-          example: 62500.00
-          description: Agreed return amount (CZK, prefilled from DB)
-          readOnly: true
-        totalSpent:
-          type: number
-          format: float
-          example: 42000.00
-          description: Total expenses (CZK, prefilled from DB)
-          readOnly: true
-        toysPrepared:
-          type: integer
-          example: 1000
-          description: Initial stock quantity (prefilled from DB)
-          readOnly: true
-        toysSold:
-          type: integer
-          example: 850
-          description: Units sold (prefilled from previous page)
-          readOnly: true
-        toysLeft:
-          type: integer
-          example: 150
-          description:
-            "Remaining inventory (calculated: prepared - sold)"
-          readOnly: true
-        amountForHelpers:
-          type: number
-          format: float
-          example: 5000.00
-          description: Proposed helper compensation (CZK, user input)
-          minimum: 0
-        totalRevenue:
-          type: number
-          format: float
-          example: 85000.00
-          description: Calculated gross income (CZK, toysSold * price)
-          readOnly: true
-
-  responses:
-    BadRequest:
-      description: Invalid request parameters
-      content:
-        application/json:
+  ######################################################
+  # TASKS
+  ######################################################
+  /tasks:
+    post:
+      summary: Create task template
+      security:
+        - admin_jwt: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskBlueprint'
+      responses:
+        '200':
+          description: Created task blueprint
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskBlueprint'
+    get:
+      summary: List task templates
+      parameters:
+        - name: limit
+          in: query
           schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 400
-            message: "Validation error"
-            details: ["Invalid date format", "Missing required field: title"]
-
-    UnauthorizedError:
-      description: Missing or invalid authentication
-      content:
-        application/json:
+            type: integer
+        - name: offset
+          in: query
           schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 401
-            message: "Authentication required"
+            type: integer
+      responses:
+        '200':
+          description: A list of task templates
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TaskBlueprint'
 
-    ForbiddenError:
-      description: Insufficient permissions
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 403
-            message: "Insufficient permissions"
+  /tasks/{task_blueprint_uuid}:
+    parameters:
+      - name: task_blueprint_uuid
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      summary: Get task template
+      responses:
+        '200':
+          description: Task blueprint
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskBlueprint'
+    put:
+      summary: Update task template
+      security:
+        - admin_jwt: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskBlueprint'
+      responses:
+        '200':
+          description: Updated task blueprint
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskBlueprint'
+    delete:
+      summary: Delete task template
+      security:
+        - admin_jwt: []
+      responses:
+        '204':
+          description: No Content
 
-    NotFoundError:
-      description: Resource not found
-      content:
-        application/json:
+  ######################################################
+  # FORMS
+  ######################################################
+  /forms:
+    post:
+      summary: Create form template
+      security:
+        - admin_jwt: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FormBlueprint'
+      responses:
+        '200':
+          description: Created form blueprint
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FormBlueprint'
+    get:
+      summary: List form templates
+      parameters:
+        - name: limit
+          in: query
           schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 404
-            message: "Project not found"
+            type: integer
+        - name: offset
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A list of form templates
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FormBlueprint'
 
-    InternalServerError:
-      description: Server error
-      content:
-        application/json:
+  /forms/{form_blueprint_uuid}:
+    parameters:
+      - name: form_blueprint_uuid
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      summary: Get form template
+      responses:
+        '200':
+          description: Form blueprint
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FormBlueprint'
+    put:
+      summary: Update form template
+      security:
+        - admin_jwt: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FormBlueprint'
+      responses:
+        '200':
+          description: Updated form blueprint
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FormBlueprint'
+    delete:
+      summary: Delete form template
+      security:
+        - admin_jwt: []
+      responses:
+        '204':
+          description: No Content
+
+  ######################################################
+  # FORM FIELDS
+  ######################################################
+  /forms/{form_blueprint_uuid}/fields:
+    parameters:
+      - name: form_blueprint_uuid
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    post:
+      summary: Add field to form
+      security:
+        - admin_jwt: []
+      parameters:
+        - name: form_field_uuid
+          in: query
+          required: true
           schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 500
-            message: "Internal server error"
+            type: string
+            format: uuid
+        - name: order
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Updated list of form field mappings
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FormFieldMapper'
+    get:
+      summary: List form fields
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+        - name: offset
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A list of form field mappings
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FormFieldMapper'
+
+  /forms/{form_blueprint_uuid}/fields/{field_uuid}:
+    parameters:
+      - name: form_blueprint_uuid
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: field_uuid
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      summary: Get field details
+      responses:
+        '200':
+          description: Form field
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FormField'
+    put:
+      summary: Update field
+      security:
+        - admin_jwt: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                input_type:
+                  type: string
+                  enum: [text, number, file]
+                required:
+                  type: boolean
+                title:
+                  type: string
+                description:
+                  type: string
+      responses:
+        '200':
+          description: Updated form field
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FormField'
+    delete:
+      summary: Remove field from form
+      security:
+        - admin_jwt: []
+      responses:
+        '204':
+          description: No Content
+
+  ######################################################
+  # PROJECT INSTANCE (USER)
+  ######################################################
+  /user/{user_uuid}/project:
+    parameters:
+      - name: user_uuid
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      summary: List user's projects
+      security:
+        - user_jwt: []
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+        - name: offset
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A list of the user's project DTOs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProjectDTO'
+    post:
+      summary: Create new project instance
+      security:
+        - user_jwt: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                project_blueprint_uuid:
+                  type: string
+                  format: uuid
+      responses:
+        '200':
+          description: Created ProjectDTO
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectDTO'
+
+  /user/{user_uuid}/project/{project_blueprint_uuid}:
+    parameters:
+      - name: user_uuid
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: project_blueprint_uuid
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      summary: Get a user-specific project instance
+      security:
+        - user_jwt: []
+      responses:
+        '200':
+          description: A single ProjectDTO
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectDTO'
+    put:
+      summary: Update project instance
+      security:
+        - user_jwt: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectInstance'
+      responses:
+        '200':
+          description: Updated ProjectDTO
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectDTO'
+
+  ######################################################
+  # DAY INSTANCE (USER)
+  ######################################################
+  /user/{user_uuid}/day/:
+    parameters:
+      - name: user_uuid
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      summary: List user's day progress
+      security:
+        - user_jwt: []
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+        - name: offset
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A list of DayDTO
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DayDTO'
+
+  /user/{user_uuid}/day/{day_blueprint_uuid}:
+    parameters:
+      - name: user_uuid
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: day_blueprint_uuid
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      summary: Get a user's day status
+      security:
+        - user_jwt: []
+      responses:
+        '200':
+          description: DayDTO
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DayDTO'
+    put:
+      summary: Update a user's day status
+      security:
+        - user_jwt: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DayInstance'
+      responses:
+        '200':
+          description: Updated DayDTO
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DayDTO'
+
+  ######################################################
+  # TASK INSTANCE (USER)
+  ######################################################
+  /user/{user_uuid}/task/:
+    parameters:
+      - name: user_uuid
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      summary: List user's task progress
+      security:
+        - user_jwt: []
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+        - name: offset
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A list of TaskDTO
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TaskDTO'
+
+  /user/{user_uuid}/task/{task_blueprint_uuid}:
+    parameters:
+      - name: user_uuid
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: task_blueprint_uuid
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      summary: Get user's task status
+      security:
+        - user_jwt: []
+      responses:
+        '200':
+          description: TaskDTO
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskDTO'
+    put:
+      summary: Update user's task status
+      security:
+        - user_jwt: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskInstance'
+      responses:
+        '200':
+          description: Updated TaskDTO
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskDTO'
+
+  ######################################################
+  # FORM INSTANCE (USER)
+  ######################################################
+  /user/{user_uuid}/form/:
+    parameters:
+      - name: user_uuid
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      summary: List user's form submissions
+      security:
+        - user_jwt: []
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+        - name: offset
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A list of FormDTO
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FormDTO'
+
+  /user/{user_uuid}/form/{form_blueprint_uuid}:
+    parameters:
+      - name: user_uuid
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: form_blueprint_uuid
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      summary: Get a user's form submission
+      security:
+        - user_jwt: []
+      responses:
+        '200':
+          description: FormDTO
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FormDTO'
+    put:
+      summary: Update a user's form submission
+      security:
+        - user_jwt: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FormInstance'
+      responses:
+        '200':
+          description: Updated FormDTO
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FormDTO'
+
+  ######################################################
+  # PROJECT MEMBERS (USER)
+  ######################################################
+  /user/{user_uuid}/project/{project_blueprint_uuid}/members:
+    parameters:
+      - name: user_uuid
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: project_blueprint_uuid
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      summary: List project members
+      security:
+        - user_jwt: []
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+        - name: offset
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A list of ProjectMembers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProjectMembers'
+    post:
+      summary: Add a member
+      security:
+        - user_jwt: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectMembers'
+      responses:
+        '200':
+          description: Created project member record
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectMembers'
+
+  ######################################################
+  # FINANCES (USER)
+  ######################################################
+  /user/{user_uuid}/project/{project_blueprint_uuid}/finances:
+    parameters:
+      - name: user_uuid
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: project_blueprint_uuid
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    post:
+      summary: Create financial data
+      security:
+        - user_jwt: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                project_blueprint_uuid:
+                  type: string
+                  format: uuid
+      responses:
+        '200':
+          description: Created project finance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectFinance'
+    put:
+      summary: Update financial data
+      security:
+        - user_jwt: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectFinance'
+      responses:
+        '200':
+          description: Updated project finance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectFinance'
+    get:
+      summary: Get financial data
+      security:
+        - user_jwt: []
+      responses:
+        '200':
+          description: Project finance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectFinance'
+
+  /user/{user_uuid}/project/{project_blueprint_uuid}/calculate:
+    parameters:
+      - name: user_uuid
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: project_blueprint_uuid
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    put:
+      summary: Calculate financial data
+      security:
+        - user_jwt: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectFinance'
+      responses:
+        '200':
+          description: Calculated project finance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectFinance'
