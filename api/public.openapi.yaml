@@ -10,27 +10,21 @@ info:
     url: https://www.apache.org/licenses/LICENSE-2.0.html
 
 servers:
-  - url: https://app.little.pm/api/v1
+  - url: https://app.little.pm
     description: Production API
-  - url: https://sandbox.little.pm/api/v1
-    description: Sandbox Environment (Testing)
 
 tags:
-  - name: Projects
+  - name: Course Service
     description: Project lifecycle management
-  - name: Tasks
+  - name: Content Service
     description: Task management within projects
-  - name: Project Finances
+  - name: Finances Service
     description: Project budget management and financial tracking
-  - name: Reports
-    description: Project reporting and analytics
-  - name: Media
-    description: Video resources and metadata
 
 paths:
-  /projects:
+  /project:
     post:
-      tags: [Projects]
+      tags: [Course Service]
       summary: Create project from blueprint
       description: Create project from blueprint
       requestBody:
@@ -65,7 +59,7 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 
     get:
-      tags: [Projects]
+      tags: [Course Service]
       summary: List accessible projects
       description: Retrieve paginated list of projects with user access
       operationId: listProjects
@@ -89,9 +83,9 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 
-  /projects/blueprints:
+  /project/blueprints:
     get:
-      tags: [Projects]
+      tags: [Course Service]
       summary: List available blueprints
       description: Retrieve paginated list of blueprints for projects with user access
       operationId: listBlueprintsProject
@@ -114,12 +108,11 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 
-
-  /projects/{projectUUID}:
+  /project/{projectUUID}:
     parameters:
       - $ref: "#/components/parameters/projectUUID"
     get:
-      tags: [Projects]
+      tags: [Course Service]
       summary: Get project details
       description: Retrieve detailed information about a specific project
       operationId: getProject
@@ -140,7 +133,7 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 
     put:
-      tags: [Projects]
+      tags: [Course Service]
       summary: Update project
       description: Update project metadata and details
       operationId: updateProject
@@ -172,7 +165,7 @@ paths:
     parameters:
       - $ref: "#/components/parameters/projectUUID"
     get:
-      tags: [Project Finances]
+      tags: [Finances Service]
       summary: Get project budget
       description: Retrieve financial budget details for a specific project
       operationId: getProjectBudget
@@ -193,7 +186,7 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 
     post:
-      tags: [Project Finances]
+      tags: [Finances Service]
       summary: Update project budget (Partial)
       description: Update partial budget information for a project
       operationId: partialUpdateProjectBudget
@@ -222,7 +215,7 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 
     put:
-      tags: [Project Finances]
+      tags: [Finances Service]
       summary: Update project budget (Full)
       description: Replace entire budget information for a project
       operationId: updateProjectBudget
@@ -250,11 +243,11 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 
-  /projects/{projectUUID}/tasks:
+  /project/{projectUUID}/unit:
     parameters:
       - $ref: "#/components/parameters/projectUUID"
     get:
-      tags: [Tasks]
+      tags: [Content Service]
       summary: List project tasks
       description: Retrieve all tasks associated with a project
       operationId: listProjectTasks
@@ -280,11 +273,11 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 
-  /tasks/{taskUUID}:
+  /task/{taskUUID}:
     parameters:
       - $ref: "#/components/parameters/taskUUID"
     get:
-      tags: [Tasks]
+      tags: [Content Service]
       summary: Get task details
       description: Retrieve detailed information about a specific task
       operationId: getTask
@@ -305,7 +298,7 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 
     put:
-      tags: [Tasks]
+      tags: [Content Service]
       summary: Update task
       description: Modify existing task details
       operationId: updateTask
@@ -333,146 +326,11 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 
-    delete:
-      tags: [Tasks]
-      summary: Delete task
-      description: Permanently remove a task
-      operationId: deleteTask
-      security:
-        - bearerAuth: []
-      responses:
-        '204':
-          description: Task deleted successfully
-        '403':
-          $ref: '#/components/responses/ForbiddenError'
-        '404':
-          $ref: '#/components/responses/NotFoundError'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-
-  /reports/{projectUUID}/pandl:
-    parameters:
-      - $ref: "#/components/parameters/projectUUID"
-    post:
-      tags: [Reports]
-      summary: Generate P&L project report
-      description: Initiate P&L report generation for a project
-      operationId: pandlGenerateReport
-      security:
-        - bearerAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SalesReportPL'
-      responses:
-        '202':
-          description: Report generation accepted
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ReportStatus'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '403':
-          $ref: '#/components/responses/ForbiddenError'
-        '404':
-          $ref: '#/components/responses/NotFoundError'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-
-  /reports/{projectUUID}/promotion:
-    parameters:
-      - $ref: "#/components/parameters/projectUUID"
-    post:
-      tags: [ Reports ]
-      summary: Generate promotional picture project
-      description: Initiate promotional picture generation for a project
-      operationId: promotionGenerateReport
-      security:
-        - bearerAuth: [ ]
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ToyAdvertisement'
-      responses:
-        '202':
-          description: Report generation accepted
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ReportStatus'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '403':
-          $ref: '#/components/responses/ForbiddenError'
-        '404':
-          $ref: '#/components/responses/NotFoundError'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-
-  /reports/{projectUUID}/pitchdeck:
-    parameters:
-      - $ref: "#/components/parameters/projectUUID"
-    post:
-      tags: [ Reports ]
-      summary: Generate project pitch deck
-      description: Initiate pitch deck picture generation for a project
-      operationId: pitchDeckGenerateReport
-      security:
-        - bearerAuth: [ ]
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PitchDeck'
-      responses:
-        '202':
-          description: Report generation accepted
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ReportStatus'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '403':
-          $ref: '#/components/responses/ForbiddenError'
-        '404':
-          $ref: '#/components/responses/NotFoundError'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-
-  /reports/{reportUUID}:
-    parameters:
-      - $ref: "#/components/parameters/reportUUID"
-    get:
-      tags: [Reports]
-      summary: Get report status
-      description: Retrieve current status of a report generation
-      operationId: getReportStatus
-      security:
-        - bearerAuth: []
-      responses:
-        '200':
-          description: Report status retrieved
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ReportStatus'
-        '404':
-          $ref: '#/components/responses/NotFoundError'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-
   /media/videos/{videoUUID}:
     parameters:
       - $ref: "#/components/parameters/videoUUID"
     get:
-      tags: [Media]
+      tags: [Content Service]
       summary: Get video metadata
       description: Retrieve metadata about a video resource
       operationId: getVideoMetadata
