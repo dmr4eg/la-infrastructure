@@ -10,6 +10,28 @@ servers:
 # SECURITY SCHEMES
 ########################################################
 components:
+  headers:
+    Set-JWT:
+      schema:
+        type: string
+        description: JWT token
+        example: "jwt=tokenValue; Path=/; HttpOnly; Secure"
+    Clear-JWT:
+      schema:
+        type: string
+        description: JWT token clear
+        example: "jwt=; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Path=/;"
+    HomeRedirect:
+      schema:
+        type: string
+        description: Home redirect
+        example: /
+    LoginRedirect:
+      schema:
+        type: string
+        description: Login redirect
+        example: /auth/login
+
   securitySchemes:
     admin_jwt:
       type: http
@@ -20,10 +42,59 @@ components:
       scheme: bearer
       bearerFormat: JWT
 
+  responses:
+    UnauthorizedLoginError:
+      description: Unauthorized login
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    UnauthorizedError:
+      description: Unauthorized access
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    AuthorizationSuccess:
+      description: OK
+      headers:
+        Set-Cookie:
+          $ref: "#/components/headers/Set-JWT"
+        Location:
+          $ref: "#/components/headers/HomeRedirect"
+    UnauthorizationSuccess:
+      description: OK
+      headers:
+        Set-Cookie:
+          $ref: "#/components/headers/Clear-JWT"
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    NotAcceptable:
+      description: Not Acceptable
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+
+
   ######################################################
   # SCHEMAS
   ######################################################
   schemas:
+
+    Error:
+      type: object
+      description: Error object
+      example: { "message": "Error message" }
+      properties:
+        message:
+          description: Error message
+          example: "Error message"
+          type: string
 
     ######################################################
     # PROJECT
@@ -374,9 +445,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProjectBlueprint'
 
-  /projects/{project_uuid}:
+  /projects/{project_blueprint_uuid}:
     parameters:
-      - name: project_uuid
+      - name: project_blueprint_uuid
         in: path
         required: true
         schema:
@@ -422,9 +493,9 @@ paths:
   ######################################################
   # PROJECT DAYS MAPPING
   ######################################################
-  /projects/{project_uuid}/days:
+  /projects/{project_blueprint_uuid}/days:
     parameters:
-      - name: project_uuid
+      - name: project_blueprint_uuid
         in: path
         required: true
         schema:
@@ -535,9 +606,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/DayBlueprint'
 
-  /days/{day_uuid}:
+  /days/{day_blueprint_uuid}:
     parameters:
-      - name: day_uuid
+      - name: day_blueprint_uuid
         in: path
         required: true
         schema:
@@ -580,9 +651,9 @@ paths:
   ######################################################
   # DAY COMPONENTS MAPPING
   ######################################################
-  /days/{day_uuid}/components:
+  /days/{day_blueprint_uuid}/components:
     parameters:
-      - name: day_uuid
+      - name: day_blueprint_uuid
         in: path
         required: true
         schema:

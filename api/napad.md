@@ -147,26 +147,26 @@ HTTP_METHOD[HTTP_HEADERS](URL_QUERY_PARAMS){REQUEST_BODY} /resource_path/{id} ->
 # projects
 GET[](?limit&offset){}                          /projects -> 200 [{project_blueprint}]                          # List project blueprints (paginated)
 POST[admin_jwt](){project_blueprint}            /projects -> 200 {project_blueprint}                            # Create new blueprint
-GET[](){}                                       /projects/{project_uuid} -> 200 {project_blueprint}             # Get blueprint details
-PUT[admin_jwt](){project_blueprint}             /projects/{project_uuid} -> 200 {project_blueprint}             # Update blueprint
-DELETE[admin_jwt](){}                           /projects/{project_uuid} -> 204 No Content                      # Delete blueprint
+GET[](){}                                       /projects/{project_blueprint_uuid} -> 200 {project_blueprint}             # Get blueprint details
+PUT[admin_jwt](){project_blueprint}             /projects/{project_blueprint_uuid} -> 200 {project_blueprint}             # Update blueprint
+DELETE[admin_jwt](){}                           /projects/{project_blueprint_uuid} -> 204 No Content                      # Delete blueprint
 
 # days mapping
-GET[](?limit&offset){}                          /projects/{project_uuid}/days -> 200 [{project_days_mapper}]    # Get linked days (paginated)
-POST[admin_jwt](day_blueprint_uuid, order){}    /projects/{project_uuid}/days -> 200 {project_days_mapper}      # Link day to project
-DELETE[admin_jwt](day_blueprint_uuid){}         /projects/{project_uuid}/days -> 204 No Content                 # Unlink day from project
+GET[](?limit&offset){}                          /projects/{project_blueprint_uuid}/days -> 200 [{project_days_mapper}]    # Get linked days (paginated)
+POST[admin_jwt](day_blueprint_uuid, order){}    /projects/{project_blueprint_uuid}/days -> 200 {project_days_mapper}      # Link day to project
+DELETE[admin_jwt](day_blueprint_uuid){}         /projects/{project_blueprint_uuid}/days -> 204 No Content                 # Unlink day from project
 
 # days
 GET[](?limit&offset){}                          /days -> 200 [{day_blueprint}]                                   # List day templates (paginated)
 POST[admin_jwt](){day_blueprint}                /days -> 200 {day_blueprint}                                     # Create day template
-GET[](){}                                       /days/{day_uuid} -> 200 {day_blueprint}                          # Get day template details
-PUT[admin_jwt](){day_blueprint}                 /days/{day_uuid} -> 200 {day_blueprint}                          # Update day template
-DELETE[admin_jwt](){}                           /days/{day_uuid} -> 204 No Content                               # Delete day template
+GET[](){}                                       /days/{day_blueprint_uuid} -> 200 {day_blueprint}                          # Get day template details
+PUT[admin_jwt](){day_blueprint}                 /days/{day_blueprint_uuid} -> 200 {day_blueprint}                          # Update day template
+DELETE[admin_jwt](){}                           /days/{day_blueprint_uuid} -> 204 No Content                               # Delete day template
 
 # component mapping
-GET[](?limit&offset){}                          /days/{day_uuid}/components -> 200 [{day_components_mapper}]          # List day components (paginated)
-POST[admin_jwt](){component_uuid, type}         /days/{day_uuid}/components -> 200 {day_components_mapper}            # Add component to day
-DELETE[admin_jwt](){component_uuid}             /days/{day_uuid}/components -> 204 No Content                         # Remove component from day
+GET[](?limit&offset){}                          /days/{day_blueprint_uuid}/components -> 200 [{day_components_mapper}]          # List day components (paginated)
+POST[admin_jwt](){component_uuid, type}         /days/{day_blueprint_uuid}/components -> 200 {day_components_mapper}            # Add component to day
+DELETE[admin_jwt](){component_uuid}             /days/{day_blueprint_uuid}/components -> 204 No Content                         # Remove component from day
 
 # media
 POST[admin_jwt](){media}                        /media -> {media}                                     # Upload new media
