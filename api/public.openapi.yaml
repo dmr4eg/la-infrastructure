@@ -199,7 +199,7 @@ components:
   schemas:
 
     ######################################################
-    # Distinct ID Schemas
+    # Single UUID Schemas for Each Resource
     ######################################################
     projectBlueprintUUID:
       type: string
@@ -217,7 +217,7 @@ components:
       type: string
       format: uuid
       pattern: "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
-      description: "UUID for a Day Component (task, form, media, etc.)"
+      description: "UUID for a Day Component"
 
     taskBlueprintUUID:
       type: string
@@ -251,20 +251,178 @@ components:
 
     order:
       type: integer
-      description: "Order or position (general integer usage)"
+      description: "Order or position within a list"
 
     ######################################################
-    # Common Error Schema
+    # Error Schema
     ######################################################
     Error:
       type: object
       description: Error object
-      example: { "message": "Error message" }
+      example:
+        message: "Error message"
       properties:
         message:
           type: string
           description: Error message
-          example: "Error message"
+      required:
+        - message
+
+    ######################################################
+    # Composite ID Schemas (Embedded IDs)
+    ######################################################
+    ProjectDaysMapperId:
+      type: object
+      description: "Composite ID for ProjectDaysMapper"
+      example:
+        {
+          "project_blueprint": "665c599d-5c8d-4d20-aaab-7ffaba150606",
+          "day": "557c482c-8bb5-4a65-9bef-848a953238ae"
+        }
+      properties:
+        project_blueprint:
+          $ref: '#/components/schemas/projectBlueprintUUID'
+        day:
+          $ref: '#/components/schemas/dayBlueprintUUID'
+      required:
+        - project_blueprint
+        - day
+
+    ProjectInstanceId:
+      type: object
+      description: "Composite ID for ProjectInstance"
+      example:
+        {
+          "project_blueprint_uuid": "665c599d-5c8d-4d20-aaab-7ffaba150606",
+          "user_uuid": "66de88ad-5c8d-4d20-a0ab-bbb7ccc15333"
+        }
+      properties:
+        project_blueprint_uuid:
+          $ref: '#/components/schemas/projectBlueprintUUID'
+        user_uuid:
+          $ref: '#/components/schemas/userUUID'
+      required:
+        - project_blueprint_uuid
+        - user_uuid
+
+    FinancesId:
+      type: object
+      description: "Composite ID for Finances"
+      example:
+        {
+          "project_blueprint_uuid": "665c599d-5c8d-4d20-aaab-7ffaba150606",
+          "user_uuid": "66de88ad-5c8d-4d20-a0ab-bbb7ccc15333"
+        }
+      properties:
+        project_blueprint_uuid:
+          $ref: '#/components/schemas/projectBlueprintUUID'
+        user_uuid:
+          $ref: '#/components/schemas/userUUID'
+      required:
+        - project_blueprint_uuid
+        - user_uuid
+
+    MembersId:
+      type: object
+      description: "Composite ID for Members"
+      example:
+        {
+          "project_blueprint_uuid": "665c599d-5c8d-4d20-aaab-7ffaba150606",
+          "user_uuid": "66de88ad-5c8d-4d20-a0ab-bbb7ccc15333"
+        }
+      properties:
+        project_blueprint_uuid:
+          $ref: '#/components/schemas/projectBlueprintUUID'
+        user_uuid:
+          $ref: '#/components/schemas/userUUID'
+      required:
+        - project_blueprint_uuid
+        - user_uuid
+
+    DayComponentsMapperId:
+      type: object
+      description: "Composite ID for DayComponentsMapper"
+      example:
+        {
+          "day_blueprint_uuid": "665c599d-5c8d-4d20-aaab-7ffaba150606",
+          "day_component_uuid": "a8494f64-0987-4dd0-8405-df19eb58f2ab"
+        }
+      properties:
+        day_blueprint_uuid:
+          $ref: '#/components/schemas/dayBlueprintUUID'
+        day_component_uuid:
+          $ref: '#/components/schemas/dayComponentUUID'
+      required:
+        - day_blueprint_uuid
+        - day_component_uuid
+
+    DayInstanceId:
+      type: object
+      description: "Composite ID for DayInstance"
+      example:
+        {
+          "day_blueprint_uuid": "665c599d-5c8d-4d20-aaab-7ffaba150606",
+          "user_uuid": "66de88ad-5c8d-4d20-a0ab-bbb7ccc15333"
+        }
+      properties:
+        day_blueprint_uuid:
+          $ref: '#/components/schemas/dayBlueprintUUID'
+        user_uuid:
+          $ref: '#/components/schemas/userUUID'
+      required:
+        - day_blueprint_uuid
+        - user_uuid
+
+    TaskInstanceId:
+      type: object
+      description: "Composite ID for TaskInstance"
+      example:
+        {
+          "task_blueprint_uuid": "665c599d-5c8d-4d20-aaab-7ffaba150606",
+          "user_uuid": "66de88ad-5c8d-4d20-a0ab-bbb7ccc15333"
+        }
+      properties:
+        task_blueprint_uuid:
+          $ref: '#/components/schemas/taskBlueprintUUID'
+        user_uuid:
+          $ref: '#/components/schemas/userUUID'
+      required:
+        - task_blueprint_uuid
+        - user_uuid
+
+    FormFieldMapperId:
+      type: object
+      description: "Composite ID for FormFieldMapper"
+      example:
+        {
+          "form_blueprint_uuid": "665c599d-5c8d-4d20-aaab-7ffaba150606",
+          "form_field_uuid": "a8494f64-0987-4dd0-8405-df19eb58f2ab"
+        }
+      properties:
+        form_blueprint_uuid:
+          $ref: '#/components/schemas/formBlueprintUUID'
+        form_field_uuid:
+          $ref: '#/components/schemas/formFieldUUID'
+      required:
+        - form_blueprint_uuid
+        - form_field_uuid
+
+    FormInstanceId:
+      type: object
+      description: "Composite ID for FormInstance"
+      example:
+        {
+          "form_blueprint_uuid": "665c599d-5c8d-4d20-aaab-7ffaba150606",
+          "user_uuid": "66de88ad-5c8d-4d20-a0ab-bbb7ccc15333"
+        }
+      properties:
+        form_blueprint_uuid:
+          $ref: '#/components/schemas/formBlueprintUUID'
+        user_uuid:
+          $ref: '#/components/schemas/userUUID'
+      required:
+        - form_blueprint_uuid
+        - user_uuid
 
     ######################################################
     # PROJECT
@@ -276,10 +434,10 @@ components:
           $ref: '#/components/schemas/projectBlueprintUUID'
         poster_url:
           type: string
-          description: URL for the project poster image
+          description: "URL for the project poster image"
         welcome_video_url:
           type: string
-          description: URL for the project introduction video
+          description: "URL for the project introduction video"
         title:
           type: string
         description:
@@ -295,24 +453,47 @@ components:
           enum:
             - "DIY"
             - "READY-MADE"
+      required:
+        - project_blueprint_uuid
+        - title
 
     ProjectDaysMapper:
       type: object
+      description: "Entity for mapping days within a project"
+      example:
+        {
+          "id": {
+            "project_blueprint": "665c599d-5c8d-4d20-aaab-7ffaba150606",
+            "day": "557c482c-8bb5-4a65-9bef-848a953238ae"
+          },
+          "order": 1
+        }
       properties:
-        project_blueprint:
-          $ref: '#/components/schemas/projectBlueprintUUID'
-        day:
-          $ref: '#/components/schemas/dayBlueprintUUID'
+        id:
+          $ref: '#/components/schemas/ProjectDaysMapperId'
+          readOnly: true
         order:
           $ref: '#/components/schemas/order'
+      required:
+        - id
+        - order
 
     ProjectInstance:
       type: object
+      description: "Entity for a user's specific project instance"
+      example:
+        {
+          "id": {
+            "project_blueprint_uuid": "665c599d-5c8d-4d20-aaab-7ffaba150606",
+            "user_uuid": "66de88ad-5c8d-4d20-a0ab-bbb7ccc15333"
+          },
+          "status": "IN_PROGRESS",
+          "start_date": "2021-09-01T10:00:00Z"
+        }
       properties:
-        project_blueprint_uuid:
-          $ref: '#/components/schemas/projectBlueprintUUID'
-        user_uuid:
-          $ref: '#/components/schemas/userUUID'
+        id:
+          $ref: '#/components/schemas/ProjectInstanceId'
+          readOnly: true
         status:
           type: string
           enum:
@@ -328,14 +509,26 @@ components:
           type: string
         what_went_well:
           type: string
+      required:
+        - id
+        - status
 
     Finances:
       type: object
+      description: "Entity for user finances on a specific project"
+      example:
+        {
+          "id": {
+            "project_blueprint_uuid": "665c599d-5c8d-4d20-aaab-7ffaba150606",
+            "user_uuid": "66de88ad-5c8d-4d20-a0ab-bbb7ccc15333"
+          },
+          "investor_gave": 100.0,
+          "investor_return": 120.0
+        }
       properties:
-        project_blueprint_uuid:
-          $ref: '#/components/schemas/projectBlueprintUUID'
-        user_uuid:
-          $ref: '#/components/schemas/userUUID'
+        id:
+          $ref: '#/components/schemas/FinancesId'
+          readOnly: true
         investor_gave:
           type: number
           format: float
@@ -378,16 +571,29 @@ components:
         sold_price:
           type: number
           format: float
+      required:
+        - id
 
     Members:
       type: object
+      description: "Entity for user membership in a specific project"
+      example:
+        {
+          "id": {
+            "project_blueprint_uuid": "665c599d-5c8d-4d20-aaab-7ffaba150606",
+            "user_uuid": "66de88ad-5c8d-4d20-a0ab-bbb7ccc15333"
+          },
+          "member_name": "John Doe"
+        }
       properties:
-        project_blueprint_uuid:
-          $ref: '#/components/schemas/projectBlueprintUUID'
-        user_uuid:
-          $ref: '#/components/schemas/userUUID'
+        id:
+          $ref: '#/components/schemas/MembersId'
+          readOnly: true
         member_name:
           type: string
+      required:
+        - id
+        - member_name
 
     ProjectDTO:
       type: object
@@ -396,6 +602,9 @@ components:
           $ref: '#/components/schemas/ProjectBlueprint'
         instance:
           $ref: '#/components/schemas/ProjectInstance'
+      required:
+        - blueprint
+        - instance
 
     ######################################################
     # DAY
@@ -411,34 +620,59 @@ components:
           type: string
         text:
           type: string
+      required:
+        - day_blueprint_uuid
+        - title
 
     DayComponentsMapper:
       type: object
+      description: "Mapping of components (tasks, forms, media) within a day"
+      example:
+        {
+          "id": {
+            "day_blueprint_uuid": "665c599d-5c8d-4d20-aaab-7ffaba150606",
+            "day_component_uuid": "a8494f64-0987-4dd0-8405-df19eb58f2ab"
+          },
+          "type": "TASK"
+        }
       properties:
-        day_blueprint_uuid:
-          $ref: '#/components/schemas/dayBlueprintUUID'
-        day_component_uuid:
-          $ref: '#/components/schemas/dayComponentUUID'
+        id:
+          $ref: '#/components/schemas/DayComponentsMapperId'
+          readOnly: true
         type:
           type: string
           enum:
             - "TASK"
             - "FORM"
             - "MEDIA"
+      required:
+        - id
+        - type
 
     DayInstance:
       type: object
+      description: "Specific instance of a day for a user"
+      example:
+        {
+          "id": {
+            "day_blueprint_uuid": "665c599d-5c8d-4d20-aaab-7ffaba150606",
+            "user_uuid": "66de88ad-5c8d-4d20-a0ab-bbb7ccc15333"
+          },
+          "status": "IN_PROGRESS"
+        }
       properties:
-        day_blueprint_uuid:
-          $ref: '#/components/schemas/dayBlueprintUUID'
-        user_uuid:
-          $ref: '#/components/schemas/userUUID'
+        id:
+          $ref: '#/components/schemas/DayInstanceId'
+          readOnly: true
         status:
           type: string
           enum:
             - "IN_PROGRESS"
             - "COMPLETED"
             - "NOT_STARTED"
+      required:
+        - id
+        - status
 
     DayDTO:
       type: object
@@ -447,6 +681,9 @@ components:
           $ref: '#/components/schemas/DayBlueprint'
         instance:
           $ref: '#/components/schemas/DayInstance'
+      required:
+        - blueprint
+        - instance
 
     ######################################################
     # TASK
@@ -460,17 +697,31 @@ components:
           type: string
         description:
           type: string
+      required:
+        - task_blueprint_uuid
+        - title
 
     TaskInstance:
       type: object
+      description: "User's progress for a specific task"
+      example:
+        {
+          "id": {
+            "task_blueprint_uuid": "665c599d-5c8d-4d20-aaab-7ffaba150606",
+            "user_uuid": "66de88ad-5c8d-4d20-a0ab-bbb7ccc15333"
+          },
+          "status": true
+        }
       properties:
-        task_blueprint_uuid:
-          $ref: '#/components/schemas/taskBlueprintUUID'
-        user_uuid:
-          $ref: '#/components/schemas/userUUID'
+        id:
+          $ref: '#/components/schemas/TaskInstanceId'
+          readOnly: true
         status:
           type: boolean
           description: "True if completed, false otherwise"
+      required:
+        - id
+        - status
 
     TaskDTO:
       type: object
@@ -479,6 +730,9 @@ components:
           $ref: '#/components/schemas/TaskBlueprint'
         progress:
           $ref: '#/components/schemas/TaskInstance'
+      required:
+        - blueprint
+        - progress
 
     ######################################################
     # FORM
@@ -494,6 +748,9 @@ components:
           type: string
         callback_url:
           type: string
+      required:
+        - form_blueprint_uuid
+        - title
 
     FormField:
       type: object
@@ -512,27 +769,53 @@ components:
           type: string
         description:
           type: string
+      required:
+        - form_field_uuid
+        - input_type
+        - title
 
     FormFieldMapper:
       type: object
+      description: "Mapping a field within a form"
+      example:
+        {
+          "id": {
+            "form_blueprint_uuid": "665c599d-5c8d-4d20-aaab-7ffaba150606",
+            "form_field_uuid": "a8494f64-0987-4dd0-8405-df19eb58f2ab"
+          },
+          "order": 1
+        }
       properties:
-        form_blueprint_uuid:
-          $ref: '#/components/schemas/formBlueprintUUID'
-        form_field:
-          $ref: '#/components/schemas/formFieldUUID'
+        id:
+          $ref: '#/components/schemas/FormFieldMapperId'
+          readOnly: true
         order:
           $ref: '#/components/schemas/order'
+      required:
+        - id
+        - order
 
     FormInstance:
       type: object
+      description: "Specific instance of a form for a user"
+      example:
+        {
+          "id": {
+            "form_blueprint_uuid": "665c599d-5c8d-4d20-aaab-7ffaba150606",
+            "user_uuid": "66de88ad-5c8d-4d20-a0ab-bbb7ccc15333"
+          },
+          "status": true
+        }
       properties:
-        form_blueprint_uuid:
-          $ref: '#/components/schemas/formBlueprintUUID'
-        user_uuid:
-          $ref: '#/components/schemas/userUUID'
+        id:
+          $ref: '#/components/schemas/FormInstanceId'
+          readOnly: true
         status:
           type: boolean
           description: "True if form is completed, false otherwise"
+      required:
+        - id
+        - status
 
     FormDTO:
       type: object
@@ -541,6 +824,9 @@ components:
           $ref: '#/components/schemas/FormBlueprint'
         instance:
           $ref: '#/components/schemas/FormInstance'
+      required:
+        - blueprint
+        - instance
 
     ######################################################
     # MEDIA
@@ -552,11 +838,17 @@ components:
           $ref: '#/components/schemas/mediaUUID'
         type:
           type: string
-          enum: [video, image]
+          enum:
+            - "video"
+            - "image"
         title:
           type: string
         description:
           type: string
+      required:
+        - mediaUUID
+        - type
+        - title
 
 ########################################################
 # PATHS
