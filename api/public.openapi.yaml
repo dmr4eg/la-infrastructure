@@ -93,127 +93,178 @@ components:
   # PARAMETERS
   ######################################################
   parameters:
-
     # -- Common Query Parameters --
-    LimitQuery:
+    limit:
       name: limit
+      description: Limit of the list
+      example: 10
       in: query
-      description: "Maximum number of items to return"
-      required: false
+      required: true
       schema:
         type: integer
 
-    OffsetQuery:
+    offset:
       name: offset
+      description: Offset of the list
+      example: 0
       in: query
-      description: "Number of items to skip before starting to collect the result set"
-      required: false
+      required: true
       schema:
         type: integer
 
-    OrderQuery:
+    order:
       name: order
       in: query
       description: "Order or position (general integer query usage)"
       required: true
       schema:
-        type: integer
+        $ref: "#/components/schemas/order"
 
-    FormFieldUuidQuery:
+    formFieldUUIDQuery:
       name: form_field_uuid
       in: query
       description: "Form field UUID in the query"
       required: true
       schema:
-        type: string
-        format: uuid
+        $ref: "#/components/schemas/formFieldUUID"
 
-    ComponentUuid:
+    componentUUID:
       name: day_component_uuid
       in: query
       description: "Component UUID in the query"
       required: true
       schema:
-        type: string
-        format: uuid
+        $ref: "#/components/schemas/dayComponentUUID"
 
     # -- Path Parameters --
-    ProjectBlueprintUuid:
+    projectBlueprintUUID:
       name: project_blueprint_uuid
       in: path
       required: true
       description: "The UUID of the project blueprint"
       schema:
-        type: string
-        format: uuid
+        $ref: "#/components/schemas/projectBlueprintUUID"
 
-    DayBlueprintUuid:
+    dayBlueprintUUID:
       name: day_blueprint_uuid
       in: path
       required: true
       description: "The UUID of the day blueprint"
       schema:
-        type: string
-        format: uuid
+        $ref: "#/components/schemas/dayBlueprintUUID"
 
-    MediaUuid:
+    mediaUUID:
       name: media_uuid
       in: path
       required: true
       description: "The UUID of the media resource"
       schema:
-        type: string
-        format: uuid
+        $ref: "#/components/schemas/mediaUUID"
 
-    TaskBlueprintUuid:
+    taskBlueprintUUID:
       name: task_blueprint_uuid
       in: path
       required: true
       description: "The UUID of the task blueprint"
       schema:
-        type: string
-        format: uuid
+        $ref: "#/components/schemas/taskBlueprintUUID"
 
-    FormBlueprintUuid:
+    formBlueprintUUID:
       name: form_blueprint_uuid
       in: path
       required: true
       description: "The UUID of the form blueprint"
       schema:
-        type: string
-        format: uuid
+        $ref: "#/components/schemas/formBlueprintUUID"
 
-    FieldUuid:
+    fieldUUID:
       name: field_uuid
       in: path
       required: true
       description: "The UUID of the form field"
       schema:
-        type: string
-        format: uuid
+        $ref: "#/components/schemas/formFieldUUID"
 
-    UserUuid:
+    userUUID:
       name: user_uuid
       in: path
       required: true
       description: "The UUID of the user"
       schema:
-        type: string
-        format: uuid
+        $ref: "#/components/schemas/userUUID"
 
   ######################################################
   # SCHEMAS
   ######################################################
   schemas:
+
+    ######################################################
+    # Distinct ID Schemas
+    ######################################################
+    projectBlueprintUUID:
+      type: string
+      format: uuid
+      pattern: "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+      description: "UUID for a Project Blueprint"
+
+    dayBlueprintUUID:
+      type: string
+      format: uuid
+      pattern: "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+      description: "UUID for a Day Blueprint"
+
+    dayComponentUUID:
+      type: string
+      format: uuid
+      pattern: "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+      description: "UUID for a Day Component (task, form, media, etc.)"
+
+    taskBlueprintUUID:
+      type: string
+      format: uuid
+      pattern: "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+      description: "UUID for a Task Blueprint"
+
+    formBlueprintUUID:
+      type: string
+      format: uuid
+      pattern: "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+      description: "UUID for a Form Blueprint"
+
+    formFieldUUID:
+      type: string
+      format: uuid
+      pattern: "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+      description: "UUID for a Form Field"
+
+    mediaUUID:
+      type: string
+      format: uuid
+      pattern: "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+      description: "UUID for a Media resource"
+
+    userUUID:
+      type: string
+      format: uuid
+      pattern: "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+      description: "UUID for a User"
+
+    order:
+      type: integer
+      description: "Order or position (general integer usage)"
+
+    ######################################################
+    # Common Error Schema
+    ######################################################
     Error:
       type: object
       description: Error object
       example: { "message": "Error message" }
       properties:
         message:
+          type: string
           description: Error message
           example: "Error message"
-          type: string
 
     ######################################################
     # PROJECT
@@ -222,8 +273,7 @@ components:
       type: object
       properties:
         project_blueprint_uuid:
-          type: string
-          format: uuid
+          $ref: '#/components/schemas/projectBlueprintUUID'
         poster_url:
           type: string
           description: URL for the project poster image
@@ -236,38 +286,38 @@ components:
           type: string
         difficulty:
           type: string
-          enum: [easy, medium, hard]
+          enum:
+            - "EASY"
+            - "MEDIUM"
+            - "HARD"
         style:
           type: string
-          enum: [dyi, ready_made]
+          enum:
+            - "DIY"
+            - "READY-MADE"
 
     ProjectDaysMapper:
       type: object
       properties:
         project_blueprint:
-          type: string
-          format: uuid
-          description: UUID referencing a ProjectBlueprint
+          $ref: '#/components/schemas/projectBlueprintUUID'
         day:
-          type: string
-          format: uuid
-          description: UUID referencing a DayBlueprint
+          $ref: '#/components/schemas/dayBlueprintUUID'
         order:
-          type: integer
-          description: The order of the day in the project
+          $ref: '#/components/schemas/order'
 
     ProjectInstance:
       type: object
       properties:
         project_blueprint_uuid:
-          type: string
-          format: uuid
+          $ref: '#/components/schemas/projectBlueprintUUID'
         user_uuid:
-          type: string
-          format: uuid
+          $ref: '#/components/schemas/userUUID'
         status:
           type: string
-          enum: [in_progress, completed]
+          enum:
+            - "IN_PROGRESS"
+            - "COMPLETED"
         start_date:
           type: string
           format: date-time
@@ -283,11 +333,9 @@ components:
       type: object
       properties:
         project_blueprint_uuid:
-          type: string
-          format: uuid
+          $ref: '#/components/schemas/projectBlueprintUUID'
         user_uuid:
-          type: string
-          format: uuid
+          $ref: '#/components/schemas/userUUID'
         investor_gave:
           type: number
           format: float
@@ -335,11 +383,9 @@ components:
       type: object
       properties:
         project_blueprint_uuid:
-          type: string
-          format: uuid
+          $ref: '#/components/schemas/projectBlueprintUUID'
         user_uuid:
-          type: string
-          format: uuid
+          $ref: '#/components/schemas/userUUID'
         member_name:
           type: string
 
@@ -358,8 +404,7 @@ components:
       type: object
       properties:
         day_blueprint_uuid:
-          type: string
-          format: uuid
+          $ref: '#/components/schemas/dayBlueprintUUID'
         title:
           type: string
         description:
@@ -371,27 +416,29 @@ components:
       type: object
       properties:
         day_blueprint_uuid:
-          type: string
-          format: uuid
+          $ref: '#/components/schemas/dayBlueprintUUID'
         day_component_uuid:
-          type: string
-          format: uuid
+          $ref: '#/components/schemas/dayComponentUUID'
         type:
           type: string
-          enum: [task_blueprint, form_blueprint, media]
+          enum:
+            - "TASK"
+            - "FORM"
+            - "MEDIA"
 
     DayInstance:
       type: object
       properties:
         day_blueprint_uuid:
-          type: string
-          format: uuid
+          $ref: '#/components/schemas/dayBlueprintUUID'
         user_uuid:
-          type: string
-          format: uuid
+          $ref: '#/components/schemas/userUUID'
         status:
           type: string
-          enum: [in_progress, completed, not_started]
+          enum:
+            - "IN_PROGRESS"
+            - "COMPLETED"
+            - "NOT_STARTED"
 
     DayDTO:
       type: object
@@ -408,8 +455,7 @@ components:
       type: object
       properties:
         task_blueprint_uuid:
-          type: string
-          format: uuid
+          $ref: '#/components/schemas/taskBlueprintUUID'
         title:
           type: string
         description:
@@ -419,14 +465,12 @@ components:
       type: object
       properties:
         task_blueprint_uuid:
-          type: string
-          format: uuid
+          $ref: '#/components/schemas/taskBlueprintUUID'
         user_uuid:
-          type: string
-          format: uuid
+          $ref: '#/components/schemas/userUUID'
         status:
           type: boolean
-          description: True if completed, false otherwise
+          description: "True if completed, false otherwise"
 
     TaskDTO:
       type: object
@@ -443,8 +487,7 @@ components:
       type: object
       properties:
         form_blueprint_uuid:
-          type: string
-          format: uuid
+          $ref: '#/components/schemas/formBlueprintUUID'
         title:
           type: string
         description:
@@ -456,11 +499,13 @@ components:
       type: object
       properties:
         form_field_uuid:
-          type: string
-          format: uuid
+          $ref: '#/components/schemas/formFieldUUID'
         input_type:
           type: string
-          enum: [text, number, file]
+          enum:
+            - "TEXT"
+            - "NUMBER"
+            - "FILE"
         required:
           type: boolean
         title:
@@ -472,26 +517,22 @@ components:
       type: object
       properties:
         form_blueprint_uuid:
-          type: string
-          format: uuid
+          $ref: '#/components/schemas/formBlueprintUUID'
         form_field:
-          type: string
-          format: uuid
+          $ref: '#/components/schemas/formFieldUUID'
         order:
-          type: integer
+          $ref: '#/components/schemas/order'
 
     FormInstance:
       type: object
       properties:
         form_blueprint_uuid:
-          type: string
-          format: uuid
+          $ref: '#/components/schemas/formBlueprintUUID'
         user_uuid:
-          type: string
-          format: uuid
+          $ref: '#/components/schemas/userUUID'
         status:
           type: boolean
-          description: True if form is completed, false otherwise
+          description: "True if form is completed, false otherwise"
 
     FormDTO:
       type: object
@@ -508,8 +549,7 @@ components:
       type: object
       properties:
         mediaUUID:
-          type: string
-          format: uuid
+          $ref: '#/components/schemas/mediaUUID'
         type:
           type: string
           enum: [video, image]
@@ -531,8 +571,8 @@ paths:
       summary: List project blueprints
       description: List project blueprints (paginated)
       parameters:
-        - $ref: '#/components/parameters/LimitQuery'
-        - $ref: '#/components/parameters/OffsetQuery'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
       responses:
         '200':
           description: A list of project blueprints
@@ -563,7 +603,7 @@ paths:
 
   /projects/{project_blueprint_uuid}:
     parameters:
-      - $ref: '#/components/parameters/ProjectBlueprintUuid'
+      - $ref: '#/components/parameters/projectBlueprintUUID'
     get:
       summary: Get project blueprint details
       description: Returns a specific project blueprint
@@ -606,13 +646,13 @@ paths:
   ######################################################
   /projects/{project_blueprint_uuid}/days:
     parameters:
-      - $ref: '#/components/parameters/ProjectBlueprintUuid'
+      - $ref: '#/components/parameters/projectBlueprintUUID'
     get:
       summary: Get days linked to a project blueprint
       description: Get linked days (paginated)
       parameters:
-        - $ref: '#/components/parameters/LimitQuery'
-        - $ref: '#/components/parameters/OffsetQuery'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
       responses:
         '200':
           description: A list of ProjectDaysMapper
@@ -628,8 +668,8 @@ paths:
       security:
         - admin_jwt: []
       parameters:
-        - $ref: '#/components/parameters/DayBlueprintUuid'
-        - $ref: '#/components/parameters/OrderQuery'
+        - $ref: '#/components/parameters/dayBlueprintUUID'
+        - $ref: '#/components/parameters/order'
       responses:
         '200':
           description: Linked day
@@ -643,7 +683,7 @@ paths:
       security:
         - admin_jwt: []
       parameters:
-        - $ref: '#/components/parameters/DayBlueprintUuid'
+        - $ref: '#/components/parameters/dayBlueprintUUID'
       responses:
         '204':
           description: No Content
@@ -656,8 +696,8 @@ paths:
       summary: List day templates
       description: List day templates (paginated)
       parameters:
-        - $ref: '#/components/parameters/LimitQuery'
-        - $ref: '#/components/parameters/OffsetQuery'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
       responses:
         '200':
           description: A list of day blueprints
@@ -688,7 +728,7 @@ paths:
 
   /days/{day_blueprint_uuid}:
     parameters:
-      - $ref: '#/components/parameters/DayBlueprintUuid'
+      - $ref: '#/components/parameters/dayBlueprintUUID'
     get:
       summary: Get day template details
       responses:
@@ -728,13 +768,13 @@ paths:
   ######################################################
   /days/{day_blueprint_uuid}/components:
     parameters:
-      - $ref: '#/components/parameters/DayBlueprintUuid'
+      - $ref: '#/components/parameters/dayBlueprintUUID'
     get:
       summary: List day components
       description: List day components (paginated)
       parameters:
-        - $ref: '#/components/parameters/LimitQuery'
-        - $ref: '#/components/parameters/OffsetQuery'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
       responses:
         '200':
           description: A list of DayComponentsMapper
@@ -775,7 +815,7 @@ paths:
       security:
         - admin_jwt: []
       parameters:
-        - $ref: '#/components/parameters/ComponentUuid'
+        - $ref: '#/components/parameters/componentUUID'
       responses:
         '204':
           description: No Content
@@ -804,7 +844,7 @@ paths:
 
   /media/{media_uuid}:
     parameters:
-      - $ref: '#/components/parameters/MediaUuid'
+      - $ref: '#/components/parameters/mediaUUID'
     get:
       summary: Get media metadata
       responses:
@@ -863,8 +903,8 @@ paths:
     get:
       summary: List task templates
       parameters:
-        - $ref: '#/components/parameters/LimitQuery'
-        - $ref: '#/components/parameters/OffsetQuery'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
       responses:
         '200':
           description: A list of task templates
@@ -877,7 +917,7 @@ paths:
 
   /tasks/{task_blueprint_uuid}:
     parameters:
-      - $ref: '#/components/parameters/TaskBlueprintUuid'
+      - $ref: '#/components/parameters/taskBlueprintUUID'
     get:
       summary: Get task template
       responses:
@@ -936,8 +976,8 @@ paths:
     get:
       summary: List form templates
       parameters:
-        - $ref: '#/components/parameters/LimitQuery'
-        - $ref: '#/components/parameters/OffsetQuery'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
       responses:
         '200':
           description: A list of form templates
@@ -950,7 +990,7 @@ paths:
 
   /forms/{form_blueprint_uuid}:
     parameters:
-      - $ref: '#/components/parameters/FormBlueprintUuid'
+      - $ref: '#/components/parameters/formBlueprintUUID'
     get:
       summary: Get form template
       responses:
@@ -990,14 +1030,14 @@ paths:
   ######################################################
   /forms/{form_blueprint_uuid}/fields:
     parameters:
-      - $ref: '#/components/parameters/FormBlueprintUuid'
+      - $ref: '#/components/parameters/formBlueprintUUID'
     post:
       summary: Add field to form
       security:
         - admin_jwt: []
       parameters:
-        - $ref: '#/components/parameters/FormFieldUuidQuery'
-        - $ref: '#/components/parameters/OrderQuery'
+        - $ref: '#/components/parameters/formFieldUUIDQuery'
+        - $ref: '#/components/parameters/order'
       responses:
         '200':
           description: Updated list of form field mappings
@@ -1010,8 +1050,8 @@ paths:
     get:
       summary: List form fields
       parameters:
-        - $ref: '#/components/parameters/LimitQuery'
-        - $ref: '#/components/parameters/OffsetQuery'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
       responses:
         '200':
           description: A list of form field mappings
@@ -1024,8 +1064,8 @@ paths:
 
   /forms/{form_blueprint_uuid}/fields/{field_uuid}:
     parameters:
-      - $ref: '#/components/parameters/FormBlueprintUuid'
-      - $ref: '#/components/parameters/FieldUuid'
+      - $ref: '#/components/parameters/formBlueprintUUID'
+      - $ref: '#/components/parameters/fieldUUID'
     get:
       summary: Get field details
       responses:
@@ -1075,14 +1115,14 @@ paths:
   ######################################################
   /user/{user_uuid}/project:
     parameters:
-      - $ref: '#/components/parameters/UserUuid'
+      - $ref: '#/components/parameters/userUUID'
     get:
       summary: List user's projects
       security:
         - user_jwt: []
       parameters:
-        - $ref: '#/components/parameters/LimitQuery'
-        - $ref: '#/components/parameters/OffsetQuery'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
       responses:
         '200':
           description: A list of the user's project DTOs
@@ -1116,8 +1156,8 @@ paths:
 
   /user/{user_uuid}/project/{project_blueprint_uuid}:
     parameters:
-      - $ref: '#/components/parameters/UserUuid'
-      - $ref: '#/components/parameters/ProjectBlueprintUuid'
+      - $ref: '#/components/parameters/userUUID'
+      - $ref: '#/components/parameters/projectBlueprintUUID'
     get:
       summary: Get a user-specific project instance
       security:
@@ -1152,14 +1192,14 @@ paths:
   ######################################################
   /user/{user_uuid}/day/:
     parameters:
-      - $ref: '#/components/parameters/UserUuid'
+      - $ref: '#/components/parameters/userUUID'
     get:
       summary: List user's day progress
       security:
         - user_jwt: []
       parameters:
-        - $ref: '#/components/parameters/LimitQuery'
-        - $ref: '#/components/parameters/OffsetQuery'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
       responses:
         '200':
           description: A list of DayDTO
@@ -1172,8 +1212,8 @@ paths:
 
   /user/{user_uuid}/day/{day_blueprint_uuid}:
     parameters:
-      - $ref: '#/components/parameters/UserUuid'
-      - $ref: '#/components/parameters/DayBlueprintUuid'
+      - $ref: '#/components/parameters/userUUID'
+      - $ref: '#/components/parameters/dayBlueprintUUID'
     get:
       summary: Get a user's day status
       security:
@@ -1208,14 +1248,14 @@ paths:
   ######################################################
   /user/{user_uuid}/task/:
     parameters:
-      - $ref: '#/components/parameters/UserUuid'
+      - $ref: '#/components/parameters/userUUID'
     get:
       summary: List user's task progress
       security:
         - user_jwt: []
       parameters:
-        - $ref: '#/components/parameters/LimitQuery'
-        - $ref: '#/components/parameters/OffsetQuery'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
       responses:
         '200':
           description: A list of TaskDTO
@@ -1228,8 +1268,8 @@ paths:
 
   /user/{user_uuid}/task/{task_blueprint_uuid}:
     parameters:
-      - $ref: '#/components/parameters/UserUuid'
-      - $ref: '#/components/parameters/TaskBlueprintUuid'
+      - $ref: '#/components/parameters/userUUID'
+      - $ref: '#/components/parameters/taskBlueprintUUID'
     get:
       summary: Get user's task status
       security:
@@ -1264,14 +1304,14 @@ paths:
   ######################################################
   /user/{user_uuid}/form/:
     parameters:
-      - $ref: '#/components/parameters/UserUuid'
+      - $ref: '#/components/parameters/userUUID'
     get:
       summary: List user's form submissions
       security:
         - user_jwt: []
       parameters:
-        - $ref: '#/components/parameters/LimitQuery'
-        - $ref: '#/components/parameters/OffsetQuery'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
       responses:
         '200':
           description: A list of FormDTO
@@ -1284,8 +1324,8 @@ paths:
 
   /user/{user_uuid}/form/{form_blueprint_uuid}:
     parameters:
-      - $ref: '#/components/parameters/UserUuid'
-      - $ref: '#/components/parameters/FormBlueprintUuid'
+      - $ref: '#/components/parameters/userUUID'
+      - $ref: '#/components/parameters/formBlueprintUUID'
     get:
       summary: Get a user's form submission
       security:
@@ -1320,15 +1360,15 @@ paths:
   ######################################################
   /user/{user_uuid}/project/{project_blueprint_uuid}/members:
     parameters:
-      - $ref: '#/components/parameters/UserUuid'
-      - $ref: '#/components/parameters/ProjectBlueprintUuid'
+      - $ref: '#/components/parameters/userUUID'
+      - $ref: '#/components/parameters/projectBlueprintUUID'
     get:
       summary: List project members
       security:
         - user_jwt: []
       parameters:
-        - $ref: '#/components/parameters/LimitQuery'
-        - $ref: '#/components/parameters/OffsetQuery'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
       responses:
         '200':
           description: A list of Members
@@ -1361,8 +1401,8 @@ paths:
   ######################################################
   /user/{user_uuid}/project/{project_blueprint_uuid}/finances:
     parameters:
-      - $ref: '#/components/parameters/UserUuid'
-      - $ref: '#/components/parameters/ProjectBlueprintUuid'
+      - $ref: '#/components/parameters/userUUID'
+      - $ref: '#/components/parameters/projectBlueprintUUID'
     post:
       summary: Create financial data
       security:
@@ -1415,8 +1455,8 @@ paths:
 
   /user/{user_uuid}/project/{project_blueprint_uuid}/calculate:
     parameters:
-      - $ref: '#/components/parameters/UserUuid'
-      - $ref: '#/components/parameters/ProjectBlueprintUuid'
+      - $ref: '#/components/parameters/userUUID'
+      - $ref: '#/components/parameters/projectBlueprintUUID'
     put:
       summary: Calculate financial data
       security:
