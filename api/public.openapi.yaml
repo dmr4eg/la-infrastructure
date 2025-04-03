@@ -111,21 +111,21 @@ components:
       schema:
         type: integer
 
-    order:
-      name: order
+    sortOrder:
+      name: sortOrder
       in: query
       description: "Order or position (general integer query usage)"
       required: true
       schema:
-        $ref: "#/components/schemas/order"
+        $ref: "#/components/schemas/sortOrder"
 
-    formFieldUUIDQuery:
-      name: form_field_uuid
+    fieldUUIDQuery:
+      name: field_uuid
       in: query
       description: "Form field UUID in the query"
       required: true
       schema:
-        $ref: "#/components/schemas/formFieldUUID"
+        $ref: "#/components/schemas/fieldUUID"
 
     componentUUID:
       name: day_component_uuid
@@ -181,7 +181,7 @@ components:
       required: true
       description: "The UUID of the form field"
       schema:
-        $ref: "#/components/schemas/formFieldUUID"
+        $ref: "#/components/schemas/fieldUUID"
 
     userUUID:
       name: user_uuid
@@ -225,7 +225,7 @@ components:
       pattern: "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
       description: "UUID for a Form Blueprint"
 
-    formFieldUUID:
+    fieldUUID:
       type: string
       format: uuid
       pattern: "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
@@ -243,7 +243,7 @@ components:
       pattern: "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
       description: "UUID for a User"
 
-    order:
+    sortOrder:
       type: integer
       description: "Order or position within a list"
 
@@ -269,13 +269,13 @@ components:
         project_blueprint: "665c599d-5c8d-4d20-aaab-7ffaba150606"
         day: "557c482c-8bb5-4a65-9bef-848a953238ae"
       properties:
-        project_blueprint:
+        project_blueprint_uuid:
           $ref: '#/components/schemas/projectBlueprintUUID'
-        day:
+        day_blueprint_uuid:
           $ref: '#/components/schemas/dayBlueprintUUID'
       required:
-        - project_blueprint
-        - day
+        - project_blueprint_uuid
+        - day_blueprint_uuid
 
     ProjectInstanceId:
       type: object
@@ -372,15 +372,15 @@ components:
       description: "Composite ID for FormFieldMapper"
       example:
         form_blueprint_uuid: "665c599d-5c8d-4d20-aaab-7ffaba150606"
-        form_field_uuid: "a8494f64-0987-4dd0-8405-df19eb58f2ab"
+        field_uuid: "a8494f64-0987-4dd0-8405-df19eb58f2ab"
       properties:
         form_blueprint_uuid:
           $ref: '#/components/schemas/formBlueprintUUID'
-        form_field_uuid:
-          $ref: '#/components/schemas/formFieldUUID'
+        field_uuid:
+          $ref: '#/components/schemas/fieldUUID'
       required:
         - form_blueprint_uuid
-        - form_field_uuid
+        - field_uuid
 
     FormInstanceId:
       type: object
@@ -435,18 +435,18 @@ components:
       description: "Entity for mapping days within a project"
       example:
         id:
-          project_blueprint: "665c599d-5c8d-4d20-aaab-7ffaba150606"
-          day: "557c482c-8bb5-4a65-9bef-848a953238ae"
-        order: 1
+          project_blueprint_uuid: "665c599d-5c8d-4d20-aaab-7ffaba150606"
+          day_blueprint_uuid: "557c482c-8bb5-4a65-9bef-848a953238ae"
+        sortOrder: 1
       properties:
         id:
           $ref: '#/components/schemas/ProjectDaysMapperId'
           readOnly: true
-        order:
-          $ref: '#/components/schemas/order'
+        sortOrder:
+          $ref: '#/components/schemas/sortOrder'
       required:
         - id
-        - order
+        - sortOrder
 
     ProjectInstance:
       type: object
@@ -511,7 +511,7 @@ components:
         toys_left:
           type: number
           format: float
-        members_budged:
+        members_budget:
           type: number
           format: float
         profit:
@@ -704,11 +704,11 @@ components:
         - form_blueprint_uuid
         - title
 
-    FormField:
+    Field:
       type: object
       properties:
-        form_field_uuid:
-          $ref: '#/components/schemas/formFieldUUID'
+        field_uuid:
+          $ref: '#/components/schemas/fieldUUID'
         input_type:
           type: string
           enum:
@@ -722,7 +722,7 @@ components:
         description:
           type: string
       required:
-        - form_field_uuid
+        - field_uuid
         - input_type
         - title
 
@@ -732,17 +732,17 @@ components:
       example:
         id:
           form_blueprint_uuid: "665c599d-5c8d-4d20-aaab-7ffaba150606"
-          form_field_uuid: "a8494f64-0987-4dd0-8405-df19eb58f2ab"
-        order: 1
+          field_uuid: "a8494f64-0987-4dd0-8405-df19eb58f2ab"
+        sortOrder: 1
       properties:
         id:
           $ref: '#/components/schemas/FormFieldMapperId'
           readOnly: true
-        order:
-          $ref: '#/components/schemas/order'
+        sortOrder:
+          $ref: '#/components/schemas/sortOrder'
       required:
         - id
-        - order
+        - sortOrder
 
     FormInstance:
       type: object
@@ -1086,22 +1086,36 @@ paths:
 
   /media:
     post:
-      summary: Upload new media (admin only)
+      summary: "Upload new media (admin only)"
+      operationId: "mediaPostMultipart"
       security:
-        - admin_jwt: []
+        - admin_jwt: [ ]
       requestBody:
-        required: true
         content:
-          application/json:
+          multipart/form-data:
             schema:
-              $ref: '#/components/schemas/Media'
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: "The file to upload"
+                description:
+                  type: string
+                  description: "Media description"
+                type:
+                  type: string
+                  description: "Media type (e.g. video, image, etc.)"
+              required:
+                - file
+        required: true
       responses:
         '200':
-          description: The uploaded media metadata
+          description: "The uploaded media metadata"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Media'
+                $ref: "#/components/schemas/Media"
     get:
       summary: (Optional) List media items
       parameters:
@@ -1311,7 +1325,11 @@ paths:
   ############################################
   /project-instances:
     get:
-      summary: List all project instances (admin or user)
+      summary: List all project instances
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/userUUID'
       security:
         - user_jwt: []
       responses:
@@ -1322,7 +1340,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/ProjectInstance'
+                  $ref: '#/components/schemas/ProjectDTO'
     post:
       summary: Create a new project instance (user)
       security:
@@ -1339,7 +1357,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ProjectInstance'
+                $ref: '#/components/schemas/ProjectDTO'
 
   /project-instances/{project_blueprint_uuid}/{user_uuid}:
     parameters:
@@ -1355,7 +1373,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ProjectInstance'
+                $ref: '#/components/schemas/ProjectDTO'
     put:
       summary: Update a project instance (user)
       security:
@@ -1372,7 +1390,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ProjectInstance'
+                $ref: '#/components/schemas/ProjectDTO'
     delete:
       summary: Delete a project instance (admin or user)
       # Decide on your actual policy
@@ -1388,6 +1406,9 @@ paths:
   /finances:
     get:
       summary: List all finances records
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
       security:
         - user_jwt: []
       responses:
@@ -1459,6 +1480,9 @@ paths:
 
   # Example sub-path to "calculate" finances:
   /finances/{project_blueprint_uuid}/{user_uuid}/calculate:
+    parameters:
+      - $ref: '#/components/parameters/projectBlueprintUUID'
+      - $ref: '#/components/parameters/userUUID'
     put:
       summary: Calculate or recalculate finances
       security:
@@ -1483,6 +1507,9 @@ paths:
   /members:
     get:
       summary: List all members records
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
       security:
         - user_jwt: []
       responses:
@@ -1558,6 +1585,10 @@ paths:
   /day-instances:
     get:
       summary: List all day instances
+      parameters:
+        - $ref: '#/components/parameters/userUUID'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
       security:
         - user_jwt: []
       responses:
@@ -1568,7 +1599,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/DayInstance'
+                  $ref: '#/components/schemas/DayDTO'
     post:
       summary: Create a day instance
       security:
@@ -1585,7 +1616,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DayInstance'
+                $ref: '#/components/schemas/DayDTO'
 
   /day-instances/{day_blueprint_uuid}/{user_uuid}:
     parameters:
@@ -1601,7 +1632,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DayInstance'
+                $ref: '#/components/schemas/DayDTO'
     put:
       summary: Update a day instance
       security:
@@ -1618,7 +1649,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DayInstance'
+                $ref: '#/components/schemas/DayDTO'
     delete:
       summary: Delete a day instance
       security:
@@ -1633,6 +1664,10 @@ paths:
   /task-instances:
     get:
       summary: List all task instances
+      parameters:
+        - $ref: '#/components/parameters/userUUID'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
       security:
         - user_jwt: []
       responses:
@@ -1643,7 +1678,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/TaskInstance'
+                  $ref: '#/components/schemas/TaskDTO'
     post:
       summary: Create a new task instance
       security:
@@ -1660,7 +1695,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TaskInstance'
+                $ref: '#/components/schemas/TaskDTO'
 
   /task-instances/{task_blueprint_uuid}/{user_uuid}:
     parameters:
@@ -1676,7 +1711,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TaskInstance'
+                $ref: '#/components/schemas/TaskDTO'
     put:
       summary: Update a task instance
       security:
@@ -1693,7 +1728,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TaskInstance'
+                $ref: '#/components/schemas/TaskDTO'
     delete:
       summary: Delete a task instance
       security:
@@ -1708,6 +1743,10 @@ paths:
   /form-field-mapper:
     get:
       summary: List all form-field mappings
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/userUUID'
       security:
         - admin_jwt: []
       responses:
@@ -1737,7 +1776,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/FormFieldMapper'
 
-  /form-field-mapper/{form_blueprint_uuid}/{form_field_uuid}:
+  /form-field-mapper/{form_blueprint_uuid}/{field_uuid}:
     parameters:
       - $ref: '#/components/parameters/formBlueprintUUID'
       - $ref: '#/components/parameters/fieldUUID'
@@ -1783,6 +1822,10 @@ paths:
   /form-instances:
     get:
       summary: List all form instances
+      parameters:
+        - $ref: '#/components/parameters/userUUID'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
       security:
         - user_jwt: []
       responses:
@@ -1793,7 +1836,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/FormInstance'
+                  $ref: '#/components/schemas/FormDTO'
     post:
       summary: Create a form instance (user)
       security:
@@ -1810,7 +1853,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FormInstance'
+                $ref: '#/components/schemas/FormDTO'
 
   /form-instances/{form_blueprint_uuid}/{user_uuid}:
     parameters:
@@ -1826,7 +1869,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FormInstance'
+                $ref: '#/components/schemas/FormDTO'
     put:
       summary: Update a form instance
       security:
@@ -1843,7 +1886,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FormInstance'
+                $ref: '#/components/schemas/FormDTO'
     delete:
       summary: Delete a form instance
       security:
