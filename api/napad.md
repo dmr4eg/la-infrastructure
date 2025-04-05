@@ -32,22 +32,22 @@ project_instance {
 }
 
 project_finance {
-project_blueprint_uuid: UUID    
-user_uuid: UUID
-investor_gave: float
-investor_return: float
-spent_budget: float
-toys_planned: float
-toys_sold: float
-toys_left: float
-members_budged: float
-profit: float
-expense_amount: float
-calculated_budget: float
-items_cost: float
-recommended_price: float
-price_per_item: float
-sold_price: float
+    project_blueprint_uuid: UUID    
+    user_uuid: UUID
+    investor_gave: float
+    investor_return: float
+    spent_budget: float
+    toys_planned: float
+    toys_sold: float
+    toys_left: float
+    members_budged: float
+    profit: float
+    expense_amount: float
+    calculated_budget: float
+    items_cost: float
+    recommended_price: float
+    price_per_item: float
+    sold_price: float
 }
 
 project_members{

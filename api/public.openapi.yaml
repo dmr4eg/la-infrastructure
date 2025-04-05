@@ -128,12 +128,12 @@ components:
         $ref: "#/components/schemas/fieldUUID"
 
     componentUUID:
-      name: day_component_uuid
+      name: component_uuid
       in: path
       description: "Component UUID in the path"
       required: true
       schema:
-        $ref: "#/components/schemas/dayComponentUUID"
+        $ref: "#/components/schemas/componentUUID"
 
     projectBlueprintUUID:
       name: project_blueprint_uuid
@@ -207,7 +207,7 @@ components:
       pattern: "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
       description: "UUID for a Day Blueprint"
 
-    dayComponentUUID:
+    componentUUID:
       type: string
       format: uuid
       pattern: "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
@@ -327,15 +327,15 @@ components:
       description: "Composite ID for DayComponentsMapper"
       example:
         day_blueprint_uuid: "665c599d-5c8d-4d20-aaab-7ffaba150606"
-        day_component_uuid: "a8494f64-0987-4dd0-8405-df19eb58f2ab"
+        component_uuid: "a8494f64-0987-4dd0-8405-df19eb58f2ab"
       properties:
         day_blueprint_uuid:
           $ref: '#/components/schemas/dayBlueprintUUID'
-        day_component_uuid:
-          $ref: '#/components/schemas/dayComponentUUID'
+        component_uuid:
+          $ref: '#/components/schemas/componentUUID'
       required:
         - day_blueprint_uuid
-        - day_component_uuid
+        - component_uuid
 
     DayInstanceId:
       type: object
@@ -591,7 +591,7 @@ components:
       example:
         id:
           day_blueprint_uuid: "665c599d-5c8d-4d20-aaab-7ffaba150606"
-          day_component_uuid: "a8494f64-0987-4dd0-8405-df19eb58f2ab"
+          component_uuid: "a8494f64-0987-4dd0-8405-df19eb58f2ab"
         type: "TASK"
       properties:
         id:
@@ -1282,7 +1282,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/DayComponentsMapper'
 
-  /day-components-mapper/{day_blueprint_uuid}/{day_component_uuid}:
+  /day-components-mapper/{day_blueprint_uuid}/{component_uuid}:
     parameters:
       - $ref: '#/components/parameters/dayBlueprintUUID'
       - $ref: '#/components/parameters/componentUUID'
