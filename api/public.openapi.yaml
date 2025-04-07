@@ -603,9 +603,12 @@ components:
             - "TASK"
             - "FORM"
             - "MEDIA"
+        sortOrder:
+          $ref: '#/components/schemas/sortOrder'
       required:
         - id
         - type
+        - sortOrder
 
     DayInstance:
       type: object
