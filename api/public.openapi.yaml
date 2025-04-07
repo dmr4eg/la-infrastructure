@@ -787,6 +787,9 @@ components:
           enum:
             - "video"
             - "image"
+        url:
+          type: URI
+          description: "URL for the media file"
         title:
           type: string
         description:
