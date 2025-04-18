@@ -4,13 +4,11 @@ metadata:
   name: letsencrypt-staging
 spec:
   acme:
-    # Replace the email address with your own contact email
     email: fifth.dmr@gmail.com
-    # The server is replaced in /clusters/production/infrastructure.yaml
     server: https://acme-staging-v02.api.letsencrypt.org/directory
     privateKeySecretRef:
       name: letsencrypt-staging
     solvers:
       - http01:
           ingress:
-            class: nginx
+            ingressClassName: nginx

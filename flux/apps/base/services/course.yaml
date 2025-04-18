@@ -2,28 +2,28 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: frontend
+  name: course
 spec:
   selector:
     matchLabels:
-      app: frontend
+      app: course
   template:
     metadata:
       labels:
-        app: frontend
+        app: course
     spec:
       containers:
-        - name: frontend
+        - name: course
           image: docker.io/nginx:stable
-          # image: ghcr.io/dmr4eg/littlepm-frontend-service:latest
+          # image: ghcr.io/dmr4eg/littlepm-course-service:latest
           env:
             - name: SOME_ENV_VAR
               value: some-value
-          # envFrom:
-          #   - secretRef:
-          #       name: database-credentials
-          #   - configMapRef:
-          #       name: be
+          envFrom:
+            - secretRef:
+                name: database-credentials
+            - configMapRef:
+                name: be
           resources:
             limits:
               memory: "128Mi"
@@ -36,10 +36,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: frontend
+  name: course
 spec:
   selector:
-    app: frontend
+    app: course
   ports:
     - port: 80
       name: http

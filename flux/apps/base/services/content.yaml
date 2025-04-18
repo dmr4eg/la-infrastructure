@@ -2,28 +2,28 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: frontend
+  name: content
 spec:
   selector:
     matchLabels:
-      app: frontend
+      app: content
   template:
     metadata:
       labels:
-        app: frontend
+        app: content
     spec:
       containers:
-        - name: frontend
+        - name: content
           image: docker.io/nginx:stable
-          # image: ghcr.io/dmr4eg/littlepm-frontend-service:latest
+          # image: ghcr.io/dmr4eg/littlepm-content-service:latest
           env:
             - name: SOME_ENV_VAR
               value: some-value
-          # envFrom:
-          #   - secretRef:
-          #       name: database-credentials
-          #   - configMapRef:
-          #       name: be
+          envFrom:
+            - secretRef:
+                name: database-credentials
+            - configMapRef:
+                name: be
           resources:
             limits:
               memory: "128Mi"
@@ -36,10 +36,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: frontend
+  name: content
 spec:
   selector:
-    app: frontend
+    app: content
   ports:
     - port: 80
       name: http
