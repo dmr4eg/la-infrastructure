@@ -27,7 +27,7 @@ spec:
   values:
     controller:
       nodeSelector:
-        ingress-ready: "true"
+        ingress-ready: true
       replicaCount: 1
       service:
         type: NodePort
