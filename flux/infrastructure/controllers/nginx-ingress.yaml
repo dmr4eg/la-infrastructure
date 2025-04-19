@@ -19,6 +19,9 @@ spec:
   install:
     createNamespace: true
     timeout: 5m0s
+  upgrade:
+    remediation:
+      retries: 3
   values:
     controller:
       admissionWebhooks:

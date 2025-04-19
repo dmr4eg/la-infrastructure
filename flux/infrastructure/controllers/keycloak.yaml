@@ -20,6 +20,10 @@ spec:
   install:
     crds: CreateReplace
     createNamespace: true
+    timeout: 5m0s
+  upgrade:
+    remediation:
+      retries: 3
   values:
     replicaCount: 1
     # httpRelativePath: "/auth/"
