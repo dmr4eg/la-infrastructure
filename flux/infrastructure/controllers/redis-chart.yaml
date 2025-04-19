@@ -12,7 +12,8 @@ spec:
   interval: 10s
   chart:
     spec:
-      chart: redis
+      # chart: redis
+      chart: ./bitnami/redis
       version: "20.12.1"
       sourceRef:
         kind: GitRepository
