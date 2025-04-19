@@ -7,6 +7,7 @@ metadata:
 spec:
   interval: 10s
   targetNamespace: ingress-nginx
+  releaseName: ingress-nginx
   chart:
     spec:
       interval: 10s
@@ -17,6 +18,7 @@ spec:
         name: ingress-nginx
         namespace: flux-system
   install:
+    crds: CreateReplace
     createNamespace: true
     timeout: 5m0s
   upgrade:
