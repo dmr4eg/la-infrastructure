@@ -5,6 +5,10 @@ kind: HelmRelease
 metadata:
   name: keycloak
 spec:
+  dependsOn:
+    - kind: HelmRelease
+      name: nginx
+      namespace: flux-system
   interval: 10s
   targetNamespace: keycloak
   releaseName: keycloak
