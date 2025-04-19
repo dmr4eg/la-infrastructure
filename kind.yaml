@@ -4,10 +4,18 @@ apiVersion: kind.x-k8s.io/v1alpha4
 
 name: little-pm
 
+networking:
+  apiServerAddress: "0.0.0.0"
+  apiServerPort: 6443
+  ipFamily: ipv4
+
 nodes:
   - role: control-plane
     labels:
       agentpool: "system"
+  - role: worker
+    labels:
+      agentpool: "application"
       ingress-ready: "true"
     extraPortMappings:
       - listenAddress: "0.0.0.0"

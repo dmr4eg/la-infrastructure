@@ -29,8 +29,6 @@ spec:
   values:
     replicaCount: 1
     # httpRelativePath: "/auth/"
-    global:
-      storageClass: "default"
     production: false
     logging:
       output: default
