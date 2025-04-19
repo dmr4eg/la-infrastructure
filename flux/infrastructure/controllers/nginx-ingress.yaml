@@ -40,3 +40,4 @@ spec:
         name: "nginx"
         enabled: true
         default: true
+        controllerValue: k8s.io/nginx

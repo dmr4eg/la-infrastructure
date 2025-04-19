@@ -54,9 +54,9 @@ build/
 Thumbs.db
 ehthumbs.db
 
-
 # IntelliJ
 *.iml
 *.ipr
 *.iws
 .idea/
+tmp
