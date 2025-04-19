@@ -24,6 +24,8 @@ spec:
       retries: 3
   values:
     controller:
+      nodeSelector:
+        ingress-ready: "true"
       admissionWebhooks:
         patch:
           enabled: false
