@@ -23,9 +23,7 @@ nodes:
         listenAddress: "0.0.0.0"
         hostPort: 443
         protocol: tcp
-
-  # worker node 1
+  - role: control-plane
   - role: worker
-
-  # worker node 2
+  - role: worker
   - role: worker
