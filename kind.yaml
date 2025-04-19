@@ -2,7 +2,7 @@
 kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
 
-name: ingress-dev
+name: little-pm
 
 networking:
   apiServerAddress: "0.0.0.0"
@@ -24,6 +24,8 @@ nodes:
         hostPort: 443
         protocol: tcp
   - role: control-plane
+  - role: control-plane
+  - role: worker
   - role: worker
   - role: worker
   - role: worker
