@@ -35,31 +35,21 @@ spec:
       timeoutSeconds: 300
 
     replicaCount: 1
-    # httpRelativePath: "/auth/"
-    production: false
-    # logging:
-    #   output: default
-    #   level: ALL
-    auth:
-      adminUser: "admin1342"
-      adminPassword: "admin1342"
-      # existingSecret: "keycloak-credentials"
-      # passwordSecretKey: "password"
+
+    production: true
 
     postgresql:
       enabled: true
-      auth:
-        username: bn_keycloak
-        database: bitnami_keycloak
-        password: "superpassword"
-        # existingSecret: "postgres-credentials"
-        # secretKeys:
-        #   userPasswordKey: "password"
+
+    auth:
+      adminUser: "admin1342"
+      adminPassword: "admin1342"
 
     ingress:
       enabled: true
       ingressClassName: nginx
-      tls: false
+      tls: true
+      selfSigned: false
       hostname: auth.app.little.pm
       annotations:
         cert-manager.io/cluster-issuer: "letsencrypt-staging"
