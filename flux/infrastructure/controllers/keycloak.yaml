@@ -22,11 +22,18 @@ spec:
   install:
     crds: CreateReplace
     createNamespace: true
-    timeout: 5m0s
+    timeout: 20m0s
   upgrade:
     remediation:
       retries: 3
   values:
+    readinessProbe:
+      initialDelaySeconds: 120
+      timeoutSeconds: 300
+    livenessProbe:
+      initialDelaySeconds: 300
+      timeoutSeconds: 300
+
     replicaCount: 1
     # httpRelativePath: "/auth/"
     production: false
