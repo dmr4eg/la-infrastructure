@@ -63,14 +63,4 @@ spec:
         cert-manager.io/acme-challenge-type: "http01"
 
     adminIngress:
-      enabled: true
-      hostname: admin.auth.app.little.pm
-      ingressClassName: nginx
-      tls: false
-      annotations:
-        cert-manager.io/cluster-issuer: "letsencrypt-staging"
-        kubernetes.io/ingress.class: "nginx"
-        nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-        ingress.kubernetes.io/ssl-redirect: "true"
-        kubernetes.io/tls-acme: "true"
-        cert-manager.io/acme-challenge-type: "http01"
+      enabled: false
