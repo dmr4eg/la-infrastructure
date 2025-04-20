@@ -4,6 +4,7 @@ kind: Kustomization
 resources:
   - services
   - postgres.yaml
+  - postgres-k.yaml
 
 configMapGenerator:
   - envs:
