@@ -29,7 +29,7 @@ spec:
   values:
     replicaCount: 1
     # httpRelativePath: "/auth/"
-    # production: false
+    production: true
     # logging:
     #   output: default
     #   level: ALL
