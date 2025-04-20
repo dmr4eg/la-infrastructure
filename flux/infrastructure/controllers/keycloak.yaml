@@ -29,10 +29,10 @@ spec:
   values:
     replicaCount: 1
     # httpRelativePath: "/auth/"
-    production: false
-    logging:
-      output: default
-      level: ALL
+    # production: false
+    # logging:
+    #   output: default
+    #   level: ALL
     auth:
       adminUser: "admin1342"
       adminPassword: "admin1342"
