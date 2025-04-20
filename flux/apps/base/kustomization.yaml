@@ -16,3 +16,6 @@ secretGenerator:
   - envs:
       - secrets/database-credentials.properties
     name: database-credentials
+
+generatorOptions:
+  disableNameSuffixHash: true
