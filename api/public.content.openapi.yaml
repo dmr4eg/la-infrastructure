@@ -1,0 +1,942 @@
+openapi: 3.0.3
+info:
+  title: Project & Day API
+  version: 1.0.0
+  description: An OpenAPI specification for project management, day templates, tasks, forms, media, and related user progress tracking.
+servers:
+  - url: https://api.example.com
+
+########################################################
+# COMPONENTS
+########################################################
+components:
+  ######################################################
+  # HEADERS
+  ######################################################
+  headers:
+    Set-JWT:
+      schema:
+        type: string
+        description: JWT token
+        example: "jwt=tokenValue; Path=/; HttpOnly; Secure"
+    Clear-JWT:
+      schema:
+        type: string
+        description: JWT token clear
+        example: "jwt=; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Path=/;"
+    HomeRedirect:
+      schema:
+        type: string
+        description: Home redirect
+        example: /
+    LoginRedirect:
+      schema:
+        type: string
+        description: Login redirect
+        example: /auth/login
+
+  ######################################################
+  # SECURITY SCHEMES
+  ######################################################
+  securitySchemes:
+    admin_jwt:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    user_jwt:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  ######################################################
+  # RESPONSES
+  ######################################################
+  responses:
+    UnauthorizedLoginError:
+      description: Unauthorized login
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    UnauthorizedError:
+      description: Unauthorized access
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    AuthorizationSuccess:
+      description: OK
+      headers:
+        Set-Cookie:
+          $ref: "#/components/headers/Set-JWT"
+        Location:
+          $ref: "#/components/headers/HomeRedirect"
+    UnauthorizationSuccess:
+      description: OK
+      headers:
+        Set-Cookie:
+          $ref: "#/components/headers/Clear-JWT"
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    NotAcceptable:
+      description: Not Acceptable
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+
+  ######################################################
+  # PARAMETERS
+  ######################################################
+  parameters:
+    limit:
+      name: limit
+      description: Limit of the list
+      example: 10
+      in: query
+      required: true
+      schema:
+        type: integer
+
+    offset:
+      name: offset
+      description: Offset of the list
+      example: 0
+      in: query
+      required: true
+      schema:
+        type: integer
+
+    sortOrder:
+      name: sortOrder
+      in: query
+      description: "Order or position (general integer query usage)"
+      required: true
+      schema:
+        $ref: "#/components/schemas/sortOrder"
+
+    fieldUUIDQuery:
+      name: field_uuid
+      in: query
+      description: "Form field UUID in the query"
+      required: true
+      schema:
+        $ref: "#/components/schemas/fieldUUID"
+
+    componentUUID:
+      name: component_uuid
+      in: path
+      description: "Component UUID in the path"
+      required: true
+      schema:
+        $ref: "#/components/schemas/componentUUID"
+
+    projectBlueprintUUID:
+      name: project_blueprint_uuid
+      in: path
+      required: true
+      description: "The UUID of the project blueprint"
+      schema:
+        $ref: "#/components/schemas/projectBlueprintUUID"
+
+    dayBlueprintUUID:
+      name: day_blueprint_uuid
+      in: path
+      required: true
+      description: "The UUID of the day blueprint"
+      schema:
+        $ref: "#/components/schemas/dayBlueprintUUID"
+
+    mediaUUID:
+      name: media_uuid
+      in: path
+      required: true
+      description: "The UUID of the media resource"
+      schema:
+        $ref: "#/components/schemas/mediaUUID"
+
+    taskBlueprintUUID:
+      name: task_blueprint_uuid
+      in: path
+      required: true
+      description: "The UUID of the task blueprint"
+      schema:
+        $ref: "#/components/schemas/taskBlueprintUUID"
+
+    formBlueprintUUID:
+      name: form_blueprint_uuid
+      in: path
+      required: true
+      description: "The UUID of the form blueprint"
+      schema:
+        $ref: "#/components/schemas/formBlueprintUUID"
+
+    fieldUUID:
+      name: field_uuid
+      in: path
+      required: true
+      description: "The UUID of the form field"
+      schema:
+        $ref: "#/components/schemas/fieldUUID"
+
+    userUUID:
+      name: user_uuid
+      in: path
+      required: true
+      description: "The UUID of the user"
+      schema:
+        $ref: "#/components/schemas/userUUID"
+
+  ######################################################
+  # SCHEMAS
+  ######################################################
+  schemas:
+    projectBlueprintUUID:
+      type: string
+      format: uuid
+      pattern: "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+      description: "UUID for a Project Blueprint"
+
+    dayBlueprintUUID:
+      type: string
+      format: uuid
+      pattern: "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+      description: "UUID for a Day Blueprint"
+
+    componentUUID:
+      type: string
+      format: uuid
+      pattern: "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+      description: "UUID for a Day Component"
+
+    taskBlueprintUUID:
+      type: string
+      format: uuid
+      pattern: "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+      description: "UUID for a Task Blueprint"
+
+    formBlueprintUUID:
+      type: string
+      format: uuid
+      pattern: "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+      description: "UUID for a Form Blueprint"
+
+    fieldUUID:
+      type: string
+      format: uuid
+      pattern: "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+      description: "UUID for a Form Field"
+
+    mediaUUID:
+      type: string
+      format: uuid
+      pattern: "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+      description: "UUID for a Media resource"
+
+    userUUID:
+      type: string
+      format: uuid
+      pattern: "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+      description: "UUID for a User"
+
+    sortOrder:
+      type: integer
+      description: "Order or position within a list"
+
+    Error:
+      type: object
+      description: Error object
+      example:
+        message: "Error message"
+      properties:
+        message:
+          type: string
+          description: Error message
+      required:
+        - message
+
+    ######################################################
+    # Composite ID Schemas
+    ######################################################
+
+    TaskInstanceId:
+      type: object
+      description: "Composite ID for TaskInstance"
+      example:
+        task_blueprint_uuid: "665c599d-5c8d-4d20-aaab-7ffaba150606"
+        user_uuid: "66de88ad-5c8d-4d20-a0ab-bbb7ccc15333"
+      properties:
+        task_blueprint_uuid:
+          $ref: '#/components/schemas/taskBlueprintUUID'
+        user_uuid:
+          $ref: '#/components/schemas/userUUID'
+      required:
+        - task_blueprint_uuid
+        - user_uuid
+
+    FormFieldMapperId:
+      type: object
+      description: "Composite ID for FormFieldMapper"
+      example:
+        form_blueprint_uuid: "665c599d-5c8d-4d20-aaab-7ffaba150606"
+        field_uuid: "a8494f64-0987-4dd0-8405-df19eb58f2ab"
+      properties:
+        form_blueprint_uuid:
+          $ref: '#/components/schemas/formBlueprintUUID'
+        field_uuid:
+          $ref: '#/components/schemas/fieldUUID'
+      required:
+        - form_blueprint_uuid
+        - field_uuid
+
+    FormInstanceId:
+      type: object
+      description: "Composite ID for FormInstance"
+      example:
+        form_blueprint_uuid: "665c599d-5c8d-4d20-aaab-7ffaba150606"
+        user_uuid: "66de88ad-5c8d-4d20-a0ab-bbb7ccc15333"
+      properties:
+        form_blueprint_uuid:
+          $ref: '#/components/schemas/formBlueprintUUID'
+        user_uuid:
+          $ref: '#/components/schemas/userUUID'
+      required:
+        - form_blueprint_uuid
+        - user_uuid
+
+    ######################################################
+    # TASK
+    ######################################################
+    TaskBlueprint:
+      type: object
+      properties:
+        task_blueprint_uuid:
+          $ref: '#/components/schemas/taskBlueprintUUID'
+        title:
+          type: string
+        description:
+          type: string
+      required:
+        - task_blueprint_uuid
+        - title
+
+    TaskInstance:
+      type: object
+      description: "User's progress for a specific task"
+      example:
+        id:
+          task_blueprint_uuid: "665c599d-5c8d-4d20-aaab-7ffaba150606"
+          user_uuid: "66de88ad-5c8d-4d20-a0ab-bbb7ccc15333"
+        status: true
+      properties:
+        id:
+          $ref: '#/components/schemas/TaskInstanceId'
+          readOnly: true
+        status:
+          type: boolean
+          description: "True if completed, false otherwise"
+      required:
+        - id
+        - status
+
+    TaskDTO:
+      type: object
+      properties:
+        blueprint:
+          $ref: '#/components/schemas/TaskBlueprint'
+        progress:
+          $ref: '#/components/schemas/TaskInstance'
+      required:
+        - blueprint
+        - progress
+
+    ######################################################
+    # FORM
+    ######################################################
+    FormBlueprint:
+      type: object
+      properties:
+        form_blueprint_uuid:
+          $ref: '#/components/schemas/formBlueprintUUID'
+        title:
+          type: string
+        description:
+          type: string
+        callback_url:
+          type: string
+      required:
+        - form_blueprint_uuid
+        - title
+
+    Field:
+      type: object
+      properties:
+        field_uuid:
+          $ref: '#/components/schemas/fieldUUID'
+        input_type:
+          type: string
+          enum:
+            - "TEXT"
+            - "NUMBER"
+            - "FILE"
+        required:
+          type: boolean
+        title:
+          type: string
+        description:
+          type: string
+      required:
+        - field_uuid
+        - input_type
+        - title
+
+    FormFieldMapper:
+      type: object
+      description: "Mapping a field within a form"
+      example:
+        id:
+          form_blueprint_uuid: "665c599d-5c8d-4d20-aaab-7ffaba150606"
+          field_uuid: "a8494f64-0987-4dd0-8405-df19eb58f2ab"
+        sortOrder: 1
+      properties:
+        id:
+          $ref: '#/components/schemas/FormFieldMapperId'
+          readOnly: true
+        sortOrder:
+          $ref: '#/components/schemas/sortOrder'
+      required:
+        - id
+        - sortOrder
+
+    FormInstance:
+      type: object
+      description: "Specific instance of a form for a user"
+      example:
+        id:
+          form_blueprint_uuid: "665c599d-5c8d-4d20-aaab-7ffaba150606"
+          user_uuid: "66de88ad-5c8d-4d20-a0ab-bbb7ccc15333"
+        status: true
+      properties:
+        id:
+          $ref: '#/components/schemas/FormInstanceId'
+          readOnly: true
+        status:
+          type: boolean
+          description: "True if form is completed, false otherwise"
+      required:
+        - id
+        - status
+
+    FormDTO:
+      type: object
+      properties:
+        blueprint:
+          $ref: '#/components/schemas/FormBlueprint'
+        instance:
+          $ref: '#/components/schemas/FormInstance'
+      required:
+        - blueprint
+        - instance
+
+    ######################################################
+    # MEDIA
+    ######################################################
+    Media:
+      type: object
+      properties:
+        mediaUUID:
+          $ref: '#/components/schemas/mediaUUID'
+        type:
+          type: string
+          enum:
+            - "video"
+            - "image"
+        url:
+          type: URI
+          description: "URL for the media file"
+        title:
+          type: string
+        description:
+          type: string
+      required:
+        - mediaUUID
+        - type
+        - title
+
+########################################################
+# PATHS
+########################################################
+paths:
+
+  ######################################################
+  # SINGLE-ID RESOURCES (Blueprints, Media, etc.)
+  ######################################################
+
+  /tasks:
+    get:
+      summary: List task templates
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
+      responses:
+        '200':
+          description: A list of task templates
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TaskBlueprint'
+    post:
+      summary: Create task template (admin only)
+      security:
+        - admin_jwt: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskBlueprint'
+      responses:
+        '200':
+          description: Created task blueprint
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskBlueprint'
+
+  /tasks/{task_blueprint_uuid}:
+    parameters:
+      - $ref: '#/components/parameters/taskBlueprintUUID'
+    get:
+      summary: Get task template
+      responses:
+        '200':
+          description: Task blueprint
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskBlueprint'
+    put:
+      summary: Update task template (admin only)
+      security:
+        - admin_jwt: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskBlueprint'
+      responses:
+        '200':
+          description: Updated task blueprint
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskBlueprint'
+    delete:
+      summary: Delete task template (admin only)
+      security:
+        - admin_jwt: []
+      responses:
+        '204':
+          description: No Content
+
+  /forms:
+    get:
+      summary: List form templates
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
+      responses:
+        '200':
+          description: A list of form templates
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FormBlueprint'
+    post:
+      summary: Create form template (admin only)
+      security:
+        - admin_jwt: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FormBlueprint'
+      responses:
+        '200':
+          description: Created form blueprint
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FormBlueprint'
+
+  /forms/{form_blueprint_uuid}:
+    parameters:
+      - $ref: '#/components/parameters/formBlueprintUUID'
+    get:
+      summary: Get form template
+      responses:
+        '200':
+          description: Form blueprint
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FormBlueprint'
+    put:
+      summary: Update form template (admin only)
+      security:
+        - admin_jwt: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FormBlueprint'
+      responses:
+        '200':
+          description: Updated form blueprint
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FormBlueprint'
+    delete:
+      summary: Delete form template (admin only)
+      security:
+        - admin_jwt: []
+      responses:
+        '204':
+          description: No Content
+
+  /media:
+    post:
+      summary: "Upload new media (admin only)"
+      operationId: "mediaPostMultipart"
+      security:
+        - admin_jwt: [ ]
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: "The file to upload"
+                description:
+                  type: string
+                  description: "Media description"
+                type:
+                  type: string
+                  description: "Media type (e.g. video, image, etc.)"
+              required:
+                - file
+        required: true
+      responses:
+        '200':
+          description: "The uploaded media metadata"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Media"
+    get:
+      summary: (Optional) List media items
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
+      responses:
+        '200':
+          description: A list of media
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Media'
+
+  /media/{media_uuid}:
+    parameters:
+      - $ref: '#/components/parameters/mediaUUID'
+    get:
+      summary: Get media metadata
+      responses:
+        '200':
+          description: Media metadata
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Media'
+    put:
+      summary: Update media metadata (admin only)
+      security:
+        - admin_jwt: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Media'
+      responses:
+        '200':
+          description: Updated media metadata
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Media'
+    delete:
+      summary: Delete media (admin only)
+      security:
+        - admin_jwt: []
+      responses:
+        '204':
+          description: No Content
+
+  ######################################################
+  # COMPOSITE-ID RESOURCES
+  ######################################################
+
+  ############################################
+  # 7) TASK-INSTANCES
+  ############################################
+  /task-instances:
+    get:
+      summary: List all task instances
+      parameters:
+        - $ref: '#/components/parameters/userUUID'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
+      security:
+        - user_jwt: []
+      responses:
+        '200':
+          description: A list of TaskInstance
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TaskDTO'
+    post:
+      summary: Create a new task instance
+      security:
+        - user_jwt: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskInstance'
+      responses:
+        '200':
+          description: Created task instance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskDTO'
+
+  /task-instances/{task_blueprint_uuid}/{user_uuid}:
+    parameters:
+      - $ref: '#/components/parameters/taskBlueprintUUID'
+      - $ref: '#/components/parameters/userUUID'
+    get:
+      summary: Get a user's specific task instance
+      security:
+        - user_jwt: []
+      responses:
+        '200':
+          description: TaskInstance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskDTO'
+    put:
+      summary: Update a task instance
+      security:
+        - user_jwt: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskInstance'
+      responses:
+        '200':
+          description: Updated task instance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskDTO'
+    delete:
+      summary: Delete a task instance
+      security:
+        - user_jwt: []
+      responses:
+        '204':
+          description: No Content
+
+  ############################################
+  # 8) FORM-FIELD-MAPPER
+  ############################################
+  /form-field-mapper:
+    get:
+      summary: List all form-field mappings
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/userUUID'
+      security:
+        - admin_jwt: []
+      responses:
+        '200':
+          description: A list of FormFieldMapper
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FormFieldMapper'
+    post:
+      summary: Create a form-field mapping (admin only)
+      security:
+        - admin_jwt: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FormFieldMapper'
+      responses:
+        '200':
+          description: Created form-field mapping
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FormFieldMapper'
+
+  /form-field-mapper/{form_blueprint_uuid}/{field_uuid}:
+    parameters:
+      - $ref: '#/components/parameters/formBlueprintUUID'
+      - $ref: '#/components/parameters/fieldUUID'
+    get:
+      summary: Get a specific form-field mapping
+      security:
+        - admin_jwt: []
+      responses:
+        '200':
+          description: A single FormFieldMapper
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FormFieldMapper'
+    put:
+      summary: Update a form-field mapping (admin only)
+      security:
+        - admin_jwt: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FormFieldMapper'
+      responses:
+        '200':
+          description: Updated form-field mapping
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FormFieldMapper'
+    delete:
+      summary: Delete a form-field mapping (admin only)
+      security:
+        - admin_jwt: []
+      responses:
+        '204':
+          description: No Content
+
+  ############################################
+  # 9) FORM-INSTANCES
+  ############################################
+  /form-instances:
+    get:
+      summary: List all form instances
+      parameters:
+        - $ref: '#/components/parameters/userUUID'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
+      security:
+        - user_jwt: []
+      responses:
+        '200':
+          description: A list of FormInstance
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FormDTO'
+    post:
+      summary: Create a form instance (user)
+      security:
+        - user_jwt: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FormInstance'
+      responses:
+        '200':
+          description: Created form instance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FormDTO'
+
+  /form-instances/{form_blueprint_uuid}/{user_uuid}:
+    parameters:
+      - $ref: '#/components/parameters/formBlueprintUUID'
+      - $ref: '#/components/parameters/userUUID'
+    get:
+      summary: Get a user's specific form instance
+      security:
+        - user_jwt: []
+      responses:
+        '200':
+          description: FormInstance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FormDTO'
+    put:
+      summary: Update a form instance
+      security:
+        - user_jwt: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FormInstance'
+      responses:
+        '200':
+          description: Updated form instance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FormDTO'
+    delete:
+      summary: Delete a form instance
+      security:
+        - user_jwt: []
+      responses:
+        '204':
+          description: No Content
