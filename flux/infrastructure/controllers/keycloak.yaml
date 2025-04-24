@@ -40,6 +40,11 @@ spec:
 
     postgresql:
       enabled: true
+      auth:
+        username: bn_keycloak
+        password: bn_keycloak
+        postgresPassword: bn_keycloak
+        database: bitnami_keycloak
 
     auth:
       adminUser: "admin1342"
