@@ -638,6 +638,9 @@ paths:
                 type:
                   type: string
                   description: "Media type (e.g. video, image, etc.)"
+                title:
+                  type: string
+                  description: "Media title"
               required:
                 - file
         required: true
