@@ -4,7 +4,7 @@ info:
   version: 1.0.0
   description: An OpenAPI specification for project management, day templates, tasks, forms, media, and related user progress tracking.
 servers:
-  - url: https://api.example.com
+  - url: https://app.little.pm/api/content
 
 ########################################################
 # COMPONENTS
@@ -271,9 +271,9 @@ components:
         user_uuid: "66de88ad-5c8d-4d20-a0ab-bbb7ccc15333"
       properties:
         task_blueprint_uuid:
-          $ref: '#/components/schemas/taskBlueprintUUID'
+          $ref: "#/components/schemas/taskBlueprintUUID"
         user_uuid:
-          $ref: '#/components/schemas/userUUID'
+          $ref: "#/components/schemas/userUUID"
       required:
         - task_blueprint_uuid
         - user_uuid
@@ -286,9 +286,9 @@ components:
         field_uuid: "a8494f64-0987-4dd0-8405-df19eb58f2ab"
       properties:
         form_blueprint_uuid:
-          $ref: '#/components/schemas/formBlueprintUUID'
+          $ref: "#/components/schemas/formBlueprintUUID"
         field_uuid:
-          $ref: '#/components/schemas/fieldUUID'
+          $ref: "#/components/schemas/fieldUUID"
       required:
         - form_blueprint_uuid
         - field_uuid
@@ -301,9 +301,9 @@ components:
         user_uuid: "66de88ad-5c8d-4d20-a0ab-bbb7ccc15333"
       properties:
         form_blueprint_uuid:
-          $ref: '#/components/schemas/formBlueprintUUID'
+          $ref: "#/components/schemas/formBlueprintUUID"
         user_uuid:
-          $ref: '#/components/schemas/userUUID'
+          $ref: "#/components/schemas/userUUID"
       required:
         - form_blueprint_uuid
         - user_uuid
@@ -315,7 +315,7 @@ components:
       type: object
       properties:
         task_blueprint_uuid:
-          $ref: '#/components/schemas/taskBlueprintUUID'
+          $ref: "#/components/schemas/taskBlueprintUUID"
         title:
           type: string
         description:
@@ -334,7 +334,7 @@ components:
         status: true
       properties:
         id:
-          $ref: '#/components/schemas/TaskInstanceId'
+          $ref: "#/components/schemas/TaskInstanceId"
           readOnly: true
         status:
           type: boolean
@@ -347,9 +347,9 @@ components:
       type: object
       properties:
         blueprint:
-          $ref: '#/components/schemas/TaskBlueprint'
+          $ref: "#/components/schemas/TaskBlueprint"
         progress:
-          $ref: '#/components/schemas/TaskInstance'
+          $ref: "#/components/schemas/TaskInstance"
       required:
         - blueprint
         - progress
@@ -361,7 +361,7 @@ components:
       type: object
       properties:
         form_blueprint_uuid:
-          $ref: '#/components/schemas/formBlueprintUUID'
+          $ref: "#/components/schemas/formBlueprintUUID"
         title:
           type: string
         description:
@@ -376,7 +376,7 @@ components:
       type: object
       properties:
         field_uuid:
-          $ref: '#/components/schemas/fieldUUID'
+          $ref: "#/components/schemas/fieldUUID"
         input_type:
           type: string
           enum:
@@ -404,10 +404,10 @@ components:
         sortOrder: 1
       properties:
         id:
-          $ref: '#/components/schemas/FormFieldMapperId'
+          $ref: "#/components/schemas/FormFieldMapperId"
           readOnly: true
         sortOrder:
-          $ref: '#/components/schemas/sortOrder'
+          $ref: "#/components/schemas/sortOrder"
       required:
         - id
         - sortOrder
@@ -422,7 +422,7 @@ components:
         status: true
       properties:
         id:
-          $ref: '#/components/schemas/FormInstanceId'
+          $ref: "#/components/schemas/FormInstanceId"
           readOnly: true
         status:
           type: boolean
@@ -435,9 +435,9 @@ components:
       type: object
       properties:
         blueprint:
-          $ref: '#/components/schemas/FormBlueprint'
+          $ref: "#/components/schemas/FormBlueprint"
         instance:
-          $ref: '#/components/schemas/FormInstance'
+          $ref: "#/components/schemas/FormInstance"
       required:
         - blueprint
         - instance
@@ -449,14 +449,14 @@ components:
       type: object
       properties:
         mediaUUID:
-          $ref: '#/components/schemas/mediaUUID'
+          $ref: "#/components/schemas/mediaUUID"
         type:
           type: string
           enum:
             - "video"
             - "image"
         url:
-          type: URI
+          type: string
           description: "URL for the media file"
         title:
           type: string
@@ -471,7 +471,6 @@ components:
 # PATHS
 ########################################################
 paths:
-
   ######################################################
   # SINGLE-ID RESOURCES (Blueprints, Media, etc.)
   ######################################################
@@ -480,17 +479,17 @@ paths:
     get:
       summary: List task templates
       parameters:
-        - $ref: '#/components/parameters/limit'
-        - $ref: '#/components/parameters/offset'
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/offset"
       responses:
-        '200':
+        "200":
           description: A list of task templates
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/TaskBlueprint'
+                  $ref: "#/components/schemas/TaskBlueprint"
     post:
       summary: Create task template (admin only)
       security:
@@ -500,27 +499,27 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TaskBlueprint'
+              $ref: "#/components/schemas/TaskBlueprint"
       responses:
-        '200':
+        "200":
           description: Created task blueprint
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TaskBlueprint'
+                $ref: "#/components/schemas/TaskBlueprint"
 
   /tasks/{task_blueprint_uuid}:
     parameters:
-      - $ref: '#/components/parameters/taskBlueprintUUID'
+      - $ref: "#/components/parameters/taskBlueprintUUID"
     get:
       summary: Get task template
       responses:
-        '200':
+        "200":
           description: Task blueprint
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TaskBlueprint'
+                $ref: "#/components/schemas/TaskBlueprint"
     put:
       summary: Update task template (admin only)
       security:
@@ -530,37 +529,37 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TaskBlueprint'
+              $ref: "#/components/schemas/TaskBlueprint"
       responses:
-        '200':
+        "200":
           description: Updated task blueprint
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TaskBlueprint'
+                $ref: "#/components/schemas/TaskBlueprint"
     delete:
       summary: Delete task template (admin only)
       security:
         - admin_jwt: []
       responses:
-        '204':
+        "204":
           description: No Content
 
   /forms:
     get:
       summary: List form templates
       parameters:
-        - $ref: '#/components/parameters/limit'
-        - $ref: '#/components/parameters/offset'
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/offset"
       responses:
-        '200':
+        "200":
           description: A list of form templates
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/FormBlueprint'
+                  $ref: "#/components/schemas/FormBlueprint"
     post:
       summary: Create form template (admin only)
       security:
@@ -570,27 +569,27 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/FormBlueprint'
+              $ref: "#/components/schemas/FormBlueprint"
       responses:
-        '200':
+        "200":
           description: Created form blueprint
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FormBlueprint'
+                $ref: "#/components/schemas/FormBlueprint"
 
   /forms/{form_blueprint_uuid}:
     parameters:
-      - $ref: '#/components/parameters/formBlueprintUUID'
+      - $ref: "#/components/parameters/formBlueprintUUID"
     get:
       summary: Get form template
       responses:
-        '200':
+        "200":
           description: Form blueprint
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FormBlueprint'
+                $ref: "#/components/schemas/FormBlueprint"
     put:
       summary: Update form template (admin only)
       security:
@@ -600,20 +599,20 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/FormBlueprint'
+              $ref: "#/components/schemas/FormBlueprint"
       responses:
-        '200':
+        "200":
           description: Updated form blueprint
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FormBlueprint'
+                $ref: "#/components/schemas/FormBlueprint"
     delete:
       summary: Delete form template (admin only)
       security:
         - admin_jwt: []
       responses:
-        '204':
+        "204":
           description: No Content
 
   /media:
@@ -621,7 +620,7 @@ paths:
       summary: "Upload new media (admin only)"
       operationId: "mediaPostMultipart"
       security:
-        - admin_jwt: [ ]
+        - admin_jwt: []
       requestBody:
         content:
           multipart/form-data:
@@ -645,7 +644,7 @@ paths:
                 - file
         required: true
       responses:
-        '200':
+        "200":
           description: "The uploaded media metadata"
           content:
             application/json:
@@ -654,30 +653,30 @@ paths:
     get:
       summary: (Optional) List media items
       parameters:
-        - $ref: '#/components/parameters/limit'
-        - $ref: '#/components/parameters/offset'
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/offset"
       responses:
-        '200':
+        "200":
           description: A list of media
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Media'
+                  $ref: "#/components/schemas/Media"
 
   /media/{media_uuid}:
     parameters:
-      - $ref: '#/components/parameters/mediaUUID'
+      - $ref: "#/components/parameters/mediaUUID"
     get:
       summary: Get media metadata
       responses:
-        '200':
+        "200":
           description: Media metadata
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Media'
+                $ref: "#/components/schemas/Media"
     put:
       summary: Update media metadata (admin only)
       security:
@@ -687,20 +686,20 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Media'
+              $ref: "#/components/schemas/Media"
       responses:
-        '200':
+        "200":
           description: Updated media metadata
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Media'
+                $ref: "#/components/schemas/Media"
     delete:
       summary: Delete media (admin only)
       security:
         - admin_jwt: []
       responses:
-        '204':
+        "204":
           description: No Content
 
   ######################################################
@@ -714,20 +713,20 @@ paths:
     get:
       summary: List all task instances
       parameters:
-        - $ref: '#/components/parameters/userUUID'
-        - $ref: '#/components/parameters/limit'
-        - $ref: '#/components/parameters/offset'
+        - $ref: "#/components/parameters/userUUID"
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/offset"
       security:
         - user_jwt: []
       responses:
-        '200':
+        "200":
           description: A list of TaskInstance
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/TaskDTO'
+                  $ref: "#/components/schemas/TaskDTO"
     post:
       summary: Create a new task instance
       security:
@@ -737,30 +736,30 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TaskInstance'
+              $ref: "#/components/schemas/TaskInstance"
       responses:
-        '200':
+        "200":
           description: Created task instance
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TaskDTO'
+                $ref: "#/components/schemas/TaskDTO"
 
   /task-instances/{task_blueprint_uuid}/{user_uuid}:
     parameters:
-      - $ref: '#/components/parameters/taskBlueprintUUID'
-      - $ref: '#/components/parameters/userUUID'
+      - $ref: "#/components/parameters/taskBlueprintUUID"
+      - $ref: "#/components/parameters/userUUID"
     get:
       summary: Get a user's specific task instance
       security:
         - user_jwt: []
       responses:
-        '200':
+        "200":
           description: TaskInstance
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TaskDTO'
+                $ref: "#/components/schemas/TaskDTO"
     put:
       summary: Update a task instance
       security:
@@ -770,20 +769,20 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TaskInstance'
+              $ref: "#/components/schemas/TaskInstance"
       responses:
-        '200':
+        "200":
           description: Updated task instance
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TaskDTO'
+                $ref: "#/components/schemas/TaskDTO"
     delete:
       summary: Delete a task instance
       security:
         - user_jwt: []
       responses:
-        '204':
+        "204":
           description: No Content
 
   ############################################
@@ -793,20 +792,20 @@ paths:
     get:
       summary: List all form-field mappings
       parameters:
-        - $ref: '#/components/parameters/limit'
-        - $ref: '#/components/parameters/offset'
-        - $ref: '#/components/parameters/userUUID'
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/offset"
+        - $ref: "#/components/parameters/userUUID"
       security:
         - admin_jwt: []
       responses:
-        '200':
+        "200":
           description: A list of FormFieldMapper
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/FormFieldMapper'
+                  $ref: "#/components/schemas/FormFieldMapper"
     post:
       summary: Create a form-field mapping (admin only)
       security:
@@ -816,30 +815,30 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/FormFieldMapper'
+              $ref: "#/components/schemas/FormFieldMapper"
       responses:
-        '200':
+        "200":
           description: Created form-field mapping
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FormFieldMapper'
+                $ref: "#/components/schemas/FormFieldMapper"
 
   /form-field-mapper/{form_blueprint_uuid}/{field_uuid}:
     parameters:
-      - $ref: '#/components/parameters/formBlueprintUUID'
-      - $ref: '#/components/parameters/fieldUUID'
+      - $ref: "#/components/parameters/formBlueprintUUID"
+      - $ref: "#/components/parameters/fieldUUID"
     get:
       summary: Get a specific form-field mapping
       security:
         - admin_jwt: []
       responses:
-        '200':
+        "200":
           description: A single FormFieldMapper
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FormFieldMapper'
+                $ref: "#/components/schemas/FormFieldMapper"
     put:
       summary: Update a form-field mapping (admin only)
       security:
@@ -849,20 +848,20 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/FormFieldMapper'
+              $ref: "#/components/schemas/FormFieldMapper"
       responses:
-        '200':
+        "200":
           description: Updated form-field mapping
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FormFieldMapper'
+                $ref: "#/components/schemas/FormFieldMapper"
     delete:
       summary: Delete a form-field mapping (admin only)
       security:
         - admin_jwt: []
       responses:
-        '204':
+        "204":
           description: No Content
 
   ############################################
@@ -872,20 +871,20 @@ paths:
     get:
       summary: List all form instances
       parameters:
-        - $ref: '#/components/parameters/userUUID'
-        - $ref: '#/components/parameters/limit'
-        - $ref: '#/components/parameters/offset'
+        - $ref: "#/components/parameters/userUUID"
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/offset"
       security:
         - user_jwt: []
       responses:
-        '200':
+        "200":
           description: A list of FormInstance
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/FormDTO'
+                  $ref: "#/components/schemas/FormDTO"
     post:
       summary: Create a form instance (user)
       security:
@@ -895,30 +894,30 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/FormInstance'
+              $ref: "#/components/schemas/FormInstance"
       responses:
-        '200':
+        "200":
           description: Created form instance
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FormDTO'
+                $ref: "#/components/schemas/FormDTO"
 
   /form-instances/{form_blueprint_uuid}/{user_uuid}:
     parameters:
-      - $ref: '#/components/parameters/formBlueprintUUID'
-      - $ref: '#/components/parameters/userUUID'
+      - $ref: "#/components/parameters/formBlueprintUUID"
+      - $ref: "#/components/parameters/userUUID"
     get:
       summary: Get a user's specific form instance
       security:
         - user_jwt: []
       responses:
-        '200':
+        "200":
           description: FormInstance
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FormDTO'
+                $ref: "#/components/schemas/FormDTO"
     put:
       summary: Update a form instance
       security:
@@ -928,18 +927,18 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/FormInstance'
+              $ref: "#/components/schemas/FormInstance"
       responses:
-        '200':
+        "200":
           description: Updated form instance
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FormDTO'
+                $ref: "#/components/schemas/FormDTO"
     delete:
       summary: Delete a form instance
       security:
         - user_jwt: []
       responses:
-        '204':
+        "204":
           description: No Content

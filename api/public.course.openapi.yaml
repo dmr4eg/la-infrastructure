@@ -4,7 +4,7 @@ info:
   version: 1.0.0
   description: An OpenAPI specification for project management, day templates, tasks, forms, media, and related user progress tracking.
 servers:
-  - url: https://api.example.com
+  - url: https://app.little.pm/api/course
 
 ########################################################
 # COMPONENTS
@@ -230,9 +230,9 @@ components:
         day: "557c482c-8bb5-4a65-9bef-848a953238ae"
       properties:
         project_blueprint_uuid:
-          $ref: '#/components/schemas/projectBlueprintUUID'
+          $ref: "#/components/schemas/projectBlueprintUUID"
         day_blueprint_uuid:
-          $ref: '#/components/schemas/dayBlueprintUUID'
+          $ref: "#/components/schemas/dayBlueprintUUID"
       required:
         - project_blueprint_uuid
         - day_blueprint_uuid
@@ -245,9 +245,9 @@ components:
         user_uuid: "66de88ad-5c8d-4d20-a0ab-bbb7ccc15333"
       properties:
         project_blueprint_uuid:
-          $ref: '#/components/schemas/projectBlueprintUUID'
+          $ref: "#/components/schemas/projectBlueprintUUID"
         user_uuid:
-          $ref: '#/components/schemas/userUUID'
+          $ref: "#/components/schemas/userUUID"
       required:
         - project_blueprint_uuid
         - user_uuid
@@ -260,9 +260,9 @@ components:
         user_uuid: "66de88ad-5c8d-4d20-a0ab-bbb7ccc15333"
       properties:
         project_blueprint_uuid:
-          $ref: '#/components/schemas/projectBlueprintUUID'
+          $ref: "#/components/schemas/projectBlueprintUUID"
         user_uuid:
-          $ref: '#/components/schemas/userUUID'
+          $ref: "#/components/schemas/userUUID"
       required:
         - project_blueprint_uuid
         - user_uuid
@@ -275,9 +275,9 @@ components:
         user_uuid: "66de88ad-5c8d-4d20-a0ab-bbb7ccc15333"
       properties:
         project_blueprint_uuid:
-          $ref: '#/components/schemas/projectBlueprintUUID'
+          $ref: "#/components/schemas/projectBlueprintUUID"
         user_uuid:
-          $ref: '#/components/schemas/userUUID'
+          $ref: "#/components/schemas/userUUID"
       required:
         - project_blueprint_uuid
         - user_uuid
@@ -290,9 +290,9 @@ components:
         component_uuid: "a8494f64-0987-4dd0-8405-df19eb58f2ab"
       properties:
         day_blueprint_uuid:
-          $ref: '#/components/schemas/dayBlueprintUUID'
+          $ref: "#/components/schemas/dayBlueprintUUID"
         component_uuid:
-          $ref: '#/components/schemas/componentUUID'
+          $ref: "#/components/schemas/componentUUID"
       required:
         - day_blueprint_uuid
         - component_uuid
@@ -305,9 +305,9 @@ components:
         user_uuid: "66de88ad-5c8d-4d20-a0ab-bbb7ccc15333"
       properties:
         day_blueprint_uuid:
-          $ref: '#/components/schemas/dayBlueprintUUID'
+          $ref: "#/components/schemas/dayBlueprintUUID"
         user_uuid:
-          $ref: '#/components/schemas/userUUID'
+          $ref: "#/components/schemas/userUUID"
       required:
         - day_blueprint_uuid
         - user_uuid
@@ -319,7 +319,7 @@ components:
       type: object
       properties:
         project_blueprint_uuid:
-          $ref: '#/components/schemas/projectBlueprintUUID'
+          $ref: "#/components/schemas/projectBlueprintUUID"
         poster_url:
           type: string
           description: "URL for the project poster image"
@@ -355,10 +355,10 @@ components:
         sortOrder: 1
       properties:
         id:
-          $ref: '#/components/schemas/ProjectDaysMapperId'
+          $ref: "#/components/schemas/ProjectDaysMapperId"
           readOnly: true
         sortOrder:
-          $ref: '#/components/schemas/sortOrder'
+          $ref: "#/components/schemas/sortOrder"
       required:
         - id
         - sortOrder
@@ -374,7 +374,7 @@ components:
         start_date: "2021-09-01T10:00:00Z"
       properties:
         id:
-          $ref: '#/components/schemas/ProjectInstanceId'
+          $ref: "#/components/schemas/ProjectInstanceId"
           readOnly: true
         status:
           type: string
@@ -406,7 +406,7 @@ components:
         investor_return: 120.0
       properties:
         id:
-          $ref: '#/components/schemas/FinancesId'
+          $ref: "#/components/schemas/FinancesId"
           readOnly: true
         investor_gave:
           type: number
@@ -463,7 +463,7 @@ components:
         member_name: "John Doe"
       properties:
         id:
-          $ref: '#/components/schemas/MembersId'
+          $ref: "#/components/schemas/MembersId"
           readOnly: true
         member_name:
           type: string
@@ -475,9 +475,9 @@ components:
       type: object
       properties:
         blueprint:
-          $ref: '#/components/schemas/ProjectBlueprint'
+          $ref: "#/components/schemas/ProjectBlueprint"
         instance:
-          $ref: '#/components/schemas/ProjectInstance'
+          $ref: "#/components/schemas/ProjectInstance"
       required:
         - blueprint
         - instance
@@ -489,7 +489,7 @@ components:
       type: object
       properties:
         day_blueprint_uuid:
-          $ref: '#/components/schemas/dayBlueprintUUID'
+          $ref: "#/components/schemas/dayBlueprintUUID"
         title:
           type: string
         description:
@@ -510,7 +510,7 @@ components:
         type: "TASK"
       properties:
         id:
-          $ref: '#/components/schemas/DayComponentsMapperId'
+          $ref: "#/components/schemas/DayComponentsMapperId"
           readOnly: true
         type:
           type: string
@@ -519,7 +519,7 @@ components:
             - "FORM"
             - "MEDIA"
         sortOrder:
-          $ref: '#/components/schemas/sortOrder'
+          $ref: "#/components/schemas/sortOrder"
       required:
         - id
         - type
@@ -535,7 +535,7 @@ components:
         status: "IN_PROGRESS"
       properties:
         id:
-          $ref: '#/components/schemas/DayInstanceId'
+          $ref: "#/components/schemas/DayInstanceId"
           readOnly: true
         status:
           type: string
@@ -551,9 +551,9 @@ components:
       type: object
       properties:
         blueprint:
-          $ref: '#/components/schemas/DayBlueprint'
+          $ref: "#/components/schemas/DayBlueprint"
         instance:
-          $ref: '#/components/schemas/DayInstance'
+          $ref: "#/components/schemas/DayInstance"
       required:
         - blueprint
         - instance
@@ -562,7 +562,6 @@ components:
 # PATHS
 ########################################################
 paths:
-
   ######################################################
   # SINGLE-ID RESOURCES (Blueprints, etc.)
   ######################################################
@@ -570,17 +569,17 @@ paths:
     get:
       summary: List project blueprints
       parameters:
-        - $ref: '#/components/parameters/limit'
-        - $ref: '#/components/parameters/offset'
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/offset"
       responses:
-        '200':
+        "200":
           description: A list of project blueprints
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/ProjectBlueprint'
+                  $ref: "#/components/schemas/ProjectBlueprint"
     post:
       summary: Create new project blueprint (admin only)
       security:
@@ -590,27 +589,27 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ProjectBlueprint'
+              $ref: "#/components/schemas/ProjectBlueprint"
       responses:
-        '200':
+        "200":
           description: The created project blueprint
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ProjectBlueprint'
+                $ref: "#/components/schemas/ProjectBlueprint"
 
   /projects/{project_blueprint_uuid}:
     parameters:
-      - $ref: '#/components/parameters/projectBlueprintUUID'
+      - $ref: "#/components/parameters/projectBlueprintUUID"
     get:
       summary: Get project blueprint details
       responses:
-        '200':
+        "200":
           description: Project blueprint
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ProjectBlueprint'
+                $ref: "#/components/schemas/ProjectBlueprint"
     put:
       summary: Update an existing project blueprint (admin only)
       security:
@@ -620,37 +619,37 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ProjectBlueprint'
+              $ref: "#/components/schemas/ProjectBlueprint"
       responses:
-        '200':
+        "200":
           description: Updated project blueprint
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ProjectBlueprint'
+                $ref: "#/components/schemas/ProjectBlueprint"
     delete:
       summary: Delete a project blueprint (admin only)
       security:
         - admin_jwt: []
       responses:
-        '204':
+        "204":
           description: No Content
 
   /days:
     get:
       summary: List day templates
       parameters:
-        - $ref: '#/components/parameters/limit'
-        - $ref: '#/components/parameters/offset'
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/offset"
       responses:
-        '200':
+        "200":
           description: A list of day blueprints
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/DayBlueprint'
+                  $ref: "#/components/schemas/DayBlueprint"
     post:
       summary: Create day template (admin only)
       security:
@@ -660,27 +659,27 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/DayBlueprint'
+              $ref: "#/components/schemas/DayBlueprint"
       responses:
-        '200':
+        "200":
           description: Created day blueprint
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DayBlueprint'
+                $ref: "#/components/schemas/DayBlueprint"
 
   /days/{day_blueprint_uuid}:
     parameters:
-      - $ref: '#/components/parameters/dayBlueprintUUID'
+      - $ref: "#/components/parameters/dayBlueprintUUID"
     get:
       summary: Get day template details
       responses:
-        '200':
+        "200":
           description: Day blueprint
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DayBlueprint'
+                $ref: "#/components/schemas/DayBlueprint"
     put:
       summary: Update day template (admin only)
       security:
@@ -690,20 +689,20 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/DayBlueprint'
+              $ref: "#/components/schemas/DayBlueprint"
       responses:
-        '200':
+        "200":
           description: Updated day blueprint
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DayBlueprint'
+                $ref: "#/components/schemas/DayBlueprint"
     delete:
       summary: Delete day template (admin only)
       security:
         - admin_jwt: []
       responses:
-        '204':
+        "204":
           description: No Content
 
   ######################################################
@@ -717,17 +716,17 @@ paths:
     get:
       summary: List all project-day mappings
       parameters:
-        - $ref: '#/components/parameters/limit'
-        - $ref: '#/components/parameters/offset'
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/offset"
       responses:
-        '200':
+        "200":
           description: A list of ProjectDaysMapper
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/ProjectDaysMapper'
+                  $ref: "#/components/schemas/ProjectDaysMapper"
     post:
       summary: Create a new project-day mapping (admin only)
       security:
@@ -737,28 +736,28 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ProjectDaysMapper'
+              $ref: "#/components/schemas/ProjectDaysMapper"
       responses:
-        '200':
+        "200":
           description: Created project-day mapping
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ProjectDaysMapper'
+                $ref: "#/components/schemas/ProjectDaysMapper"
 
   /project-days-mapper/{project_blueprint_uuid}/{day_blueprint_uuid}:
     parameters:
-      - $ref: '#/components/parameters/projectBlueprintUUID'
-      - $ref: '#/components/parameters/dayBlueprintUUID'
+      - $ref: "#/components/parameters/projectBlueprintUUID"
+      - $ref: "#/components/parameters/dayBlueprintUUID"
     get:
       summary: Get a specific project-day mapping
       responses:
-        '200':
+        "200":
           description: A single ProjectDaysMapper
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ProjectDaysMapper'
+                $ref: "#/components/schemas/ProjectDaysMapper"
     put:
       summary: Update a specific project-day mapping (admin only)
       security:
@@ -768,20 +767,20 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ProjectDaysMapper'
+              $ref: "#/components/schemas/ProjectDaysMapper"
       responses:
-        '200':
+        "200":
           description: Updated mapping
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ProjectDaysMapper'
+                $ref: "#/components/schemas/ProjectDaysMapper"
     delete:
       summary: Delete project-day mapping (admin only)
       security:
         - admin_jwt: []
       responses:
-        '204':
+        "204":
           description: No Content
 
   ############################################
@@ -791,17 +790,17 @@ paths:
     get:
       summary: List all day-component mappings
       parameters:
-        - $ref: '#/components/parameters/limit'
-        - $ref: '#/components/parameters/offset'
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/offset"
       responses:
-        '200':
+        "200":
           description: A list of DayComponentsMapper
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/DayComponentsMapper'
+                  $ref: "#/components/schemas/DayComponentsMapper"
     post:
       summary: Create a new day-component mapping (admin only)
       security:
@@ -811,28 +810,28 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/DayComponentsMapper'
+              $ref: "#/components/schemas/DayComponentsMapper"
       responses:
-        '200':
+        "200":
           description: Created day-component mapping
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DayComponentsMapper'
+                $ref: "#/components/schemas/DayComponentsMapper"
 
   /day-components-mapper/{day_blueprint_uuid}/{component_uuid}:
     parameters:
-      - $ref: '#/components/parameters/dayBlueprintUUID'
-      - $ref: '#/components/parameters/componentUUID'
+      - $ref: "#/components/parameters/dayBlueprintUUID"
+      - $ref: "#/components/parameters/componentUUID"
     get:
       summary: Get a specific day-component mapping
       responses:
-        '200':
+        "200":
           description: DayComponentsMapper
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DayComponentsMapper'
+                $ref: "#/components/schemas/DayComponentsMapper"
     put:
       summary: Update a day-component mapping (admin only)
       security:
@@ -842,20 +841,20 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/DayComponentsMapper'
+              $ref: "#/components/schemas/DayComponentsMapper"
       responses:
-        '200':
+        "200":
           description: Updated mapping
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DayComponentsMapper'
+                $ref: "#/components/schemas/DayComponentsMapper"
     delete:
       summary: Delete day-component mapping (admin only)
       security:
         - admin_jwt: []
       responses:
-        '204':
+        "204":
           description: No Content
 
   ############################################
@@ -865,20 +864,20 @@ paths:
     get:
       summary: List all project instances
       parameters:
-        - $ref: '#/components/parameters/limit'
-        - $ref: '#/components/parameters/offset'
-        - $ref: '#/components/parameters/userUUID'
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/offset"
+        - $ref: "#/components/parameters/userUUID"
       security:
         - user_jwt: []
       responses:
-        '200':
+        "200":
           description: A list of ProjectInstance
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/ProjectDTO'
+                  $ref: "#/components/schemas/ProjectDTO"
     post:
       summary: Create a new project instance (user)
       security:
@@ -888,30 +887,30 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ProjectInstance'
+              $ref: "#/components/schemas/ProjectInstance"
       responses:
-        '200':
+        "200":
           description: Created project instance
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ProjectDTO'
+                $ref: "#/components/schemas/ProjectDTO"
 
   /project-instances/{project_blueprint_uuid}/{user_uuid}:
     parameters:
-      - $ref: '#/components/parameters/projectBlueprintUUID'
-      - $ref: '#/components/parameters/userUUID'
+      - $ref: "#/components/parameters/projectBlueprintUUID"
+      - $ref: "#/components/parameters/userUUID"
     get:
       summary: Get a specific project instance
       security:
         - user_jwt: []
       responses:
-        '200':
+        "200":
           description: ProjectInstance
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ProjectDTO'
+                $ref: "#/components/schemas/ProjectDTO"
     put:
       summary: Update a project instance (user)
       security:
@@ -921,21 +920,21 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ProjectInstance'
+              $ref: "#/components/schemas/ProjectInstance"
       responses:
-        '200':
+        "200":
           description: Updated project instance
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ProjectDTO'
+                $ref: "#/components/schemas/ProjectDTO"
     delete:
       summary: Delete a project instance (admin or user)
       # Decide on your actual policy
       security:
         - admin_jwt: []
       responses:
-        '204':
+        "204":
           description: No Content
 
   ############################################
@@ -945,19 +944,19 @@ paths:
     get:
       summary: List all finances records
       parameters:
-        - $ref: '#/components/parameters/limit'
-        - $ref: '#/components/parameters/offset'
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/offset"
       security:
         - user_jwt: []
       responses:
-        '200':
+        "200":
           description: A list of Finances
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Finances'
+                  $ref: "#/components/schemas/Finances"
     post:
       summary: Create new finances record
       security:
@@ -967,30 +966,30 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Finances'
+              $ref: "#/components/schemas/Finances"
       responses:
-        '200':
+        "200":
           description: Created finances
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Finances'
+                $ref: "#/components/schemas/Finances"
 
   /finances/{project_blueprint_uuid}/{user_uuid}:
     parameters:
-      - $ref: '#/components/parameters/projectBlueprintUUID'
-      - $ref: '#/components/parameters/userUUID'
+      - $ref: "#/components/parameters/projectBlueprintUUID"
+      - $ref: "#/components/parameters/userUUID"
     get:
       summary: Get finances record
       security:
         - user_jwt: []
       responses:
-        '200':
+        "200":
           description: Finances
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Finances'
+                $ref: "#/components/schemas/Finances"
     put:
       summary: Update finances record
       security:
@@ -1000,27 +999,27 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Finances'
+              $ref: "#/components/schemas/Finances"
       responses:
-        '200':
+        "200":
           description: Updated finances
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Finances'
+                $ref: "#/components/schemas/Finances"
     delete:
       summary: Delete finances record
       security:
         - user_jwt: []
       responses:
-        '204':
+        "204":
           description: No Content
 
   # Example sub-path to "calculate" finances:
   /finances/{project_blueprint_uuid}/{user_uuid}/calculate:
     parameters:
-      - $ref: '#/components/parameters/projectBlueprintUUID'
-      - $ref: '#/components/parameters/userUUID'
+      - $ref: "#/components/parameters/projectBlueprintUUID"
+      - $ref: "#/components/parameters/userUUID"
     put:
       summary: Calculate or recalculate finances
       security:
@@ -1030,14 +1029,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Finances'
+              $ref: "#/components/schemas/Finances"
       responses:
-        '200':
+        "200":
           description: Calculated finances
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Finances'
+                $ref: "#/components/schemas/Finances"
 
   ############################################
   # 5) MEMBERS
@@ -1046,19 +1045,19 @@ paths:
     get:
       summary: List all members records
       parameters:
-        - $ref: '#/components/parameters/limit'
-        - $ref: '#/components/parameters/offset'
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/offset"
       security:
         - user_jwt: []
       responses:
-        '200':
+        "200":
           description: A list of Members
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Members'
+                  $ref: "#/components/schemas/Members"
     post:
       summary: Create new members record
       security:
@@ -1068,30 +1067,30 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Members'
+              $ref: "#/components/schemas/Members"
       responses:
-        '200':
+        "200":
           description: Created members record
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Members'
+                $ref: "#/components/schemas/Members"
 
   /members/{project_blueprint_uuid}/{user_uuid}:
     parameters:
-      - $ref: '#/components/parameters/projectBlueprintUUID'
-      - $ref: '#/components/parameters/userUUID'
+      - $ref: "#/components/parameters/projectBlueprintUUID"
+      - $ref: "#/components/parameters/userUUID"
     get:
       summary: Get one member record
       security:
         - user_jwt: []
       responses:
-        '200':
+        "200":
           description: Members
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Members'
+                $ref: "#/components/schemas/Members"
     put:
       summary: Update a member record
       security:
@@ -1101,20 +1100,20 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Members'
+              $ref: "#/components/schemas/Members"
       responses:
-        '200':
+        "200":
           description: Updated member
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Members'
+                $ref: "#/components/schemas/Members"
     delete:
       summary: Delete a member record
       security:
         - user_jwt: []
       responses:
-        '204':
+        "204":
           description: No Content
 
   ############################################
@@ -1124,20 +1123,20 @@ paths:
     get:
       summary: List all day instances
       parameters:
-        - $ref: '#/components/parameters/userUUID'
-        - $ref: '#/components/parameters/limit'
-        - $ref: '#/components/parameters/offset'
+        - $ref: "#/components/parameters/userUUID"
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/offset"
       security:
         - user_jwt: []
       responses:
-        '200':
+        "200":
           description: A list of DayInstance
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/DayDTO'
+                  $ref: "#/components/schemas/DayDTO"
     post:
       summary: Create a day instance
       security:
@@ -1147,30 +1146,30 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/DayInstance'
+              $ref: "#/components/schemas/DayInstance"
       responses:
-        '200':
+        "200":
           description: Created day instance
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DayDTO'
+                $ref: "#/components/schemas/DayDTO"
 
   /day-instances/{day_blueprint_uuid}/{user_uuid}:
     parameters:
-      - $ref: '#/components/parameters/dayBlueprintUUID'
-      - $ref: '#/components/parameters/userUUID'
+      - $ref: "#/components/parameters/dayBlueprintUUID"
+      - $ref: "#/components/parameters/userUUID"
     get:
       summary: Get a specific day instance
       security:
         - user_jwt: []
       responses:
-        '200':
+        "200":
           description: DayInstance
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DayDTO'
+                $ref: "#/components/schemas/DayDTO"
     put:
       summary: Update a day instance
       security:
@@ -1180,18 +1179,18 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/DayInstance'
+              $ref: "#/components/schemas/DayInstance"
       responses:
-        '200':
+        "200":
           description: Updated day instance
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DayDTO'
+                $ref: "#/components/schemas/DayDTO"
     delete:
       summary: Delete a day instance
       security:
         - user_jwt: []
       responses:
-        '204':
+        "204":
           description: No Content
