@@ -3,22 +3,14 @@ kind: Ingress
 metadata:
   name: be
   annotations:
-    # cert-manager.io/cluster-issuer: letsencrypt
     cert-manager.io/cluster-issuer: letsencrypt-staging
     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
     nginx.ingress.kubernetes.io/enable-cors: "true"
-    # nginx.ingress.kubernetes.io/cors-allow-origin: "app.little.pm"
     nginx.ingress.kubernetes.io/cors-allow-origin: "*"
     nginx.ingress.kubernetes.io/cors-allow-methods: "PUT, GET, POST, OPTIONS, DELETE, PATCH"
     nginx.ingress.kubernetes.io/cors-allow-headers: "*"
     nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
-    nginx.ingress.kubernetes.io/rewrite-target: /$2
-
-    # OAuth2 Proxy
-    # nginx.ingress.kubernetes.io/auth-signin: "https://auth.app.little.pm/oauth2/start?rd=https://app.little.pm"
-    # nginx.ingress.kubernetes.io/auth-url: "http://oauth2-proxy.default.svc.cluster.local/oauth2/auth"
-    # nginx.ingress.kubernetes.io/auth-signin: "http://$host/oauth2/start?rd=$request_uri"
-
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
 spec:
   ingressClassName: nginx
   tls:
@@ -29,14 +21,14 @@ spec:
     - host: app.little.pm
       http:
         paths:
-          - path: /api/content(/|$)(.*)
+          - path: /api/content/?(.*)
             pathType: ImplementationSpecific
             backend:
               service:
                 name: content-service
                 port:
                   name: http
-          - path: /api/course(/|$)(.*)
+          - path: /api/course/?(.*)
             pathType: ImplementationSpecific
             backend:
               service:
