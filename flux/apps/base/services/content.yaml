@@ -25,6 +25,8 @@ spec:
                 name: database-credentials
             - configMapRef:
                 name: be
+            - configMapRef:
+                name: content
           resources:
             limits:
               memory: "500Mi"

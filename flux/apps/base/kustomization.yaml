@@ -6,11 +6,15 @@ resources:
   - postgres.yaml
 
 configMapGenerator:
-  - envs:
+  - name: be 
+    envs:
       - configs/be.properties
-    name:
-      be
-      # behavior: merge
+  - name: content
+    envs:
+      - configs/content.properties
+  - name: course
+    envs:
+      - configs/course.properties
 
 secretGenerator:
   - envs:
