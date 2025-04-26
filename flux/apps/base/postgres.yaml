@@ -23,11 +23,19 @@ spec:
     remediation:
       retries: 3
   values:
+    global:
+      postgresql:
+        auth:
+          existingSecret: "database-credentials"
+          secretKeys:
+            adminPasswordKey: "POSTGRES_PASSWORD"
+            userPasswordKey: "POSTGRES_PASSWORD"
     auth:
       enablePostgresUser: true
       existingSecret: "database-credentials"
       secretKeys:
         adminPasswordKey: "POSTGRES_PASSWORD"
+        userPasswordKey: "POSTGRES_PASSWORD"
 
     primary:
       initdb:
