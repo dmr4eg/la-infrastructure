@@ -14,8 +14,8 @@ spec:
     spec:
       containers:
         - name: course
-          image: docker.io/nginx:stable
-          # image: ghcr.io/dmr4eg/littlepm-course-service:latest
+          # image: docker.io/nginx:stable
+          image: ghcr.io/dmr4eg/littlepm-course-service:latest
           env:
             - name: SOME_ENV_VAR
               value: some-value
