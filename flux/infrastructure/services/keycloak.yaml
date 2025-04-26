@@ -58,8 +58,8 @@ spec:
       hostname: auth.app.little.pm
       annotations:
         kubernetes.io/ingress.class: nginx
-        cert-manager.io/cluster-issuer: letsencrypt
-        # cert-manager.io/cluster-issuer: letsencrypt-staging
+        # cert-manager.io/cluster-issuer: letsencrypt
+        cert-manager.io/cluster-issuer: letsencrypt-staging
         nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
         ingress.kubernetes.io/ssl-redirect: "true"
         kubernetes.io/tls-acme: "true"
