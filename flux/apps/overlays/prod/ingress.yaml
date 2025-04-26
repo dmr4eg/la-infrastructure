@@ -3,8 +3,8 @@ kind: Ingress
 metadata:
   name: be
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt
-    # cert-manager.io/cluster-issuer: letsencrypt-staging
+    # cert-manager.io/cluster-issuer: letsencrypt
+    cert-manager.io/cluster-issuer: letsencrypt-staging
     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
     nginx.ingress.kubernetes.io/enable-cors: "true"
     # nginx.ingress.kubernetes.io/cors-allow-origin: "app.little.pm"
@@ -49,8 +49,8 @@ kind: Ingress
 metadata:
   name: fe
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt
-    # cert-manager.io/cluster-issuer: letsencrypt-staging
+    # cert-manager.io/cluster-issuer: letsencrypt
+    cert-manager.io/cluster-issuer: letsencrypt-staging
     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
     nginx.ingress.kubernetes.io/enable-cors: "true"
     # nginx.ingress.kubernetes.io/cors-allow-origin: "app.little.pm"
