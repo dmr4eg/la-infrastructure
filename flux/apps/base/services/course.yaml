@@ -16,6 +16,7 @@ spec:
         - name: course
           # image: docker.io/nginx:stable
           image: ghcr.io/dmr4eg/littlepm-course-service:latest
+          imagePullPolicy: Always
           env:
             - name: SOME_ENV_VAR
               value: some-value
