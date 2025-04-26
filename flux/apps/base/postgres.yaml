@@ -26,12 +26,14 @@ spec:
     global:
       postgresql:
         auth:
+          username: "postgres"
           existingSecret: "database-credentials"
           secretKeys:
             adminPasswordKey: "POSTGRES_PASSWORD"
             userPasswordKey: "POSTGRES_PASSWORD"
     auth:
       enablePostgresUser: true
+      username: "postgres"
       existingSecret: "database-credentials"
       secretKeys:
         adminPasswordKey: "POSTGRES_PASSWORD"
