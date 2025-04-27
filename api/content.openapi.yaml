@@ -468,6 +468,17 @@ components:
         - title
 
 ########################################################
+# TAGS
+########################################################
+tags:
+  - name: tasks
+    description: "Task blueprints and instances"
+  - name: forms
+    description: "Form blueprints and instances"
+  - name: media
+    description: "Media resources"
+
+########################################################
 # PATHS
 ########################################################
 paths:
@@ -477,6 +488,7 @@ paths:
 
   /tasks:
     get:
+      tags: [tasks]
       summary: List task templates
       parameters:
         - $ref: "#/components/parameters/limit"
@@ -491,6 +503,7 @@ paths:
                 items:
                   $ref: "#/components/schemas/TaskBlueprint"
     post:
+      tags: [tasks]
       summary: Create task template (admin only)
       security:
         - admin_jwt: []
@@ -512,6 +525,7 @@ paths:
     parameters:
       - $ref: "#/components/parameters/taskBlueprintUUID"
     get:
+      tags: [tasks]
       summary: Get task template
       responses:
         "200":
@@ -521,6 +535,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/TaskBlueprint"
     put:
+      tags: [tasks]
       summary: Update task template (admin only)
       security:
         - admin_jwt: []
@@ -538,6 +553,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/TaskBlueprint"
     delete:
+      tags: [tasks]
       summary: Delete task template (admin only)
       security:
         - admin_jwt: []
@@ -547,6 +563,7 @@ paths:
 
   /forms:
     get:
+      tags: [forms]
       summary: List form templates
       parameters:
         - $ref: "#/components/parameters/limit"
@@ -561,6 +578,7 @@ paths:
                 items:
                   $ref: "#/components/schemas/FormBlueprint"
     post:
+      tags: [forms]
       summary: Create form template (admin only)
       security:
         - admin_jwt: []
@@ -582,6 +600,7 @@ paths:
     parameters:
       - $ref: "#/components/parameters/formBlueprintUUID"
     get:
+      tags: [forms]
       summary: Get form template
       responses:
         "200":
@@ -591,6 +610,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/FormBlueprint"
     put:
+      tags: [forms]
       summary: Update form template (admin only)
       security:
         - admin_jwt: []
@@ -608,6 +628,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/FormBlueprint"
     delete:
+      tags: [forms]
       summary: Delete form template (admin only)
       security:
         - admin_jwt: []
@@ -617,6 +638,7 @@ paths:
 
   /media:
     post:
+      tags: [media]
       summary: "Upload new media (admin only)"
       operationId: "mediaPostMultipart"
       security:
@@ -651,6 +673,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Media"
     get:
+      tags: [media]
       summary: (Optional) List media items
       parameters:
         - $ref: "#/components/parameters/limit"
@@ -669,6 +692,7 @@ paths:
     parameters:
       - $ref: "#/components/parameters/mediaUUID"
     get:
+      tags: [media]
       summary: Get media metadata
       responses:
         "200":
@@ -678,6 +702,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Media"
     put:
+      tags: [media]
       summary: Update media metadata (admin only)
       security:
         - admin_jwt: []
@@ -695,6 +720,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Media"
     delete:
+      tags: [media]
       summary: Delete media (admin only)
       security:
         - admin_jwt: []
@@ -702,15 +728,12 @@ paths:
         "204":
           description: No Content
 
-  ######################################################
-  # COMPOSITE-ID RESOURCES
-  ######################################################
-
   ############################################
   # 7) TASK-INSTANCES
   ############################################
   /task-instances:
     get:
+      tags: [tasks]
       summary: List all task instances
       parameters:
         - $ref: "#/components/parameters/userUUID"
@@ -728,6 +751,7 @@ paths:
                 items:
                   $ref: "#/components/schemas/TaskDTO"
     post:
+      tags: [tasks]
       summary: Create a new task instance
       security:
         - user_jwt: []
@@ -750,6 +774,7 @@ paths:
       - $ref: "#/components/parameters/taskBlueprintUUID"
       - $ref: "#/components/parameters/userUUID"
     get:
+      tags: [tasks]
       summary: Get a user's specific task instance
       security:
         - user_jwt: []
@@ -761,6 +786,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/TaskDTO"
     put:
+      tags: [tasks]
       summary: Update a task instance
       security:
         - user_jwt: []
@@ -778,6 +804,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/TaskDTO"
     delete:
+      tags: [tasks]
       summary: Delete a task instance
       security:
         - user_jwt: []
@@ -790,6 +817,7 @@ paths:
   ############################################
   /form-field-mapper:
     get:
+      tags: [forms]
       summary: List all form-field mappings
       parameters:
         - $ref: "#/components/parameters/limit"
@@ -807,6 +835,7 @@ paths:
                 items:
                   $ref: "#/components/schemas/FormFieldMapper"
     post:
+      tags: [forms]
       summary: Create a form-field mapping (admin only)
       security:
         - admin_jwt: []
@@ -829,6 +858,7 @@ paths:
       - $ref: "#/components/parameters/formBlueprintUUID"
       - $ref: "#/components/parameters/fieldUUID"
     get:
+      tags: [forms]
       summary: Get a specific form-field mapping
       security:
         - admin_jwt: []
@@ -840,6 +870,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/FormFieldMapper"
     put:
+      tags: [forms]
       summary: Update a form-field mapping (admin only)
       security:
         - admin_jwt: []
@@ -857,6 +888,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/FormFieldMapper"
     delete:
+      tags: [forms]
       summary: Delete a form-field mapping (admin only)
       security:
         - admin_jwt: []
@@ -869,6 +901,7 @@ paths:
   ############################################
   /form-instances:
     get:
+      tags: [forms]
       summary: List all form instances
       parameters:
         - $ref: "#/components/parameters/userUUID"
@@ -886,6 +919,7 @@ paths:
                 items:
                   $ref: "#/components/schemas/FormDTO"
     post:
+      tags: [forms]
       summary: Create a form instance (user)
       security:
         - user_jwt: []
@@ -908,6 +942,7 @@ paths:
       - $ref: "#/components/parameters/formBlueprintUUID"
       - $ref: "#/components/parameters/userUUID"
     get:
+      tags: [forms]
       summary: Get a user's specific form instance
       security:
         - user_jwt: []
@@ -919,6 +954,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/FormDTO"
     put:
+      tags: [forms]
       summary: Update a form instance
       security:
         - user_jwt: []
@@ -936,6 +972,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/FormDTO"
     delete:
+      tags: [forms]
       summary: Delete a form instance
       security:
         - user_jwt: []
