@@ -559,6 +559,19 @@ components:
         - instance
 
 ########################################################
+# TAGS
+########################################################
+tags:
+  - name: projects
+    description: APIs for managing projects, day templates, and user progress tracking.
+  - name: days
+    description: APIs for managing day templates and their instances.
+  - name: finances
+    description: APIs for managing finances related to projects and users.
+  - name: members
+    description: APIs for managing members within projects.
+
+########################################################
 # PATHS
 ########################################################
 paths:
@@ -567,6 +580,7 @@ paths:
   ######################################################
   /projects:
     get:
+      tags: [projects]
       summary: List project blueprints
       parameters:
         - $ref: "#/components/parameters/limit"
@@ -581,6 +595,7 @@ paths:
                 items:
                   $ref: "#/components/schemas/ProjectBlueprint"
     post:
+      tags: [projects]
       summary: Create new project blueprint (admin only)
       security:
         - admin_jwt: []
@@ -602,6 +617,7 @@ paths:
     parameters:
       - $ref: "#/components/parameters/projectBlueprintUUID"
     get:
+      tags: [projects]
       summary: Get project blueprint details
       responses:
         "200":
@@ -611,6 +627,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ProjectBlueprint"
     put:
+      tags: [projects]
       summary: Update an existing project blueprint (admin only)
       security:
         - admin_jwt: []
@@ -628,6 +645,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ProjectBlueprint"
     delete:
+      tags: [projects]
       summary: Delete a project blueprint (admin only)
       security:
         - admin_jwt: []
@@ -637,6 +655,7 @@ paths:
 
   /days:
     get:
+      tags: [days]
       summary: List day templates
       parameters:
         - $ref: "#/components/parameters/limit"
@@ -651,6 +670,7 @@ paths:
                 items:
                   $ref: "#/components/schemas/DayBlueprint"
     post:
+      tags: [days]
       summary: Create day template (admin only)
       security:
         - admin_jwt: []
@@ -672,6 +692,7 @@ paths:
     parameters:
       - $ref: "#/components/parameters/dayBlueprintUUID"
     get:
+      tags: [days]
       summary: Get day template details
       responses:
         "200":
@@ -681,6 +702,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/DayBlueprint"
     put:
+      tags: [days]
       summary: Update day template (admin only)
       security:
         - admin_jwt: []
@@ -698,6 +720,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/DayBlueprint"
     delete:
+      tags: [days]
       summary: Delete day template (admin only)
       security:
         - admin_jwt: []
@@ -714,6 +737,7 @@ paths:
   ############################################
   /project-days-mapper:
     get:
+      tags: [projects]
       summary: List all project-day mappings
       parameters:
         - $ref: "#/components/parameters/limit"
@@ -728,6 +752,7 @@ paths:
                 items:
                   $ref: "#/components/schemas/ProjectDaysMapper"
     post:
+      tags: [projects]
       summary: Create a new project-day mapping (admin only)
       security:
         - admin_jwt: []
@@ -750,6 +775,7 @@ paths:
       - $ref: "#/components/parameters/projectBlueprintUUID"
       - $ref: "#/components/parameters/dayBlueprintUUID"
     get:
+      tags: [projects]
       summary: Get a specific project-day mapping
       responses:
         "200":
@@ -759,6 +785,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ProjectDaysMapper"
     put:
+      tags: [projects]
       summary: Update a specific project-day mapping (admin only)
       security:
         - admin_jwt: []
@@ -776,6 +803,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ProjectDaysMapper"
     delete:
+      tags: [projects]
       summary: Delete project-day mapping (admin only)
       security:
         - admin_jwt: []
@@ -788,6 +816,7 @@ paths:
   ############################################
   /day-components-mapper:
     get:
+      tags: [days]
       summary: List all day-component mappings
       parameters:
         - $ref: "#/components/parameters/limit"
@@ -802,6 +831,7 @@ paths:
                 items:
                   $ref: "#/components/schemas/DayComponentsMapper"
     post:
+      tags: [days]
       summary: Create a new day-component mapping (admin only)
       security:
         - admin_jwt: []
@@ -824,6 +854,7 @@ paths:
       - $ref: "#/components/parameters/dayBlueprintUUID"
       - $ref: "#/components/parameters/componentUUID"
     get:
+      tags: [days]
       summary: Get a specific day-component mapping
       responses:
         "200":
@@ -833,6 +864,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/DayComponentsMapper"
     put:
+      tags: [days]
       summary: Update a day-component mapping (admin only)
       security:
         - admin_jwt: []
@@ -850,6 +882,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/DayComponentsMapper"
     delete:
+      tags: [days]
       summary: Delete day-component mapping (admin only)
       security:
         - admin_jwt: []
@@ -862,6 +895,7 @@ paths:
   ############################################
   /project-instances:
     get:
+      tags: [projects]
       summary: List all project instances
       parameters:
         - $ref: "#/components/parameters/limit"
@@ -879,6 +913,7 @@ paths:
                 items:
                   $ref: "#/components/schemas/ProjectDTO"
     post:
+      tags: [projects]
       summary: Create a new project instance (user)
       security:
         - user_jwt: []
@@ -901,6 +936,7 @@ paths:
       - $ref: "#/components/parameters/projectBlueprintUUID"
       - $ref: "#/components/parameters/userUUID"
     get:
+      tags: [projects]
       summary: Get a specific project instance
       security:
         - user_jwt: []
@@ -912,6 +948,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ProjectDTO"
     put:
+      tags: [projects]
       summary: Update a project instance (user)
       security:
         - user_jwt: []
@@ -929,6 +966,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ProjectDTO"
     delete:
+      tags: [projects]
       summary: Delete a project instance (admin or user)
       # Decide on your actual policy
       security:
@@ -942,6 +980,7 @@ paths:
   ############################################
   /finances:
     get:
+      tags: [finances]
       summary: List all finances records
       parameters:
         - $ref: "#/components/parameters/limit"
@@ -958,6 +997,7 @@ paths:
                 items:
                   $ref: "#/components/schemas/Finances"
     post:
+      tags: [finances]
       summary: Create new finances record
       security:
         - user_jwt: []
@@ -980,6 +1020,7 @@ paths:
       - $ref: "#/components/parameters/projectBlueprintUUID"
       - $ref: "#/components/parameters/userUUID"
     get:
+      tags: [finances]
       summary: Get finances record
       security:
         - user_jwt: []
@@ -991,6 +1032,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Finances"
     put:
+      tags: [finances]
       summary: Update finances record
       security:
         - user_jwt: []
@@ -1008,6 +1050,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Finances"
     delete:
+      tags: [finances]
       summary: Delete finances record
       security:
         - user_jwt: []
@@ -1015,12 +1058,12 @@ paths:
         "204":
           description: No Content
 
-  # Example sub-path to "calculate" finances:
   /finances/{project_blueprint_uuid}/{user_uuid}/calculate:
     parameters:
       - $ref: "#/components/parameters/projectBlueprintUUID"
       - $ref: "#/components/parameters/userUUID"
     put:
+      tags: [finances]
       summary: Calculate or recalculate finances
       security:
         - user_jwt: []
@@ -1043,6 +1086,7 @@ paths:
   ############################################
   /members:
     get:
+      tags: [members]
       summary: List all members records
       parameters:
         - $ref: "#/components/parameters/limit"
@@ -1059,6 +1103,7 @@ paths:
                 items:
                   $ref: "#/components/schemas/Members"
     post:
+      tags: [members]
       summary: Create new members record
       security:
         - user_jwt: []
@@ -1081,6 +1126,7 @@ paths:
       - $ref: "#/components/parameters/projectBlueprintUUID"
       - $ref: "#/components/parameters/userUUID"
     get:
+      tags: [members]
       summary: Get one member record
       security:
         - user_jwt: []
@@ -1092,6 +1138,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Members"
     put:
+      tags: [members]
       summary: Update a member record
       security:
         - user_jwt: []
@@ -1109,6 +1156,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Members"
     delete:
+      tags: [members]
       summary: Delete a member record
       security:
         - user_jwt: []
@@ -1121,6 +1169,7 @@ paths:
   ############################################
   /day-instances:
     get:
+      tags: [days]
       summary: List all day instances
       parameters:
         - $ref: "#/components/parameters/userUUID"
@@ -1138,6 +1187,7 @@ paths:
                 items:
                   $ref: "#/components/schemas/DayDTO"
     post:
+      tags: [days]
       summary: Create a day instance
       security:
         - user_jwt: []
@@ -1160,6 +1210,7 @@ paths:
       - $ref: "#/components/parameters/dayBlueprintUUID"
       - $ref: "#/components/parameters/userUUID"
     get:
+      tags: [days]
       summary: Get a specific day instance
       security:
         - user_jwt: []
@@ -1171,6 +1222,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/DayDTO"
     put:
+      tags: [days]
       summary: Update a day instance
       security:
         - user_jwt: []
@@ -1188,6 +1240,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/DayDTO"
     delete:
+      tags: [days]
       summary: Delete a day instance
       security:
         - user_jwt: []
