@@ -8,12 +8,12 @@
 openapi-generator generate \
     -i ./content.openapi.yaml \
     -g typescript-fetch \
-    -o gen/ts/content \
-    --additional-properties=apiPackage=controllers,invokerPackage=api-content-service,modelPackage=models
+    -o gen/ts/api-content \
+    --additional-properties=apiPackage=controllers,invokerPackage=api-content,modelPackage=models
 
 #fe-js-course
 openapi-generator generate \
     -i ./course.openapi.yaml \
     -g typescript-fetch \
-    -o gen/ts/course \
-    --additional-properties=apiPackage=controllers,invokerPackage=api-course-service,modelPackage=models
+    -o gen/ts/api-course \
+    --additional-properties=apiPackage=controllers,invokerPackage=api-course,modelPackage=models

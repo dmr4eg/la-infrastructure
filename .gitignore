@@ -60,3 +60,15 @@ ehthumbs.db
 *.iws
 .idea/
 tmp
+
+*.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+*.tfvars.*
+*.tfplan
+*.tfplan.*
+*.tfstate.backup
+*.tfstate.backup.*
+*.tfstate.lock.*
+*.terraform.lock.*

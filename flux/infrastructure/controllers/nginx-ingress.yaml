@@ -30,6 +30,9 @@ spec:
         ingress-ready: "true"
       replicaCount: 1
       service:
+        annotations:
+          service.beta.kubernetes.io/azure-dns-label-name: "littlepmaks"
+          service.beta.kubernetes.io/azure-load-balancer-health-probe-request-path: "/healthz"
         type: NodePort
         nodePorts:
           http: 30080
