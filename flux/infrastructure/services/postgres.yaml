@@ -3,9 +3,10 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: postgresql
+  name: postgres
+  namespace: flux-system
 spec:
-  releaseName: postgresql
+  releaseName: postgres
   chart:
     spec:
       # chart: postgresql
