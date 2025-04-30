@@ -13,7 +13,7 @@ spec:
   releaseName: keycloak
   chart:
     spec:
-      chart: keycloak
+      chart: ./bitnami/keycloak
       version: 24.5.2
       sourceRef:
         kind: HelmRepository
