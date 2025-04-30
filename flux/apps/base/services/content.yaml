@@ -31,6 +31,9 @@ spec:
             limits:
               memory: "500Mi"
               cpu: "500m"
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
           ports:
             - name: http
               containerPort: 8080
