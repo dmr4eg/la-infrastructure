@@ -19,6 +19,15 @@ spec:
         kind: GitRepository
         name: bitnami
         namespace: flux-system
+  resources:
+    limits:
+      cpu: 1
+      ephemeral-storage: 2Gi
+      memory: 1.5Gi
+    requests:
+      cpu: 500m
+      ephemeral-storage: 50Mi
+      memory: 512Mi
   install:
     crds: CreateReplace
     createNamespace: true
