@@ -7,6 +7,7 @@ metadata:
   namespace: flux-system
 spec:
   releaseName: postgres
+  targetNamespace: postgres
   chart:
     spec:
       # chart: postgresql
