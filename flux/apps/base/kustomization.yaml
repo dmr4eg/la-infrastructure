@@ -3,10 +3,9 @@ kind: Kustomization
 
 resources:
   - services
-  - postgres.yaml
 
 configMapGenerator:
-  - name: be 
+  - name: be
     envs:
       - configs/be.properties
   - name: content
