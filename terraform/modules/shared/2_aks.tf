@@ -12,12 +12,12 @@ resource "azurerm_role_assignment" "dns_zone_contributor" {
   role_definition_name = "DNS Zone Contributor"
 }
 
-# #KUBELET IDENTITY ROLE
-# resource "azurerm_role_assignment" "keyvault_secrets_user" {
-#   scope                = azurerm_key_vault.this.id
-#   principal_id         = azurerm_user_assigned_identity.this.principal_id
-#   role_definition_name = "Key Vault Secrets User"
-# }
+#KUBELET IDENTITY ROLE
+resource "azurerm_role_assignment" "keyvault_secrets_user" {
+  scope                = azurerm_key_vault.this.id
+  principal_id         = azurerm_user_assigned_identity.this.principal_id
+  role_definition_name = "Key Vault Secrets User"
+}
 
 #KUBELET IDENTITY ROLE
 resource "azurerm_role_assignment" "acr_pull" {

@@ -25,20 +25,20 @@ spec:
       retries: 3
   values:
     global:
-      postgresql:
+      postgres:
         auth:
           username: "postgres"
           existingSecret: "database-credentials"
           secretKeys:
-            adminPasswordKey: "POSTGRES_PASSWORD"
-            userPasswordKey: "POSTGRES_PASSWORD"
+            adminPasswordKey: "postgres_PASSWORD"
+            userPasswordKey: "postgres_PASSWORD"
     auth:
       enablePostgresUser: true
       username: "postgres"
       existingSecret: "database-credentials"
       secretKeys:
-        adminPasswordKey: "POSTGRES_PASSWORD"
-        userPasswordKey: "POSTGRES_PASSWORD"
+        adminPasswordKey: "postgres_PASSWORD"
+        userPasswordKey: "postgres_PASSWORD"
 
     primary:
       initdb:
