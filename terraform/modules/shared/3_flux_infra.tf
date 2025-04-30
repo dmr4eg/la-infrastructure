@@ -34,8 +34,8 @@ resource "azurerm_kubernetes_cluster_extension" "this" {
 #   secret_name = "ssh-key"
 # }
 
-resource "azurerm_kubernetes_flux_configuration" "this" {
-  name       = "flux-config"
+resource "azurerm_kubernetes_flux_configuration" "infra" {
+  name       = "flux-infra"
   cluster_id = azurerm_kubernetes_cluster.this.id
   namespace  = "flux-system"
   scope      = "cluster"
