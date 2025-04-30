@@ -27,23 +27,24 @@ spec:
     replicaCount: 1
     resources:
       limits:
-        cpu: "1"
+        cpu: 1.5
         memory: 1.5Gi
         ephemeral-storage: 2Gi
       requests:
-        cpu: 500m
-        memory: 512Mi
-        ephemeral-storage: 50Mi
+        cpu: 1
+        memory: 768Mi
 
     production: false
 
     postgresql:
-      enabled: true
-      auth:
-        username: bn_keycloak
-        password: bn_keycloak
-        postgresPassword: bn_keycloak
-        database: bitnami_keycloak
+      enabled: false
+
+    externalDatabase:
+      host: postgres-postgresql.postgres.svc.cluster.local # service created by your other release
+      port: 5432
+      database: postgres
+      user: bn_keycloak
+      password: bn_keycloak # or use externalDatabase.existingSecret
 
     auth:
       adminUser: admin1342
