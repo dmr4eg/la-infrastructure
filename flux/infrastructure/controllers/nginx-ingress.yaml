@@ -22,8 +22,6 @@ spec:
     createNamespace: true
   values:
     controller:
-      nodeSelector:
-        ingress-ready: "true"
       replicaCount: 1
       service:
         annotations:
