@@ -12,7 +12,7 @@ spec:
   releaseName: keycloak
   chart:
     spec:
-      chart: ./bitnami/keycloak
+      chart: keycloak
       interval: 10s
       version: "24.5.2"
       sourceRef:

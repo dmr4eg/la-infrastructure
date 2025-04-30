@@ -10,7 +10,7 @@ spec:
   chart:
     spec:
       # chart: postgresql
-      chart: ./bitnami/postgresql
+      chart: postgresql
       version: "16.6.3"
       sourceRef:
         kind: GitRepository
