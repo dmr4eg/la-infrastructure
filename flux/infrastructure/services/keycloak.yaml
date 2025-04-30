@@ -1,32 +1,28 @@
-# keycloak HelmRelease – fixed
+# https://artifacthub.io/packages/helm/bitnami/keycloak/24.5.8
+---
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
   name: keycloak
   namespace: flux-system
 spec:
-  dependsOn:
-    - name: ingress-nginx
-      namespace: flux-system
-  interval: 10m0s
+  interval: 10s
   targetNamespace: keycloak
   releaseName: keycloak
   chart:
     spec:
+      # chart: keycloak
       chart: ./bitnami/keycloak
-      version: 24.5.2
+      interval: 10s
+      version: "24.5.8"
       sourceRef:
-        kind: HelmRepository
+        # kind: HelmRepository
+        kind: GitRepository
         name: bitnami
         namespace: flux-system
-      interval: 10m0s
   install:
-    createNamespace: true
     crds: CreateReplace
-    timeout: 20m0s
-  upgrade:
-    remediation:
-      retries: 3
+    createNamespace: true
   values:
     replicaCount: 1
     resources:
