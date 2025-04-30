@@ -29,7 +29,7 @@ spec:
       postgres:
         auth:
           username: "postgres"
-          # existingSecret: "database-credentials"
+          postgresPassword: "postgres"
           secretKeys:
             adminPasswordKey: "postgres"
             userPasswordKey: "postgres"
