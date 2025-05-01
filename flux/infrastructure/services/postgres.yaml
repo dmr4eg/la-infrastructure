@@ -25,14 +25,9 @@ spec:
     remediation:
       retries: 3
   values:
-    global:
-      postgres:
-        auth:
-          username: "postgres"
-          postgresPassword: "postgres"
-          secretKeys:
-            adminPasswordKey: "postgres"
-            userPasswordKey: "postgres"
+    auth:
+      enablePostgresUser: true
+      postgresPassword: "postgres"
 
     primary:
       initdb:

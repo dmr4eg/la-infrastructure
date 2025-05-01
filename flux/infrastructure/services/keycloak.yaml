@@ -43,8 +43,8 @@ spec:
       host: postgres-postgresql.postgres.svc.cluster.local # service created by your other release
       port: 5432
       database: postgres
-      user: bn_keycloak
-      password: bn_keycloak # or use externalDatabase.existingSecret
+      user: postgres
+      password: postgres
 
     auth:
       adminUser: admin1342
