@@ -23,6 +23,7 @@ spec:
   install:
     crds: CreateReplace
     createNamespace: true
+    timeout: 20m0s
   values:
     replicaCount: 2
 
