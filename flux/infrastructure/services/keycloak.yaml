@@ -24,7 +24,35 @@ spec:
     crds: CreateReplace
     createNamespace: true
   values:
-    replicaCount: 1
+    replicaCount: 2
+
+    proxy: edge
+    proxyHeaders: xforwarded
+
+    startupProbe:
+      enabled: true # Enabled to prevent liveness probe from killing pod too early
+      initialDelaySeconds: 60
+      periodSeconds: 20
+      timeoutSeconds: 5
+      failureThreshold: 30 # Total startup time: 30 x 10 = 300 seconds
+      successThreshold: 1
+
+    readinessProbe:
+      enabled: true
+      initialDelaySeconds: 120 # Increased delay to allow app to become ready
+      periodSeconds: 20
+      timeoutSeconds: 5 # Increased to allow more time per check
+      failureThreshold: 30 # More failures allowed before marking as not ready
+      successThreshold: 1
+
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 360 # Delayed to ensure app has fully started
+      periodSeconds: 20
+      timeoutSeconds: 5
+      failureThreshold: 5
+      successThreshold: 1
+
     resources:
       limits:
         cpu: 500m
@@ -37,14 +65,11 @@ spec:
     production: false
 
     postgresql:
-      enabled: false
-
-    externalDatabase:
-      host: postgres-postgresql.postgres.svc.cluster.local # service created by your other release
-      port: 5432
-      database: postgres
-      user: postgres
-      password: postgres
+      enabled: true
+      auth:
+        username: bn_keycloak
+        database: bitnami_keycloak
+        password: bn_keycloak_password
 
     auth:
       adminUser: admin1342
