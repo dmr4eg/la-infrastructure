@@ -25,7 +25,7 @@ spec:
     createNamespace: true
     timeout: 20m0s
   values:
-    replicaCount: 2
+    replicaCount: 1
 
     proxy: edge
     proxyHeaders: xforwarded
