@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: be
+  name: be-content
   annotations:
     # cert-manager.io/cluster-issuer: letsencrypt
     cert-manager.io/cluster-issuer: letsencrypt-staging
@@ -35,7 +35,7 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: be
+  name: be-course
   annotations:
     # cert-manager.io/cluster-issuer: letsencrypt
     cert-manager.io/cluster-issuer: letsencrypt-staging
