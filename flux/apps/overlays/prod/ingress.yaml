@@ -13,7 +13,7 @@ metadata:
     nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
     nginx.ingress.kubernetes.io/rewrite-target: /$2
     nginx.ingress.kubernetes.io/use-regex: "true"
-
+    nginx.ingress.kubernetes.io/x-forwarded-prefix: /api/content
 spec:
   ingressClassName: nginx
   tls:
@@ -31,13 +31,37 @@ spec:
                 name: content-service
                 port:
                   name: http
-          - path: /api/course(/|$)(.*)
-            pathType: ImplementationSpecific
-            backend:
-              service:
-                name: course-service
-                port:
-                  name: http
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: be
+  annotations:
+    # cert-manager.io/cluster-issuer: letsencrypt
+    cert-manager.io/cluster-issuer: letsencrypt-staging
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "*"
+    nginx.ingress.kubernetes.io/cors-allow-methods: "PUT, GET, POST, OPTIONS, DELETE, PATCH"
+    nginx.ingress.kubernetes.io/cors-allow-headers: "*"
+    nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/x-forwarded-prefix: /api/course
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - app.little.pm
+      secretName: be-app-little-pm-tls
+  rules:              
+    - path: /api/course(/|$)(.*)
+      pathType: ImplementationSpecific
+      backend:
+        service:
+          name: course-service
+          port:
+            name: http
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
