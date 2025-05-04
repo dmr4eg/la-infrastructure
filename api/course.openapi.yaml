@@ -1,8 +1,8 @@
 openapi: 3.0.3
 info:
-  title: Project & Day API
+  title: Course API
   version: 1.0.0
-  description: An OpenAPI specification for project management, day templates, tasks, forms, media, and related user progress tracking.
+  description: API for managing projects, days, finances, and members.
 servers:
   - url: https://app.little.pm/api/course
 

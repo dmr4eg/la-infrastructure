@@ -1,8 +1,8 @@
 openapi: 3.0.3
 info:
-  title: Project & Day API
+  title: Content API
   version: 1.0.0
-  description: An OpenAPI specification for project management, day templates, tasks, forms, media, and related user progress tracking.
+  description: API for managing tasks, forms, media, and other content types.
 servers:
   - url: https://app.little.pm/api/content
 
@@ -127,6 +127,15 @@ components:
       schema:
         $ref: "#/components/schemas/fieldUUID"
 
+    userUUIDQuery:
+      name: user_uuid
+      in: query
+      description: "Filter list responses by user uuid"
+      required: false
+      schema:
+        $ref: "#/components/schemas/userUUID"
+
+    # ── PATH PARAMETERS ────────────────────────────────────────────────
     componentUUID:
       name: component_uuid
       in: path
@@ -644,10 +653,12 @@ paths:
       security:
         - admin_jwt: []
       requestBody:
+        required: true
         content:
           multipart/form-data:
             schema:
               type: object
+              required: [file]
               properties:
                 file:
                   type: string
@@ -662,9 +673,6 @@ paths:
                 title:
                   type: string
                   description: "Media title"
-              required:
-                - file
-        required: true
       responses:
         "200":
           description: "The uploaded media metadata"
@@ -736,7 +744,7 @@ paths:
       tags: [tasks]
       summary: List all task instances
       parameters:
-        - $ref: "#/components/parameters/userUUID"
+        - $ref: "#/components/parameters/userUUIDQuery" # fixed
         - $ref: "#/components/parameters/limit"
         - $ref: "#/components/parameters/offset"
       security:
@@ -822,7 +830,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/limit"
         - $ref: "#/components/parameters/offset"
-        - $ref: "#/components/parameters/userUUID"
+        - $ref: "#/components/parameters/userUUIDQuery" # fixed
       security:
         - admin_jwt: []
       responses:
@@ -904,7 +912,7 @@ paths:
       tags: [forms]
       summary: List all form instances
       parameters:
-        - $ref: "#/components/parameters/userUUID"
+        - $ref: "#/components/parameters/userUUIDQuery"
         - $ref: "#/components/parameters/limit"
         - $ref: "#/components/parameters/offset"
       security:
