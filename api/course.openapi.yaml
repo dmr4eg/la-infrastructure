@@ -990,6 +990,7 @@ paths:
       tags: [finances]
       summary: List all finances records
       parameters:
+        - $ref: "#/components/parameters/userUUIDQuery"
         - $ref: "#/components/parameters/limit"
         - $ref: "#/components/parameters/offset"
       security:
