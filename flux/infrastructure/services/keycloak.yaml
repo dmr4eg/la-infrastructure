@@ -82,7 +82,8 @@ spec:
       tls: true
       hostname: auth.app.little.pm
       annotations:
-        cert-manager.io/cluster-issuer: letsencrypt-staging
+        cert-manager.io/cluster-issuer: letsencrypt
+        # cert-manager.io/cluster-issuer: letsencrypt-staging
         nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
         kubernetes.io/tls-acme: "true"
         cert-manager.io/acme-challenge-type: "http01"
