@@ -151,6 +151,14 @@ components:
       schema:
         $ref: "#/components/schemas/userUUID"
 
+    userUUIDQuery:
+      name: user_uuid
+      in: query
+      required: false
+      description: "Filter list responses by user UUID"
+      schema:
+        $ref: "#/components/schemas/userUUID"
+
   ######################################################
   # SCHEMAS
   ######################################################
@@ -226,8 +234,8 @@ components:
       type: object
       description: "Composite ID for ProjectDaysMapper"
       example:
-        project_blueprint: "665c599d-5c8d-4d20-aaab-7ffaba150606"
-        day: "557c482c-8bb5-4a65-9bef-848a953238ae"
+        project_blueprint_uuid: "665c599d-5c8d-4d20-aaab-7ffaba150606"
+        day_blueprint_uuid: "557c482c-8bb5-4a65-9bef-848a953238ae"
       properties:
         project_blueprint_uuid:
           $ref: "#/components/schemas/projectBlueprintUUID"
@@ -898,9 +906,9 @@ paths:
       tags: [projects]
       summary: List all project instances
       parameters:
+        - $ref: "#/components/parameters/userUUIDQuery"
         - $ref: "#/components/parameters/limit"
         - $ref: "#/components/parameters/offset"
-        - $ref: "#/components/parameters/userUUID"
       security:
         - user_jwt: []
       responses:
@@ -968,7 +976,6 @@ paths:
     delete:
       tags: [projects]
       summary: Delete a project instance (admin or user)
-      # Decide on your actual policy
       security:
         - admin_jwt: []
       responses:
@@ -1172,7 +1179,7 @@ paths:
       tags: [days]
       summary: List all day instances
       parameters:
-        - $ref: "#/components/parameters/userUUID"
+        - $ref: "#/components/parameters/userUUIDQuery"
         - $ref: "#/components/parameters/limit"
         - $ref: "#/components/parameters/offset"
       security:
