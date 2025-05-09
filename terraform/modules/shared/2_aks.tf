@@ -42,14 +42,12 @@ resource "azurerm_kubernetes_cluster" "this" {
   oidc_issuer_enabled       = true
   workload_identity_enabled = true
 
-  # Enable Storage
   storage_profile {
     blob_driver_enabled = true
     disk_driver_enabled = true
     file_driver_enabled = true
   }
 
-  # Enable KEDA
   workload_autoscaler_profile {
     keda_enabled                    = true
     vertical_pod_autoscaler_enabled = true

@@ -38,7 +38,6 @@ resource "azurerm_kubernetes_flux_configuration" "infra" {
     url             = var.git_repository_url
     reference_type  = var.git_reference_type
     reference_value = var.git_reference_value
-    # ssh_private_key_base64   = base64encode(module.ssh-secret.private_key)
     sync_interval_in_seconds = 20
   }
 
