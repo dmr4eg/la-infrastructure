@@ -18,6 +18,5 @@ module "app" {
   git_reference_value     = "main"
   git_kustomizations_path = "./flux/apps/overlays/prod"
 
-  # psql_server_id = module.demo.psql_server_id
   aks_id = module.prod.aks_id
 }

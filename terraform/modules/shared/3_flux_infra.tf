@@ -28,12 +28,6 @@ resource "azurerm_kubernetes_cluster_extension" "this" {
   extension_type = "microsoft.flux"
 }
 
-# module "ssh-secret" {
-#   source      = "../ssh"
-#   kv_id       = azurerm_key_vault.this.id
-#   secret_name = "ssh-key"
-# }
-
 resource "azurerm_kubernetes_flux_configuration" "infra" {
   name       = "flux-infra"
   cluster_id = azurerm_kubernetes_cluster.this.id
