@@ -1,0 +1,80 @@
+@startuml
+
+skinparam package {
+    FontSize 13
+    FontStyle bold
+    BackgroundColor #F0F0F0
+}
+
+actor Parent
+actor Child
+
+participant "Frontend SPA\n(finance-calc + reports)"      as FE
+participant "Keycloak \nAuth + e-mail notifications"    as KC
+participant "Course Service"  as COURSE
+participant "Content Service" as CONTENT
+
+== 1 · Registration, parental e-mail verification ==
+Child  -> FE     : sign-up (child & parent e-mails, pw)
+FE     -> KC     : **Admin REST** POST /realms/littlepm/users\n  ↳ create user {requiredAction = VERIFY_EMAIL}
+KC     -> Parent : ✉ Verification e-mail (Keycloak template)
+Parent --> KC    : clicks verification link (user e-mail verified)
+FE     -> KC     : **OAuth 2.1** (PKCE – auth code)
+KC     --> FE    : ID + Access JWT   (Set-Cookie jwt=…)
+
+note over FE
+Subsequent API calls include  
+`Authorization: Bearer <JWT>`
+end note
+
+== 2 · Browse blueprints & create project-instance ==
+FE     -> COURSE : **GET /projects**           (JWT)
+Child  -> FE     : chooses project_blueprint_uuid
+FE     -> COURSE : **POST /project-instances** (JWT, body=UUIDs)
+COURSE --> FE    : ProjectDTO {status=IN_PROGRESS, day=1}
+
+== 3 · Daily loop  (Day 1 → 7) ==
+loop day = 1 → 7
+  ' 3.1 progress/meta
+  FE  -> COURSE  : **GET /project-instances/{proj}/{user}**
+  COURSE--> FE   : current day, status
+
+  ' 3.2 teaching content
+  FE  -> CONTENT : **GET /day-components-mapper?day_uuid={day}**
+  CONTENT --> FE : list(TASK|FORM|MEDIA, sortOrder)
+
+  ' 3.3 execute components
+  loop each component
+    alt MEDIA
+      FE -> CONTENT : **GET /media/{media_uuid}**
+      Child --> FE  : watch / read
+    else TASK
+      FE -> CONTENT : **GET /tasks/{task_uuid}**
+      Child --> FE  : mark done
+      FE -> COURSE  : **POST /task-instances**            (JWT)
+    else FORM
+      FE -> CONTENT : **GET /forms/{form_uuid}**
+      Child --> FE  : fill & submit
+      FE -> COURSE  : **POST /form-instances**            (JWT)
+    end
+  end
+
+  ' 3.4 client-side finance
+  Child --> FE : enter budget, price, qty …
+  FE    --> FE : _calcROI()_  ▸ immediate UX feedback
+  FE    -> COURSE : **PUT /finances/{proj}/{user}**       (JWT)
+
+  ' 3.5 day complete & e-mail reminder
+  FE    -> COURSE : **PUT /day-instances/{day}/{user}**   status=COMPLETED
+  COURSE -> KC    : POST custom "*REMINDER_DAY_{n+1}*"
+  KC     -> Child : ✉ “Tomorrow is Day {n+1}!”
+end
+
+== 4 · Reports & project closure ==
+Child -> FE     : “Generate my reports”
+FE    --> FE    : build pitch-deck (PDF) & P/L (XLSX)
+FE    -> COURSE : **PUT /project-instances/{proj}/{user}** status=COMPLETED
+COURSE--> FE    : OK
+Child <-- FE    : downloads files
+
+@enduml

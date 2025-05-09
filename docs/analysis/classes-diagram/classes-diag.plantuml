@@ -1,0 +1,237 @@
+@startuml
+
+!theme plain
+left to right direction
+skinparam linetype ortho
+skinparam package {
+    FontSize 11
+    FontStyle bold
+    BackgroundColor #F0F0F0
+}
+
+package "Day Management" {
+  class DayBlueprint {
+    * description: String
+    * dayBlueprintUuid: UUID
+    * text: String
+    * title: String
+  }
+
+  class DayComponentsMapper {
+    * id: DayComponentsMapperId
+    * sortOrder: Integer
+    * type: TypeEnum
+  }
+
+  class DayComponentsMapperId {
+    * dayBlueprintUuid: UUID
+    * componentUuid: UUID
+  }
+
+  class DayDTO {
+    * instance: DayInstance
+    * blueprint: DayBlueprint
+  }
+
+  class DayInstance {
+    * status: StatusEnum
+    * id: DayInstanceId
+  }
+
+  class DayInstanceId {
+    * dayBlueprintUuid: UUID
+    * userUuid: UUID
+  }
+}
+
+package "Project Management" {
+  class ProjectBlueprint {
+    * difficulty: DifficultyEnum
+    * posterUrl: String
+    * description: String
+    * projectBlueprintUuid: UUID
+    * welcomeVideoUrl: String
+    * title: String
+    * style: StyleEnum
+  }
+
+  class ProjectDTO {
+    * instance: ProjectInstance
+    * blueprint: ProjectBlueprint
+  }
+
+  class ProjectDaysMapper {
+    * id: ProjectDaysMapperId
+    * sortOrder: Integer
+  }
+
+  class ProjectDaysMapperId {
+    * projectBlueprintUuid: UUID
+    * dayBlueprintUuid: UUID
+  }
+
+  class ProjectInstance {
+    * endDate: OffsetDateTime
+    * startDate: OffsetDateTime
+    * feedback: String
+    * status: StatusEnum
+    * whatWentWell: String
+    * id: ProjectInstanceId
+  }
+
+  class ProjectInstanceId {
+    * userUuid: UUID
+    * projectBlueprintUuid: UUID
+  }
+}
+
+package "Form Management" {
+  class Field {
+    * description: String
+    * title: String
+    * inputType: InputTypeEnum
+    * required: Boolean
+    * fieldUuid: UUID
+  }
+
+  class FormBlueprint {
+    * formBlueprintUuid: UUID
+    * callbackUrl: String
+    * title: String
+    * description: String
+  }
+
+  class FormDTO {
+    * blueprint: FormBlueprint
+    * instance: FormInstance
+  }
+
+  class FormFieldMapper {
+    * sortOrder: Integer
+    * id: FormFieldMapperId
+  }
+
+  class FormFieldMapperId {
+    * fieldUuid: UUID
+    * formBlueprintUuid: UUID
+  }
+
+  class FormInstance {
+    * id: FormInstanceId
+    * status: Boolean
+  }
+
+  class FormInstanceId {
+    * userUuid: UUID
+    * formBlueprintUuid: UUID
+  }
+}
+
+package "Task Management" {
+  class TaskBlueprint {
+    * title: String
+    * taskBlueprintUuid: UUID
+    * description: String
+  }
+
+  class TaskDTO {
+    * blueprint: TaskBlueprint
+    * progress: TaskInstance
+  }
+
+  class TaskInstance {
+    * status: Boolean
+    * id: TaskInstanceId
+  }
+
+  class TaskInstanceId {
+    * taskBlueprintUuid: UUID
+    * userUuid: UUID
+  }
+}
+
+package "Financials" {
+  class Finances {
+    * itemsCost: Float
+    * soldPrice: Float
+    * toysSold: Float
+    * toysLeft: Float
+    * id: FinancesId
+    * investorReturn: Float
+    * recommendedPrice: Float
+    * investorGave: Float
+    * calculatedBudget: Float
+    * membersBudget: Float
+    * pricePerItem: Float
+    * toysPlanned: Float
+    * profit: Float
+    * expenseAmount: Float
+    * spentBudget: Float
+  }
+
+  class FinancesId {
+    * userUuid: UUID
+    * projectBlueprintUuid: UUID
+  }
+}
+
+package "Team" {
+  class Members {
+    * memberName: String
+    * id: MembersId
+  }
+
+  class MembersId {
+    * projectBlueprintUuid: UUID
+    * userUuid: UUID
+  }
+}
+
+package "Media" {
+  class Media {
+    * type: TypeEnum
+    * url: String
+    * description: String
+    * mediaUUID: UUID
+    * title: String
+  }
+}
+
+DayDTO *-- DayBlueprint
+DayDTO *-- DayInstance
+DayInstance *-- DayInstanceId
+DayComponentsMapper *-- DayComponentsMapperId
+ProjectDTO *-- ProjectBlueprint
+ProjectDTO *-- ProjectInstance
+ProjectInstance *-- ProjectInstanceId
+ProjectDaysMapper *-- ProjectDaysMapperId
+Finances *-- FinancesId
+Members *-- MembersId
+FormDTO *-- FormBlueprint
+FormDTO *-- FormInstance
+FormInstance *-- FormInstanceId
+FormFieldMapper *-- FormFieldMapperId
+TaskDTO *-- TaskBlueprint
+TaskDTO *-- TaskInstance
+TaskInstance *-- TaskInstanceId
+
+DayInstanceId --> DayBlueprint
+DayComponentsMapperId --> DayBlueprint
+ProjectInstanceId --> ProjectBlueprint
+ProjectDaysMapperId --> ProjectBlueprint
+ProjectDaysMapperId --> DayBlueprint
+FinancesId --> ProjectBlueprint
+FinancesId --> ProjectInstanceId
+MembersId --> ProjectBlueprint
+MembersId --> ProjectInstanceId
+FormFieldMapperId --> FormBlueprint
+FormFieldMapperId --> Field
+FormInstanceId --> FormBlueprint
+TaskInstanceId --> TaskBlueprint
+
+
+DayComponentsMapperId --> Media.Media
+DayComponentsMapperId --> FormBlueprint
+DayComponentsMapperId --> TaskBlueprint
+
+@enduml
