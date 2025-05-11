@@ -1,0 +1,68 @@
+@startuml
+left to right direction
+skinparam packageStyle rectangle  
+skinparam linetype ortho
+skinparam package {
+    FontSize 13
+    FontStyle bold
+}
+
+actor Kid    as "Kid"
+actor Parent as "Parent"
+actor Admin  as "Administrator"
+
+rectangle "Learning application for kids" {
+
+  package "Auth" {
+    usecase "UC-1 Register"         as UC1
+    usecase "UC-2 Provide parental consent" as UC2
+    usecase "UC-3 Login"                    as UC3
+  }
+
+  package "Dashboard" {
+    usecase "UC-4 View completed projects"    as UC4
+    usecase "UC-5 Start new project" as UC5
+    usecase "UC-6 Resume project"    as UC6
+  }
+
+  package "Project management" {
+    usecase "UC-7 View day page"                as UC7
+    usecase "UC-8 Interact with content"        as UC8
+    usecase "UC-9 Fill forms"           as UC9
+    usecase "UC-10 Execute calculations" as UC10
+  }
+
+  package "Reporting" {
+    usecase "UC-11 Generate reports" as UC11
+    usecase "UC-12 Export reports"   as UC12
+  }
+
+  package "Administration" {
+    usecase "UC-13 Manage projects" as UC13
+    usecase "UC-14 Manage components"   as UC14
+  }
+}
+
+Kid    -- UC1
+Kid    -- UC3
+Kid    -- UC4
+Kid    -- UC5
+Kid    -- UC6
+Kid    -- UC7
+Kid    -- UC8
+Kid    -- UC9
+Kid    -- UC10
+Kid    -- UC11
+Kid    -- UC12
+
+UC2 -right-> Parent 
+
+Admin  -- UC13
+Admin  -- UC14
+
+UC1  ..> UC2  : <<include>>
+UC5  ..> UC7  : <<include>>
+UC6  ..> UC7  : <<include>>
+UC9  ..> UC10 : <<include>>
+UC11 ..> UC12 : <<include>>
+@enduml
