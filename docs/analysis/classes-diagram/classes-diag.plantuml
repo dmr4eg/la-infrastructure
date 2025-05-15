@@ -73,8 +73,8 @@ package "day" {
     }
 
     class DayInstance {
-        * status: StatusEnum
         * id: DayInstanceId
+        * status: StatusEnum
     }
 
     class DayDTO {
@@ -129,11 +129,11 @@ package "content" {
         }
 
         class Field {
+            * fieldUuid: UUID
             * description: String
             * title: String
             * inputType: InputTypeEnum
             * required: Boolean
-            * fieldUuid: UUID
         }
     }
 
@@ -162,10 +162,10 @@ package "content" {
 
     package "media" {
         class Media {
+            * mediaUUID: UUID
             * type: TypeEnum
             * url: String
             * description: String
-            * mediaUUID: UUID
             * title: String
         }
     }
