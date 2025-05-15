@@ -1,237 +1,237 @@
 @startuml
 
 !theme plain
-left to right direction
+
 skinparam linetype ortho
+
 skinparam package {
     FontSize 11
     FontStyle bold
     BackgroundColor #F0F0F0
 }
 
-package "Day Management" {
-  class DayBlueprint {
-    * description: String
-    * dayBlueprintUuid: UUID
-    * text: String
-    * title: String
-  }
+package "project" {
+    class ProjectBlueprint {
+        * projectBlueprintUuid: UUID
+        * difficulty: DifficultyEnum
+        * posterUrl: String
+        * description: String
+        * welcomeVideoUrl: String
+        * title: String
+        * style: StyleEnum
+    }
 
-  class DayComponentsMapper {
-    * id: DayComponentsMapperId
-    * sortOrder: Integer
-    * type: TypeEnum
-  }
+    class ProjectInstanceId {
+        * userUuid: UUID
+        * projectBlueprintUuid: UUID
+    }
 
-  class DayComponentsMapperId {
-    * dayBlueprintUuid: UUID
-    * componentUuid: UUID
-  }
+    class ProjectInstance {
+        * id: ProjectInstanceId
+        * endDate: OffsetDateTime
+        * startDate: OffsetDateTime
+        * feedback: String
+        * status: StatusEnum
+        * whatWentWell: String
+    }
 
-  class DayDTO {
-    * instance: DayInstance
-    * blueprint: DayBlueprint
-  }
+    class ProjectDTO {
+        * instance: ProjectInstance
+        * blueprint: ProjectBlueprint
+    }
 
-  class DayInstance {
-    * status: StatusEnum
-    * id: DayInstanceId
-  }
+    class ProjectDaysMapperId {
+        * projectBlueprintUuid: UUID
+        * dayBlueprintUuid: UUID
+    }
 
-  class DayInstanceId {
-    * dayBlueprintUuid: UUID
-    * userUuid: UUID
-  }
+    class ProjectDaysMapper {
+        * id: ProjectDaysMapperId
+        * sortOrder: Integer
+    }
+
 }
 
-package "Project Management" {
-  class ProjectBlueprint {
-    * difficulty: DifficultyEnum
-    * posterUrl: String
-    * description: String
-    * projectBlueprintUuid: UUID
-    * welcomeVideoUrl: String
-    * title: String
-    * style: StyleEnum
-  }
-
-  class ProjectDTO {
-    * instance: ProjectInstance
-    * blueprint: ProjectBlueprint
-  }
-
-  class ProjectDaysMapper {
-    * id: ProjectDaysMapperId
-    * sortOrder: Integer
-  }
-
-  class ProjectDaysMapperId {
-    * projectBlueprintUuid: UUID
-    * dayBlueprintUuid: UUID
-  }
-
-  class ProjectInstance {
-    * endDate: OffsetDateTime
-    * startDate: OffsetDateTime
-    * feedback: String
-    * status: StatusEnum
-    * whatWentWell: String
-    * id: ProjectInstanceId
-  }
-
-  class ProjectInstanceId {
-    * userUuid: UUID
-    * projectBlueprintUuid: UUID
-  }
+package "membership" {
+    class Membership {
+        * ProjectInstanceID: ProjectInstanceID
+        * user: UUID
+    }
 }
 
-package "Form Management" {
-  class Field {
-    * description: String
-    * title: String
-    * inputType: InputTypeEnum
-    * required: Boolean
-    * fieldUuid: UUID
-  }
+package "day" {
+    class DayBlueprint {
+        * dayBlueprintUuid: UUID
+        * description: String
+        * text: String
+        * title: String
+    }
 
-  class FormBlueprint {
-    * formBlueprintUuid: UUID
-    * callbackUrl: String
-    * title: String
-    * description: String
-  }
+    class DayInstanceId {
+        * dayBlueprintUuid: UUID
+        * userUuid: UUID
+    }
 
-  class FormDTO {
-    * blueprint: FormBlueprint
-    * instance: FormInstance
-  }
+    class DayInstance {
+        * status: StatusEnum
+        * id: DayInstanceId
+    }
 
-  class FormFieldMapper {
-    * sortOrder: Integer
-    * id: FormFieldMapperId
-  }
+    class DayDTO {
+        * instance: DayInstance
+        * blueprint: DayBlueprint
+    }
 
-  class FormFieldMapperId {
-    * fieldUuid: UUID
-    * formBlueprintUuid: UUID
-  }
+    class DayComponentsMapperId {
+        * dayBlueprintUuid: UUID
+        * componentUuid: UUID
+    }
 
-  class FormInstance {
-    * id: FormInstanceId
-    * status: Boolean
-  }
-
-  class FormInstanceId {
-    * userUuid: UUID
-    * formBlueprintUuid: UUID
-  }
+    class DayComponentsMapper {
+        * id: DayComponentsMapperId
+        * sortOrder: Integer
+        * type: TypeEnum
+    }
 }
 
-package "Task Management" {
-  class TaskBlueprint {
-    * title: String
-    * taskBlueprintUuid: UUID
-    * description: String
-  }
+package "content" {
+    package "form" {
+        class FormBlueprint {
+            * formBlueprintUuid: UUID
+            * callbackUrl: String
+            * title: String
+            * description: String
+        }
 
-  class TaskDTO {
-    * blueprint: TaskBlueprint
-    * progress: TaskInstance
-  }
+        class FormInstanceId {
+            * userUuid: UUID
+            * formBlueprintUuid: UUID
+        }
 
-  class TaskInstance {
-    * status: Boolean
-    * id: TaskInstanceId
-  }
+        class FormInstance {
+            * id: FormInstanceId
+            * status: Boolean
+        }
 
-  class TaskInstanceId {
-    * taskBlueprintUuid: UUID
-    * userUuid: UUID
-  }
+        class FormDTO {
+            * blueprint: FormBlueprint
+            * instance: FormInstance
+        }
+
+        class FormFieldMapperId {
+            * fieldUuid: UUID
+            * formBlueprintUuid: UUID
+        }
+
+        class FormFieldMapper {
+            * id: FormFieldMapperId
+            * sortOrder: Integer
+        }
+
+        class Field {
+            * description: String
+            * title: String
+            * inputType: InputTypeEnum
+            * required: Boolean
+            * fieldUuid: UUID
+        }
+    }
+
+    package "task" {
+        class TaskBlueprint {
+            * taskBlueprintUuid: UUID
+            * title: String
+            * description: String
+        }
+
+        class TaskInstanceId {
+            * taskBlueprintUuid: UUID
+            * userUuid: UUID
+        }
+
+        class TaskInstance {
+            * id: TaskInstanceId
+            * status: Boolean
+        }
+
+        class TaskDTO {
+            * blueprint: TaskBlueprint
+            * instance: TaskInstance
+        }
+    }
+
+    package "media" {
+        class Media {
+            * type: TypeEnum
+            * url: String
+            * description: String
+            * mediaUUID: UUID
+            * title: String
+        }
+    }
+}
+package "finance" {
+    class FinancesId {
+        * userUuid: UUID
+        * projectBlueprintUuid: UUID
+    }
+    class Finances {
+        * id: FinancesId
+        * itemsCost: Float
+        * soldPrice: Float
+        * toysSold: Float
+        * toysLeft: Float
+        * investorReturn: Float
+        * recommendedPrice: Float
+        * investorGave: Float
+        * calculatedBudget: Float
+        * membersBudget: Float
+        * pricePerItem: Float
+        * toysPlanned: Float
+        * profit: Float
+        * expenseAmount: Float
+        * spentBudget: Float
+    }
 }
 
-package "Financials" {
-  class Finances {
-    * itemsCost: Float
-    * soldPrice: Float
-    * toysSold: Float
-    * toysLeft: Float
-    * id: FinancesId
-    * investorReturn: Float
-    * recommendedPrice: Float
-    * investorGave: Float
-    * calculatedBudget: Float
-    * membersBudget: Float
-    * pricePerItem: Float
-    * toysPlanned: Float
-    * profit: Float
-    * expenseAmount: Float
-    * spentBudget: Float
-  }
+FinancesId       "1" -down-> "1" ProjectInstanceId
+FinancesId       "N" -down-> "1" ProjectBlueprint
+Finances         "1" *-left- "1" FinancesId
 
-  class FinancesId {
-    * userUuid: UUID
-    * projectBlueprintUuid: UUID
-  }
-}
+Membership        "N" -down-> "1" ProjectInstanceId
 
-package "Team" {
-  class Members {
-    * memberName: String
-    * id: MembersId
-  }
+ProjectInstanceId "N" -left-> "1" ProjectBlueprint
+ProjectInstance  "1" *-left- "1" ProjectInstanceId
+ProjectDTO       "N" *-left-> "1" ProjectBlueprint
+ProjectDTO       "1" *-left-> "1" ProjectInstance
 
-  class MembersId {
-    * projectBlueprintUuid: UUID
-    * userUuid: UUID
-  }
-}
+ProjectDaysMapperId "N" -up-> "1" ProjectBlueprint
+ProjectDaysMapperId "N" -down-> "1" DayBlueprint
+ProjectDaysMapper "1" *-left- "1" ProjectDaysMapperId
 
-package "Media" {
-  class Media {
-    * type: TypeEnum
-    * url: String
-    * description: String
-    * mediaUUID: UUID
-    * title: String
-  }
-}
+DayInstanceId    "N" -left-> "1" DayBlueprint
+DayInstance      "1" *-left- "1" DayInstanceId
+DayDTO           "N" *-left-> "1" DayBlueprint
+DayDTO           "1" *-left-> "1" DayInstance
 
-DayDTO *-- DayBlueprint
-DayDTO *-- DayInstance
-DayInstance *-- DayInstanceId
-DayComponentsMapper *-- DayComponentsMapperId
-ProjectDTO *-- ProjectBlueprint
-ProjectDTO *-- ProjectInstance
-ProjectInstance *-- ProjectInstanceId
-ProjectDaysMapper *-- ProjectDaysMapperId
-Finances *-- FinancesId
-Members *-- MembersId
-FormDTO *-- FormBlueprint
-FormDTO *-- FormInstance
-FormInstance *-- FormInstanceId
-FormFieldMapper *-- FormFieldMapperId
-TaskDTO *-- TaskBlueprint
-TaskDTO *-- TaskInstance
-TaskInstance *-- TaskInstanceId
+DayComponentsMapperId "N" -up-> "1" DayBlueprint
+DayComponentsMapperId "N" -down-> "1" Media
+DayComponentsMapperId "N" -down-> "1" TaskBlueprint
+DayComponentsMapperId "N" -down-> "1" FormBlueprint
 
-DayInstanceId --> DayBlueprint
-DayComponentsMapperId --> DayBlueprint
-ProjectInstanceId --> ProjectBlueprint
-ProjectDaysMapperId --> ProjectBlueprint
-ProjectDaysMapperId --> DayBlueprint
-FinancesId --> ProjectBlueprint
-FinancesId --> ProjectInstanceId
-MembersId --> ProjectBlueprint
-MembersId --> ProjectInstanceId
-FormFieldMapperId --> FormBlueprint
-FormFieldMapperId --> Field
-FormInstanceId --> FormBlueprint
-TaskInstanceId --> TaskBlueprint
+DayComponentsMapper "1" *-left- "1" DayComponentsMapperId
 
+TaskInstanceId   "N" -up-> "1" TaskBlueprint
+TaskInstance     "1" *-up- "1" TaskInstanceId
+TaskDTO          "N" *-up-> "1" TaskBlueprint
+TaskDTO          "1" *-up-> "1" TaskInstance
 
-DayComponentsMapperId --> Media.Media
-DayComponentsMapperId --> FormBlueprint
-DayComponentsMapperId --> TaskBlueprint
+FormInstanceId    "N" -up-> "1" FormBlueprint
+FormInstance     "1" *-up- "1" FormInstanceId
+FormDTO          "N" *-up-> "1" FormBlueprint
+FormDTO          "1" *-up-> "1" FormInstance
+FormFieldMapperId "N" -left-> "1" FormBlueprint
+FormFieldMapper  "1" *-up- "1" FormFieldMapperId
+FormFieldMapper "N" -down-> "1" Field
 
 @enduml
