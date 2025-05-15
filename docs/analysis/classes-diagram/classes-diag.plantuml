@@ -22,8 +22,8 @@ package "project" {
     }
 
     class ProjectInstanceId {
-        * userUuid: UUID
         * projectBlueprintUuid: UUID
+        * userUuid: UUID
     }
 
     class ProjectInstance {
@@ -36,8 +36,8 @@ package "project" {
     }
 
     class ProjectDTO {
-        * instance: ProjectInstance
         * blueprint: ProjectBlueprint
+        * instance: ProjectInstance
     }
 
     class ProjectDaysMapperId {
@@ -78,8 +78,8 @@ package "day" {
     }
 
     class DayDTO {
-        * instance: DayInstance
         * blueprint: DayBlueprint
+        * instance: DayInstance
     }
 
     class DayComponentsMapperId {
@@ -104,8 +104,8 @@ package "content" {
         }
 
         class FormInstanceId {
-            * userUuid: UUID
             * formBlueprintUuid: UUID
+            * userUuid: UUID
         }
 
         class FormInstance {
@@ -119,8 +119,8 @@ package "content" {
         }
 
         class FormFieldMapperId {
-            * fieldUuid: UUID
             * formBlueprintUuid: UUID
+            * fieldUuid: UUID
         }
 
         class FormFieldMapper {
@@ -172,8 +172,8 @@ package "content" {
 }
 package "finance" {
     class FinancesId {
-        * userUuid: UUID
         * projectBlueprintUuid: UUID
+        * userUuid: UUID
     }
     class Finances {
         * id: FinancesId
@@ -193,7 +193,6 @@ package "finance" {
         * spentBudget: Float
     }
 }
-
 FinancesId       "1" -down-> "1" ProjectInstanceId
 FinancesId       "N" -down-> "1" ProjectBlueprint
 Finances         "1" *-left- "1" FinancesId
@@ -230,8 +229,11 @@ FormInstanceId    "N" -up-> "1" FormBlueprint
 FormInstance     "1" *-up- "1" FormInstanceId
 FormDTO          "N" *-up-> "1" FormBlueprint
 FormDTO          "1" *-up-> "1" FormInstance
+
 FormFieldMapperId "N" -left-> "1" FormBlueprint
 FormFieldMapper  "1" *-up- "1" FormFieldMapperId
-FormFieldMapper "N" -down-> "1" Field
+FormFieldMapperId "N" -right-> "1" Field
 
+media -right[hidden]-> task
+task -right[hidden]-> form
 @enduml
