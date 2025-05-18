@@ -53,9 +53,14 @@ package "project" {
 }
 
 package "membership" {
-    class Membership {
-        * ProjectInstanceID: ProjectInstanceID
-        * user: UUID
+    class Members {
+        * id: MemberId
+        * membersName: String
+    }
+    
+    class MembersId {
+        * projectBlueprintUuid: UUID
+        * userUuid: UUID
     }
 }
 
@@ -197,7 +202,8 @@ FinancesId       "1" -down-> "1" ProjectInstanceId
 FinancesId       "N" -down-> "1" ProjectBlueprint
 Finances         "1" *-left- "1" FinancesId
 
-Membership        "N" -down-> "1" ProjectInstanceId
+MembersId        "N" -down-> "1" ProjectInstanceId
+Members        "1" -left-> "1" MembersId
 
 ProjectInstanceId "N" -left-> "1" ProjectBlueprint
 ProjectInstance  "1" *-left- "1" ProjectInstanceId
@@ -236,4 +242,5 @@ FormFieldMapperId "N" -right-> "1" Field
 
 media -right[hidden]-> task
 task -right[hidden]-> form
+
 @enduml
