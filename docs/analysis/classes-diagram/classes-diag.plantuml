@@ -242,5 +242,7 @@ FormFieldMapperId "N" -right-> "1" Field
 
 media -right[hidden]-> task
 task -right[hidden]-> form
+task -right[hidden]-> form
+day -down[hidden]-> content
 
 @enduml

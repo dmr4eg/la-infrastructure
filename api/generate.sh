@@ -1,8 +1,8 @@
-#spring-content
-openapi-generator generate -i ./content.openapi.yaml -g spring -o gen/spring/content --additional-properties=apiPackage=pm.little.api.controllers,basePackage=pm.little.api,configPackage=pm.little.api.confs,modelPackage=pm.little.api.models
+# #spring-content
+# openapi-generator generate -i ./content.openapi.yaml -g spring -o gen/spring/content --additional-properties=apiPackage=pm.little.api.controllers,basePackage=pm.little.api,configPackage=pm.little.api.confs,modelPackage=pm.little.api.models
 
-#spring-course
-openapi-generator generate -i ./course.openapi.yaml -g spring -o gen/spring/course --additional-properties=apiPackage=pm.little.api.controllers,basePackage=pm.little.api,configPackage=pm.little.api.confs,modelPackage=pm.little.api.models
+# #spring-course
+# openapi-generator generate -i ./course.openapi.yaml -g spring -o gen/spring/course --additional-properties=apiPackage=pm.little.api.controllers,basePackage=pm.little.api,configPackage=pm.little.api.confs,modelPackage=pm.little.api.models
 
 # #fe-js-content
 # openapi-generator generate \
@@ -17,3 +17,8 @@ openapi-generator generate -i ./course.openapi.yaml -g spring -o gen/spring/cour
 #     -g typescript-fetch \
 #     -o gen/ts/api-course \
 #     --additional-properties=apiPackage=controllers,invokerPackage=api-course,modelPackage=models
+
+openapi-generator generate \
+  -i ./course.openapi.yaml \
+  -g markdown \
+  -o docs/md
