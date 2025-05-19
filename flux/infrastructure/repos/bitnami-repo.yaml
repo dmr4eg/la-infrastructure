@@ -9,13 +9,3 @@ spec:
   url: https://github.com/bitnami/charts
   ref:
     branch: main
-# ---
-# apiVersion: source.toolkit.fluxcd.io/v1beta2
-# kind: HelmRepository
-# metadata:
-#   name: bitnami
-# spec:
-#   interval: 10m
-#   url: https://charts.bitnami.com/bitnami
-#   # type: "oci"
-#   # url: oci://registry-1.docker.io/bitnamicharts

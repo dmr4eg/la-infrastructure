@@ -10,7 +10,6 @@ spec:
   targetNamespace: postgres
   chart:
     spec:
-      # chart: postgresql
       chart: ./bitnami/postgresql
       version: "16.6.3"
       sourceRef:

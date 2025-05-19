@@ -75,7 +75,6 @@ metadata:
     # cert-manager.io/cluster-issuer: letsencrypt-staging
     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
     nginx.ingress.kubernetes.io/enable-cors: "true"
-    # nginx.ingress.kubernetes.io/cors-allow-origin: "app.little.pm"
     nginx.ingress.kubernetes.io/cors-allow-origin: "*"
     nginx.ingress.kubernetes.io/cors-allow-methods: "PUT, GET, POST, OPTIONS, DELETE, PATCH"
     nginx.ingress.kubernetes.io/cors-allow-headers: "*"

@@ -11,12 +11,10 @@ spec:
   releaseName: keycloak
   chart:
     spec:
-      # chart: keycloak
       chart: ./bitnami/keycloak
       interval: 10s
       version: "24.5.8"
       sourceRef:
-        # kind: HelmRepository
         kind: GitRepository
         name: bitnami
         namespace: flux-system
@@ -31,24 +29,24 @@ spec:
     proxyHeaders: xforwarded
 
     startupProbe:
-      enabled: true # Enabled to prevent liveness probe from killing pod too early
+      enabled: true 
       initialDelaySeconds: 60
       periodSeconds: 20
       timeoutSeconds: 5
-      failureThreshold: 30 # Total startup time: 30 x 10 = 300 seconds
+      failureThreshold: 30
       successThreshold: 1
 
     readinessProbe:
       enabled: true
-      initialDelaySeconds: 120 # Increased delay to allow app to become ready
+      initialDelaySeconds: 120 
       periodSeconds: 20
-      timeoutSeconds: 5 # Increased to allow more time per check
-      failureThreshold: 30 # More failures allowed before marking as not ready
+      timeoutSeconds: 5 
+      failureThreshold: 30
       successThreshold: 1
 
     livenessProbe:
       enabled: true
-      initialDelaySeconds: 360 # Delayed to ensure app has fully started
+      initialDelaySeconds: 360
       periodSeconds: 20
       timeoutSeconds: 5
       failureThreshold: 5
@@ -83,7 +81,6 @@ spec:
       hostname: auth.app.little.pm
       annotations:
         cert-manager.io/cluster-issuer: letsencrypt
-        # cert-manager.io/cluster-issuer: letsencrypt-staging
         nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
         kubernetes.io/tls-acme: "true"
         cert-manager.io/acme-challenge-type: "http01"

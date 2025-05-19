@@ -1,25 +1,21 @@
-#USER ASSIGNED IDENTITY ROLE
 resource "azurerm_role_assignment" "net_contributor" {
   scope                = data.azurerm_resource_group.this.id
   principal_id         = azurerm_user_assigned_identity.this.principal_id
   role_definition_name = "Network Contributor"
 }
 
-#USER ASSIGNED IDENTITY ROLE
 resource "azurerm_role_assignment" "dns_zone_contributor" {
   scope                = data.azurerm_dns_zone.this.id
   principal_id         = azurerm_user_assigned_identity.this.principal_id
   role_definition_name = "DNS Zone Contributor"
 }
 
-#KUBELET IDENTITY ROLE
 resource "azurerm_role_assignment" "keyvault_secrets_user" {
   scope                = azurerm_key_vault.this.id
   principal_id         = azurerm_user_assigned_identity.this.principal_id
   role_definition_name = "Key Vault Secrets User"
 }
 
-#KUBELET IDENTITY ROLE
 resource "azurerm_role_assignment" "acr_pull" {
   scope                            = azurerm_container_registry.this.id
   principal_id                     = azurerm_user_assigned_identity.this.principal_id
@@ -53,7 +49,6 @@ resource "azurerm_kubernetes_cluster" "this" {
     vertical_pod_autoscaler_enabled = true
   }
 
-  # Microsoft Entra authentication with Azure AD; Local account enabled
   azure_active_directory_role_based_access_control {
     tenant_id              = data.azurerm_client_config.this.tenant_id
     azure_rbac_enabled     = true
@@ -99,7 +94,6 @@ resource "azurerm_kubernetes_cluster" "this" {
   lifecycle {
     prevent_destroy = true
     ignore_changes = [
-      #   default_node_pool[0].node_count,
       default_node_pool[0].upgrade_settings,
     ]
   }

@@ -1,12 +1,4 @@
 terraform {
-
-  # terraform init -migrate-state
-  # backend "azurerm" {
-  #   subscription_id     = "d4fa161c-91b5-4d9b-9831-a9e1061b4ac2"
-  #   resource_group_name = "rg-little-pm"
-  #   key                 = "terraform.tfstate"
-  # }
-
   required_providers {
     azapi = {
       source  = "azure/azapi"
