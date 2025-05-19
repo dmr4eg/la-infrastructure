@@ -10,21 +10,21 @@ actor Parent
 actor Child
 
 participant "Frontend\n(finance-calc + reports)"      as FE
-participant "Keycloak \nAuth + e-mail notifications"    as KC
+participant "Keycloak \nAuth + e-mail verification"    as KC
 participant "Course Service"  as COURSE
 participant "Content Service" as CONTENT
 
 == 1 · Registration, parental e-mail verification ==
 Child  -> FE     : sign-up 
-FE     -> KC     : **Admin REST** POST /realms/littlepm/users\n  -> create user {requiredAction = VERIFY_EMAIL}
+FE     -> KC     : **POST**  /realms/littlepm/users\n  -> create user {requiredAction = VERIFY_EMAIL}
 KC     -> Parent : Verification e-mail (Keycloak template)
 Parent --> KC    : clicks verification link 
 FE     -> KC     : **OAuth 2.1** 
-KC     --> FE    : 200=OK ID + Access JWT   (Set-Cookie)
+KC     --> FE    : 201=CREATED ID + Access JWT   (Set-Cookie)
 
 
 == 2 · Browse blueprints & create project-instance ==
-FE     -> COURSE : **GET /projects**           (JWT)
+FE     -> COURSE : **GET /projects**  (JWT)
 Child  -> FE     : chooses project_blueprint_uuid
 FE     -> COURSE : **POST /project-instances** (JWT, body=UUIDs)
 COURSE --> FE    : 200=OK ProjectDTO 
@@ -32,7 +32,7 @@ COURSE --> FE    : 200=OK ProjectDTO
 == 3 · Daily loop  (Day 1 → 7) ==
 loop day = 1 → 7
   ' 3.1 progress/meta
-  FE  -> COURSE  : **GET /project-instances/{proj}/{user}**
+  FE  -> COURSE  : **GET /project-instances/{project}/{user}**
   COURSE--> FE   : 200=OK current day, status
 
   ' 3.2 teaching content
@@ -42,23 +42,23 @@ loop day = 1 → 7
   ' 3.3 execute components
   loop each component
     alt MEDIA
+      Child --> FE  : watch 
       FE -> CONTENT : **GET /media/{media_uuid}**
-      Child --> FE  : watch / read
     else TASK
       FE -> CONTENT : **GET /tasks/{task_uuid}**
       Child --> FE  : mark done
-      FE -> COURSE  : **POST /task-instances**            (JWT)
+      FE -> COURSE  : **POST /task-instances**  (JWT)
     else FORM
       FE -> CONTENT : **GET /forms/{form_uuid}**
       Child --> FE  : fill & submit
-      FE -> COURSE  : **POST /form-instances**            (JWT)
+      FE -> COURSE  : **POST /form-instances**  (JWT)
     end
   end
 
   ' 3.4 client-side finance
   Child --> FE : enter budget, price…
   FE    --> FE : _calculate()_  
-  FE    -> COURSE : **PUT /finances/{proj}/{user}**       (JWT)
+  FE    -> COURSE : **PUT /finances/{project}/{user}**  (JWT)
 
   ' 3.5 day complete & e-mail reminder
   FE    -> COURSE : **PUT /day-instances/{day}/{user}**   status=COMPLETED
@@ -67,7 +67,7 @@ end
 == 4 · Reports & project closure ==
 Child -> FE     : generate reports
 FE    --> FE    : build reports
-FE    -> COURSE : **PUT /project-instances/{proj}/{user}** status=COMPLETED
+FE    -> COURSE : **PUT /project-instances/{project}/{user}** status=COMPLETED
 COURSE--> FE    : 200=OK
 Child <-- FE    : downloads files
 
