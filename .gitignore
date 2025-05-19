@@ -1,17 +1,9 @@
-# Compiled class file
 *.class
-
-# Log file
 *.log
 
-# BlueJ files
 *.ctxt
 api/gen/
-
-# Mobile Tools for Java (J2ME)
 .mtj.tmp/
-
-# Package Files #
 *.jar
 *.war
 *.nar
@@ -20,11 +12,9 @@ api/gen/
 *.tar.gz
 *.rar
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 replay_pid*
 
-# IDE
 .idea/
 *.iml
 *.iws
@@ -34,27 +24,17 @@ replay_pid*
 *.idea
 *vscode
 .vscode
-
-# Maven
+*.vscode
 target/
-
-# Eclipse
 .classpath
+*.venv/
 
-# NetBeans
-
-# Gradle
 .gradle/
 build/
 
-# Mac
 .DS_Store
-
-# Windows
 Thumbs.db
 ehthumbs.db
-
-# IntelliJ
 *.iml
 *.ipr
 *.iws
