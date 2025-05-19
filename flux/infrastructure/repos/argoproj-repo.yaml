@@ -1,9 +1,0 @@
----
-apiVersion: source.toolkit.fluxcd.io/v1beta2
-kind: HelmRepository
-metadata:
-  name: argoproj
-spec:
-  interval: 1h
-  url: https://argoproj.github.io/argo-helm
-  timeout: 3m

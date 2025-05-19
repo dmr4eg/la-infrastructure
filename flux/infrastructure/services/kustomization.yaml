@@ -4,3 +4,4 @@ namespace: flux-system
 resources:
   - keycloak.yaml
   - postgres.yaml
+  - oauth2-proxy.yaml
