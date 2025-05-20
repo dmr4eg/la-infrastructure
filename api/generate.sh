@@ -1,8 +1,8 @@
 # #spring-content
-# openapi-generator generate -i ./content.openapi.yaml -g spring -o gen/spring/content --additional-properties=apiPackage=pm.little.api.controllers,basePackage=pm.little.api,configPackage=pm.little.api.confs,modelPackage=pm.little.api.models
+# openapi-generator generate -i ./content.openapi.yaml -g spring -o gen/spring/content --additional-properties=apiPackage=la.api.controllers,basePackage=la.api,configPackage=la.api.confs,modelPackage=la.api.models
 
 # #spring-course
-# openapi-generator generate -i ./course.openapi.yaml -g spring -o gen/spring/course --additional-properties=apiPackage=pm.little.api.controllers,basePackage=pm.little.api,configPackage=pm.little.api.confs,modelPackage=pm.little.api.models
+# openapi-generator generate -i ./course.openapi.yaml -g spring -o gen/spring/course --additional-properties=apiPackage=la.api.controllers,basePackage=la.api,configPackage=la.api.confs,modelPackage=la.api.models
 
 # #fe-js-content
 # openapi-generator generate \

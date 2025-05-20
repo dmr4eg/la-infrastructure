@@ -1,5 +1,5 @@
 resource "azurerm_key_vault" "this" {
-  name                       = "akv-little-pm"
+  name                       = "akv-la"
   location                   = data.azurerm_resource_group.this.location
   resource_group_name        = data.azurerm_resource_group.this.name
   tenant_id                  = data.azurerm_client_config.this.tenant_id

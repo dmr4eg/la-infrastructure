@@ -4,15 +4,12 @@ info:
   version: 1.0.0
   description: API for managing projects, days, finances, and members.
 servers:
-  - url: https://app.little.pm/api/course
+  - url: https://localhost/api/course
 
-########################################################
 # COMPONENTS
-########################################################
+
 components:
-  ######################################################
-  # HEADERS
-  ######################################################
+# HEADERS
   headers:
     Set-JWT:
       schema:
@@ -35,9 +32,8 @@ components:
         description: Login redirect
         example: /auth/login
 
-  ######################################################
-  # SECURITY SCHEMES
-  ######################################################
+# SECURITY SCHEMES
+
   securitySchemes:
     admin_jwt:
       type: http
@@ -48,9 +44,8 @@ components:
       scheme: bearer
       bearerFormat: JWT
 
-  ######################################################
-  # RESPONSES
-  ######################################################
+# RESPONSES
+
   responses:
     UnauthorizedLoginError:
       description: Unauthorized login
@@ -89,9 +84,8 @@ components:
           schema:
             $ref: "#/components/schemas/Error"
 
-  ######################################################
-  # PARAMETERS
-  ######################################################
+# PARAMETERS
+
   parameters:
     limit:
       name: limit
@@ -159,9 +153,8 @@ components:
       schema:
         $ref: "#/components/schemas/userUUID"
 
-  ######################################################
-  # SCHEMAS
-  ######################################################
+# SCHEMAS
+
   schemas:
     projectBlueprintUUID:
       type: string
@@ -227,9 +220,8 @@ components:
       required:
         - message
 
-    ######################################################
-    # Composite ID Schemas
-    ######################################################
+# COMPOSITE IDS
+
     ProjectDaysMapperId:
       type: object
       description: "Composite ID for ProjectDaysMapper"
@@ -320,9 +312,19 @@ components:
         - day_blueprint_uuid
         - user_uuid
 
-    ######################################################
-    # PROJECT
-    ######################################################
+# PROJECTS 
+
+    ProjectDTO:
+      type: object
+      properties:
+        blueprint:
+          $ref: "#/components/schemas/ProjectBlueprint"
+        instance:
+          $ref: "#/components/schemas/ProjectInstance"
+      required:
+        - blueprint
+        - instance
+
     ProjectBlueprint:
       type: object
       properties:
@@ -403,6 +405,8 @@ components:
         - id
         - status
 
+# FINANCES
+
     Finances:
       type: object
       description: "Entity for user finances on a specific project"
@@ -461,6 +465,8 @@ components:
       required:
         - id
 
+# MEMBERS
+
     Members:
       type: object
       description: "Entity for user membership in a specific project"
@@ -479,20 +485,8 @@ components:
         - id
         - member_name
 
-    ProjectDTO:
-      type: object
-      properties:
-        blueprint:
-          $ref: "#/components/schemas/ProjectBlueprint"
-        instance:
-          $ref: "#/components/schemas/ProjectInstance"
-      required:
-        - blueprint
-        - instance
+# DAYS
 
-    ######################################################
-    # DAY
-    ######################################################
     DayBlueprint:
       type: object
       properties:
@@ -566,9 +560,8 @@ components:
         - blueprint
         - instance
 
-########################################################
 # TAGS
-########################################################
+
 tags:
   - name: projects
     description: APIs for managing projects, day templates, and user progress tracking.
@@ -579,13 +572,10 @@ tags:
   - name: members
     description: APIs for managing members within projects.
 
-########################################################
 # PATHS
-########################################################
+
 paths:
-  ######################################################
-  # SINGLE-ID RESOURCES (Blueprints, etc.)
-  ######################################################
+# BLUEPRINTS
   /projects:
     get:
       tags: [projects]
@@ -736,13 +726,8 @@ paths:
         "204":
           description: No Content
 
-  ######################################################
-  # COMPOSITE-ID RESOURCES
-  ######################################################
+# PROJECT-DAYS-MAPPER 
 
-  ############################################
-  # 1) PROJECT-DAYS-MAPPER
-  ############################################
   /project-days-mapper:
     get:
       tags: [projects]
@@ -819,9 +804,8 @@ paths:
         "204":
           description: No Content
 
-  ############################################
-  # 2) DAY-COMPONENTS-MAPPER
-  ############################################
+# DAY-COMPONENTS-MAPPER
+
   /day-components-mapper:
     get:
       tags: [days]
@@ -898,9 +882,8 @@ paths:
         "204":
           description: No Content
 
-  ############################################
-  # 3) PROJECT-INSTANCES
-  ############################################
+# PROJECT-INSTANCES
+
   /project-instances:
     get:
       tags: [projects]
@@ -982,9 +965,8 @@ paths:
         "204":
           description: No Content
 
-  ############################################
-  # 4) FINANCES
-  ############################################
+# FINANCES
+
   /finances:
     get:
       tags: [finances]
@@ -1089,9 +1071,8 @@ paths:
               schema:
                 $ref: "#/components/schemas/Finances"
 
-  ############################################
-  # 5) MEMBERS
-  ############################################
+# MEMBERS
+
   /members:
     get:
       tags: [members]
@@ -1172,9 +1153,8 @@ paths:
         "204":
           description: No Content
 
-  ############################################
-  # 6) DAY-INSTANCES
-  ############################################
+# DAY-INSTANCES
+
   /day-instances:
     get:
       tags: [days]

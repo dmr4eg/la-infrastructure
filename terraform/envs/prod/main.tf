@@ -1,7 +1,7 @@
 module "prod" {
   source = "../../modules/shared"
 
-  git_repository_url  = "https://github.com/dmr4eg/littlepm.git"
+  git_repository_url  = "https://github.com/dmr4eg/la-infrastructure.git"
   git_reference_type  = "branch"
   git_reference_value = "main"
 
@@ -13,7 +13,7 @@ module "prod" {
 module "app" {
   source = "../../modules/app"
 
-  git_repository_url      = "https://github.com/dmr4eg/littlepm.git"
+  git_repository_url      = "https://github.com/dmr4eg/la-infrastructure.git"
   git_reference_type      = "branch"
   git_reference_value     = "main"
   git_kustomizations_path = "./flux/apps/overlays/prod"

@@ -5,8 +5,8 @@ metadata:
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt
     # cert-manager.io/cluster-issuer: letsencrypt-staging
-    nginx.ingress.kubernetes.io/auth-url: "https://auth.app.little.pm/oauth2/auth"
-    nginx.ingress.kubernetes.io/auth-signin: "https://auth.app.little.pm/oauth2/start?rd=$escaped_request_uri"
+    nginx.ingress.kubernetes.io/auth-url: "https://localhost/oauth2/auth"
+    nginx.ingress.kubernetes.io/auth-signin: "https://localhost/oauth2/start?rd=$escaped_request_uri"
     nginx.ingress.kubernetes.io/auth-response-headers: "Authorization, X-Auth-Request-User, X-Auth-Request-Email"
     nginx.ingress.kubernetes.io/configuration-snippet: |
       # Forward the bearer token oauth2-proxy gives us
@@ -25,10 +25,10 @@ spec:
   ingressClassName: nginx
   tls:
     - hosts:
-        - app.little.pm
-      secretName: app-little-pm-tls
+        - localhost
+      secretName: localhost-tls
   rules:
-    - host: app.little.pm
+    - host: localhost
       http:
         paths:
           - path: /api/content(/|$)(.*)
@@ -46,8 +46,8 @@ metadata:
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt
     # cert-manager.io/cluster-issuer: letsencrypt-staging
-    nginx.ingress.kubernetes.io/auth-url: "https://auth.app.little.pm/oauth2/auth"
-    nginx.ingress.kubernetes.io/auth-signin: "https://auth.app.little.pm/oauth2/start?rd=$escaped_request_uri"
+    nginx.ingress.kubernetes.io/auth-url: "https://localhost/oauth2/auth"
+    nginx.ingress.kubernetes.io/auth-signin: "https://localhost/oauth2/start?rd=$escaped_request_uri"
     nginx.ingress.kubernetes.io/auth-response-headers: "Authorization, X-Auth-Request-User, X-Auth-Request-Email"
     nginx.ingress.kubernetes.io/configuration-snippet: |
       auth_request_set $access_token $upstream_http_authorization;
@@ -65,10 +65,10 @@ spec:
   ingressClassName: nginx
   tls:
     - hosts:
-        - app.little.pm
-      secretName: app-little-pm-tls
+        - localhost
+      secretName: localhost-tls
   rules:       
-    - host: app.little.pm
+    - host: localhost
       http:
         paths:       
         - path: /api/course(/|$)(.*)
@@ -97,10 +97,10 @@ spec:
   ingressClassName: nginx
   tls:
     - hosts:
-        - app.little.pm
-      secretName: app-little-pm-tls
+        - localhost
+      secretName: localhost-tls
   rules:
-    - host: app.little.pm
+    - host: localhost
       http:
         paths:
           - path: /

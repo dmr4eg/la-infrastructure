@@ -1,5 +1,5 @@
 resource "azurerm_container_registry" "this" {
-  name                     = "littlepmacr"
+  name                     = "laacr"
   resource_group_name      = data.azurerm_resource_group.this.name
   location                 = data.azurerm_resource_group.this.location
   sku                      = "Basic"
@@ -9,7 +9,7 @@ resource "azurerm_container_registry" "this" {
 
   tags = {
     environment = "dev"
-    app         = "little-pm"
+    app         = "la"
     owner       = "dmr4eg"
   }
 }

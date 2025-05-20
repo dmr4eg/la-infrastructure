@@ -16,7 +16,7 @@ participant "Content Service" as CONTENT
 
 == 1 · Registration, parental e-mail verification ==
 Child  -> FE     : sign-up 
-FE     -> KC     : **POST**  /realms/littlepm/users\n  -> create user {requiredAction = VERIFY_EMAIL}
+FE     -> KC     : **POST**  /realms/la/users\n  -> create user {requiredAction = VERIFY_EMAIL}
 KC     -> Parent : Verification e-mail (Keycloak template)
 Parent --> KC    : clicks verification link 
 FE     -> KC     : **OAuth 2.1** 

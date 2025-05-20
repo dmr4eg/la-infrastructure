@@ -1,5 +1,5 @@
 resource "azurerm_user_assigned_identity" "this" {
-  name                = "id-little-pm"
+  name                = "id-la"
   location            = data.azurerm_resource_group.this.location
   resource_group_name = data.azurerm_resource_group.this.name
 }

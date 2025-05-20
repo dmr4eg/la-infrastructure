@@ -4,15 +4,12 @@ info:
   version: 1.0.0
   description: API for managing tasks, forms, media, and other content types.
 servers:
-  - url: https://app.little.pm/api/content
+  - url: https://localhost/api/content
 
-########################################################
 # COMPONENTS
-########################################################
+
 components:
-  ######################################################
-  # HEADERS
-  ######################################################
+# HEADERS
   headers:
     Set-JWT:
       schema:
@@ -35,9 +32,8 @@ components:
         description: Login redirect
         example: /auth/login
 
-  ######################################################
-  # SECURITY SCHEMES
-  ######################################################
+# SECURITY SCHEMES
+
   securitySchemes:
     admin_jwt:
       type: http
@@ -48,9 +44,8 @@ components:
       scheme: bearer
       bearerFormat: JWT
 
-  ######################################################
-  # RESPONSES
-  ######################################################
+# RESPONSES
+
   responses:
     UnauthorizedLoginError:
       description: Unauthorized login
@@ -89,9 +84,8 @@ components:
           schema:
             $ref: "#/components/schemas/Error"
 
-  ######################################################
-  # PARAMETERS
-  ######################################################
+# PARAMETERs
+
   parameters:
     limit:
       name: limit
@@ -135,7 +129,8 @@ components:
       schema:
         $ref: "#/components/schemas/userUUID"
 
-    # ── PATH PARAMETERS ────────────────────────────────────────────────
+# PATH PARAMETERS
+
     componentUUID:
       name: component_uuid
       in: path
@@ -200,9 +195,8 @@ components:
       schema:
         $ref: "#/components/schemas/userUUID"
 
-  ######################################################
-  # SCHEMAS
-  ######################################################
+# SCHEMAS
+
   schemas:
     projectBlueprintUUID:
       type: string
@@ -268,9 +262,7 @@ components:
       required:
         - message
 
-    ######################################################
-    # Composite ID Schemas
-    ######################################################
+# COMPOSITE IDS
 
     TaskInstanceId:
       type: object
@@ -317,9 +309,8 @@ components:
         - form_blueprint_uuid
         - user_uuid
 
-    ######################################################
-    # TASK
-    ######################################################
+# TASKS
+
     TaskBlueprint:
       type: object
       properties:
@@ -363,9 +354,8 @@ components:
         - blueprint
         - progress
 
-    ######################################################
-    # FORM
-    ######################################################
+# FORMS
+
     FormBlueprint:
       type: object
       properties:
@@ -451,9 +441,8 @@ components:
         - blueprint
         - instance
 
-    ######################################################
-    # MEDIA
-    ######################################################
+# MEDIA
+
     Media:
       type: object
       properties:
@@ -476,9 +465,6 @@ components:
         - type
         - title
 
-########################################################
-# TAGS
-########################################################
 tags:
   - name: tasks
     description: "Task blueprints and instances"
@@ -487,14 +473,8 @@ tags:
   - name: media
     description: "Media resources"
 
-########################################################
-# PATHS
-########################################################
 paths:
-  ######################################################
-  # SINGLE-ID RESOURCES (Blueprints, Media, etc.)
-  ######################################################
-
+# BLUEPRINTS
   /tasks:
     get:
       tags: [tasks]
@@ -736,9 +716,8 @@ paths:
         "204":
           description: No Content
 
-  ############################################
-  # 7) TASK-INSTANCES
-  ############################################
+# TASK-INSTANCES
+
   /task-instances:
     get:
       tags: [tasks]
@@ -820,9 +799,8 @@ paths:
         "204":
           description: No Content
 
-  ############################################
-  # 8) FORM-FIELD-MAPPER
-  ############################################
+# FORM-FIELD-MAPPER
+
   /form-field-mapper:
     get:
       tags: [forms]
@@ -904,9 +882,8 @@ paths:
         "204":
           description: No Content
 
-  ############################################
-  # 9) FORM-INSTANCES
-  ############################################
+# FORM-INSTANCES
+
   /form-instances:
     get:
       tags: [forms]

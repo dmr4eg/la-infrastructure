@@ -11,7 +11,7 @@ spec:
     branch: main
   secretRef:
     name: flux-system
-  url: ssh://git@github.com/dmr4eg/littlepm.git
+  url: ssh://git@github.com/dmr4eg/la-infrastructure.git
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -20,7 +20,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 10m0s
-  path: ./flux/clusters/littlepm
+  path: ./flux/clusters/la-infrastructure
   prune: true
   sourceRef:
     kind: GitRepository

@@ -24,14 +24,14 @@ resource "azurerm_role_assignment" "acr_pull" {
 }
 
 resource "azurerm_kubernetes_cluster" "this" {
-  name                      = "aks-little-pm"
+  name                      = "aks-la"
   location                  = data.azurerm_resource_group.this.location
   resource_group_name       = data.azurerm_resource_group.this.name
-  dns_prefix                = "aks-little-pm"
+  dns_prefix                = "aks-la"
   private_cluster_enabled   = false
   kubernetes_version        = "1.30.9"
   automatic_upgrade_channel = "stable"
-  node_resource_group       = "rg-little-pm-aks"
+  node_resource_group       = "rg-la-aks"
   sku_tier                  = "Free"
   azure_policy_enabled      = false
 
