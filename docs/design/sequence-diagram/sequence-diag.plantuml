@@ -1,7 +1,7 @@
 @startuml
 
 skinparam package {
-    FontSize 13
+    FontSize 16
     FontStyle bold
     BackgroundColor #F0F0F0
 }
@@ -20,16 +20,16 @@ FE     -> KC     : **POST**  /realms/la/users\n  -> create user {requiredAction 
 KC     -> Parent : Verification e-mail (Keycloak template)
 Parent --> KC    : clicks verification link 
 FE     -> KC     : **OAuth 2.1** 
-KC     --> FE    : 201=CREATED ID + Access JWT   (Set-Cookie)
+KC     --> FE    : 201=CREATED ID + Access JWT  \n (Set-Cookie)
 
 
-== 2 · Browse blueprints & create project-instance ==
+== 2 · Get project blueprint & create project instance ==
 FE     -> COURSE : **GET /projects**  (JWT)
 Child  -> FE     : chooses project_blueprint_uuid
 FE     -> COURSE : **POST /project-instances** (JWT, body=UUIDs)
 COURSE --> FE    : 200=OK ProjectDTO 
 
-== 3 · Daily loop  (Day 1 → 7) ==
+== 3 · Daily loop  (Day 1 to 7) ==
 loop day = 1 → 7
   ' 3.1 progress/meta
   FE  -> COURSE  : **GET /project-instances/{project}/{user}**
@@ -60,11 +60,10 @@ loop day = 1 → 7
   FE    --> FE : _calculate()_  
   FE    -> COURSE : **PUT /finances/{project}/{user}**  (JWT)
 
-  ' 3.5 day complete & e-mail reminder
-  FE    -> COURSE : **PUT /day-instances/{day}/{user}**   status=COMPLETED
+
 end
 
-== 4 · Reports & project closure ==
+== 4 · Report generatuin & project closure ==
 Child -> FE     : generate reports
 FE    --> FE    : build reports
 FE    -> COURSE : **PUT /project-instances/{project}/{user}** status=COMPLETED

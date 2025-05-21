@@ -5,7 +5,7 @@
 skinparam linetype ortho
 
 skinparam package {
-    FontSize 11
+    FontSize 15
     FontStyle bold
     BackgroundColor #F0F0F0
 }
