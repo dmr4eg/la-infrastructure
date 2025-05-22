@@ -51,16 +51,9 @@ Kid    -- UC3
 Kid    -- UC4
 Kid    -- UC5
 Kid    -- UC6
-Kid    -- UC7
 Kid    -- UC8
 Kid    -- UC9
-
 Kid    -- UC11
-Kid    -- UC12
-
-UC1 -right[hidden]-UC3
-UC4 -right[hidden]-UC5
-UC5 -right[hidden]-UC6
 
 Admin  -- UC13
 Admin  -- UC14
@@ -70,6 +63,12 @@ Admin  -- UC16
 UC1  ..left..> UC2  : <<include>>
 UC5  ..> UC7  : <<include>>
 UC6  ..> UC7  : <<include>>
-UC9  .right.> UC10 : <<include>>
-UC11 .right.> UC12 : <<include>>
+UC9  .left.> UC10 : <<extend>>
+UC10  -left[hidden]-> UC11 
+UC11 .left.> UC12 : <<extend>>
+UC13 -right[hidden]-UC15
+UC1 -left[hidden]-UC3
+UC4 -left[hidden]-UC5
+UC5 -right[hidden]-UC6
+UC10  -left[hidden]-> UC11 
 @enduml
