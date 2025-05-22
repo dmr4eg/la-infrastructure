@@ -7,15 +7,15 @@ skinparam package {
 }
 
 actor Parent
-actor Child
+actor Kid
 
-participant "Frontend\n(finance-calc + reports)"      as FE
-participant "Keycloak \nAuth + e-mail verification"    as KC
+participant "Frontend"      as FE
+participant "Keycloak"    as KC
 participant "Course Service"  as COURSE
 participant "Content Service" as CONTENT
 
 == 1 · Registration, parental e-mail verification ==
-Child  -> FE     : sign-up 
+Kid  -> FE     : sign-up 
 FE     -> KC     : **POST**  /realms/la/users\n  -> create user {requiredAction = VERIFY_EMAIL}
 KC     -> Parent : Verification e-mail (Keycloak template)
 Parent --> KC    : clicks verification link 
@@ -25,7 +25,7 @@ KC     --> FE    : 201=CREATED ID + Access JWT  \n (Set-Cookie)
 
 == 2 · Get project blueprint & create project instance ==
 FE     -> COURSE : **GET /projects**  (JWT)
-Child  -> FE     : chooses project_blueprint_uuid
+Kid  -> FE     : chooses project_blueprint_uuid
 FE     -> COURSE : **POST /project-instances** (JWT, body=UUIDs)
 COURSE --> FE    : 200=OK ProjectDTO 
 
@@ -42,21 +42,21 @@ loop day = 1 → 7
   ' 3.3 execute components
   loop each component
     alt MEDIA
-      Child --> FE  : watch 
+      Kid --> FE  : watch 
       FE -> CONTENT : **GET /media/{media_uuid}**
     else TASK
       FE -> CONTENT : **GET /tasks/{task_uuid}**
-      Child --> FE  : mark done
+      Kid --> FE  : mark done
       FE -> COURSE  : **POST /task-instances**  (JWT)
     else FORM
       FE -> CONTENT : **GET /forms/{form_uuid}**
-      Child --> FE  : fill & submit
+      Kid --> FE  : fill & submit
       FE -> COURSE  : **POST /form-instances**  (JWT)
     end
   end
 
   ' 3.4 client-side finance
-  Child --> FE : enter budget, price…
+  Kid --> FE : enter budget, price…
   FE    --> FE : _calculate()_  
   FE    -> COURSE : **PUT /finances/{project}/{user}**  (JWT)
 
@@ -64,10 +64,10 @@ loop day = 1 → 7
 end
 
 == 4 · Report generatuin & project closure ==
-Child -> FE     : generate reports
+Kid -> FE     : generate reports
 FE    --> FE    : build reports
 FE    -> COURSE : **PUT /project-instances/{project}/{user}** status=COMPLETED
 COURSE--> FE    : 200=OK
-Child <-- FE    : downloads files
+Kid <-- FE    : downloads files
 
 @enduml
