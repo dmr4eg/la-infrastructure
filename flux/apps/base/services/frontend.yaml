@@ -25,7 +25,8 @@ spec:
               cpu: "500m"
           ports:
             - name: http
-              containerPort: 80
+              containerPort: 9002
+              protocol: TCP
 ---
 apiVersion: v1
 kind: Service
