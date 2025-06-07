@@ -78,7 +78,7 @@ spec:
       enabled: true
       ingressClassName: nginx
       tls: true
-      hostname: auth.app.dmr4eg.xyz
+      hostname: auth.dmr4eg.xyz
       annotations:
         cert-manager.io/cluster-issuer: letsencrypt
         nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
