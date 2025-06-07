@@ -18,10 +18,10 @@ spec:
   ingressClassName: nginx
   tls:
     - hosts:
-        - app.little.pm
+        - app.dmr4eg.xyz
       secretName: app-little-pm-tls
   rules:
-    - host: app.little.pm
+    - host: app.dmr4eg.xyz
       http:
         paths:
           - path: /api/content(/|$)(.*)
@@ -52,10 +52,10 @@ spec:
   ingressClassName: nginx
   tls:
     - hosts:
-        - app.little.pm
+        - app.dmr4eg.xyz
       secretName: app-little-pm-tls
   rules:       
-    - host: app.little.pm
+    - host: app.dmr4eg.xyz
       http:
         paths:       
         - path: /api/course(/|$)(.*)
@@ -75,7 +75,7 @@ metadata:
     # cert-manager.io/cluster-issuer: letsencrypt-staging
     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
     nginx.ingress.kubernetes.io/enable-cors: "true"
-    # nginx.ingress.kubernetes.io/cors-allow-origin: "app.little.pm"
+    # nginx.ingress.kubernetes.io/cors-allow-origin: "app.dmr4eg.xyz"
     nginx.ingress.kubernetes.io/cors-allow-origin: "*"
     nginx.ingress.kubernetes.io/cors-allow-methods: "PUT, GET, POST, OPTIONS, DELETE, PATCH"
     nginx.ingress.kubernetes.io/cors-allow-headers: "*"
@@ -85,10 +85,10 @@ spec:
   ingressClassName: nginx
   tls:
     - hosts:
-        - app.little.pm
+        - app.dmr4eg.xyz
       secretName: app-little-pm-tls
   rules:
-    - host: app.little.pm
+    - host: app.dmr4eg.xyz
       http:
         paths:
           - path: /
