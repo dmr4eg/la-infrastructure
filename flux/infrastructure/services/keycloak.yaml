@@ -78,7 +78,7 @@ spec:
       enabled: true
       ingressClassName: nginx
       tls: true
-      hostname: localhost
+      hostname: auth.app.little.pm
       annotations:
         cert-manager.io/cluster-issuer: letsencrypt
         nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
