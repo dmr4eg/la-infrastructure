@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: content
-          image: ghcr.io/dmr4eg/la-content-service:latest
+          image: ghcr.io/dmr4eg/littlepm-content-service:latest
           imagePullPolicy: Always
           env:
             - name: SOME_ENV_VAR
