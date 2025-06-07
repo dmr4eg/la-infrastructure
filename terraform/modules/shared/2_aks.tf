@@ -16,12 +16,12 @@ resource "azurerm_role_assignment" "keyvault_secrets_user" {
   role_definition_name = "Key Vault Secrets User"
 }
 
-resource "azurerm_role_assignment" "acr_pull" {
-  scope                            = azurerm_container_registry.this.id
-  principal_id                     = azurerm_user_assigned_identity.this.principal_id
-  skip_service_principal_aad_check = true
-  role_definition_name             = "AcrPull"
-}
+# resource "azurerm_role_assignment" "acr_pull" {
+#   scope                            = azurerm_container_registry.this.id
+#   principal_id                     = azurerm_user_assigned_identity.this.principal_id
+#   skip_service_principal_aad_check = true
+#   role_definition_name             = "AcrPull"
+# }
 
 resource "azurerm_kubernetes_cluster" "this" {
   name                      = "aks-la"

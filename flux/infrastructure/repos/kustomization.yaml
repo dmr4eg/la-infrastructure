@@ -5,4 +5,3 @@ resources:
   - bitnami-repo.yaml
   - ingress-nginx-repo.yaml
   - jetstack-repo.yaml
-  - oauth2-proxy.yaml

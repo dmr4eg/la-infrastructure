@@ -5,13 +5,6 @@ metadata:
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt
     # cert-manager.io/cluster-issuer: letsencrypt-staging
-    nginx.ingress.kubernetes.io/auth-url: "https://localhost/oauth2/auth"
-    nginx.ingress.kubernetes.io/auth-signin: "https://localhost/oauth2/start?rd=$escaped_request_uri"
-    nginx.ingress.kubernetes.io/auth-response-headers: "Authorization, X-Auth-Request-User, X-Auth-Request-Email"
-    nginx.ingress.kubernetes.io/configuration-snippet: |
-      # Forward the bearer token oauth2-proxy gives us
-      auth_request_set $access_token $upstream_http_authorization;
-      proxy_set_header Authorization $access_token;
     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
     nginx.ingress.kubernetes.io/enable-cors: "true"
     nginx.ingress.kubernetes.io/cors-allow-origin: "*"
@@ -25,10 +18,10 @@ spec:
   ingressClassName: nginx
   tls:
     - hosts:
-        - localhost
-      secretName: localhost-tls
+        - app.little.pm
+      secretName: app-little-pm-tls
   rules:
-    - host: localhost
+    - host: app.little.pm
       http:
         paths:
           - path: /api/content(/|$)(.*)
@@ -46,12 +39,6 @@ metadata:
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt
     # cert-manager.io/cluster-issuer: letsencrypt-staging
-    nginx.ingress.kubernetes.io/auth-url: "https://localhost/oauth2/auth"
-    nginx.ingress.kubernetes.io/auth-signin: "https://localhost/oauth2/start?rd=$escaped_request_uri"
-    nginx.ingress.kubernetes.io/auth-response-headers: "Authorization, X-Auth-Request-User, X-Auth-Request-Email"
-    nginx.ingress.kubernetes.io/configuration-snippet: |
-      auth_request_set $access_token $upstream_http_authorization;
-      proxy_set_header Authorization $access_token;
     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
     nginx.ingress.kubernetes.io/enable-cors: "true"
     nginx.ingress.kubernetes.io/cors-allow-origin: "*"
@@ -65,10 +52,10 @@ spec:
   ingressClassName: nginx
   tls:
     - hosts:
-        - localhost
-      secretName: localhost-tls
+        - app.little.pm
+      secretName: app-little-pm-tls
   rules:       
-    - host: localhost
+    - host: app.little.pm
       http:
         paths:       
         - path: /api/course(/|$)(.*)
@@ -88,6 +75,7 @@ metadata:
     # cert-manager.io/cluster-issuer: letsencrypt-staging
     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
     nginx.ingress.kubernetes.io/enable-cors: "true"
+    # nginx.ingress.kubernetes.io/cors-allow-origin: "app.little.pm"
     nginx.ingress.kubernetes.io/cors-allow-origin: "*"
     nginx.ingress.kubernetes.io/cors-allow-methods: "PUT, GET, POST, OPTIONS, DELETE, PATCH"
     nginx.ingress.kubernetes.io/cors-allow-headers: "*"
@@ -97,10 +85,10 @@ spec:
   ingressClassName: nginx
   tls:
     - hosts:
-        - localhost
-      secretName: localhost-tls
+        - app.little.pm
+      secretName: app-little-pm-tls
   rules:
-    - host: localhost
+    - host: app.little.pm
       http:
         paths:
           - path: /
